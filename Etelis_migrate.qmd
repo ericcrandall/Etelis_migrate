@@ -124,3 +124,39 @@ Bee-utiful deepwater snappers wondering where they came from, where they are goi
 :::
 
 I'm also going to see how much I can learn about quarto notebooks, which Rstudio is apparently using to replace Rmarkdown notebooks. They seem like an improvement so far! Following along [here](https://quarto.org/docs/publishing/github-pages.html), using the simple option to render to the `docs` folder.
+
+
+Ann placed all the data on Google Drive, zipped by population.  I will download them with the gdown python package. This involves looking up the google id for each file in the URL of the share link and pasting that into gdown thusly. They were quite large, and `unzip` and `gzip` wouldn't work. I used jar (which I didn't even know could uncompress things) as suggested [here](https://unix.stackexchange.com/questions/438368/unix-unzip-is-failing-but-mac-archive-utility-works)
+
+```{bash}
+#| eval: false
+gdown https://drive.google.com/uc?id=142BTkLDRNa6TXk1l4vhxRMxcejOg3rMt --output ECA_Japan.zip
+gdown https://drive.google.com/uc?id=1NFI7bH6kmsDcKwB7Y6IkE1MkOAhypCu0 --output ECA_MHI.zip
+gdown https://drive.google.com/uc?id=1hufzYMZNUX_q9-QX3JwIbKYOvjsmSwks --output ECA_NWHI.zip
+gdown https://drive.google.com/uc?id=1_Z3zJVPVg7cazG_BWrcoJExM36YcFVqU --output ECO_Japan.zip
+gdown https://drive.google.com/uc?id=1N50_iwNGLK6bZmjfrm58lgSZgC4RHw74 --output ECO_Johnston.zip
+gdown https://drive.google.com/uc?id=1YvWbC3kkY7IJKjmjOQIJIKPAJD-KnExd --output ECO_MHI.zip
+gdown https://drive.google.com/uc?id=1VIBPxE08eZQuTWnW3kWmQBTBbp8FUNEZ --output ECO_NWHI.zip
+
+jar xvf ECA_Japan.zip
+ # etc.
+```
+
+
+Need to rename the files into Illumina format in order for Stacks to recognize the paired reads.
+
+```{bash eval = F}
+cd raw
+
+for f in *.R1.fq.gz
+do
+mv $f ${f/.R1.fq.gz/_R1_001.fastq.gz}
+done
+
+for f in *.R2.fq.gz
+do
+mv $f ${f/.R2.fq.gz/_R2_001.fastq.gz}
+done
+
+cd ..
+```
