@@ -109,7 +109,7 @@ migrants.per.gen<-function(x){
 
 # Introduction
 
-Brian Bowen's student Ann Lee asked me to do a migrate analysis on two species of deepwater snapper, *Etelis carbunculus* and *Etelis coruscans*. She wrote:
+Brian Bowen's student Anne Lee asked me to do a migrate analysis on two species of deepwater snapper, *Etelis carbunculus* and *Etelis coruscans*. She wrote:
 
 > My thesis focuses on assessing the population structure and origin of deepwater snappers, Etelis carbunculus and Etelis coruscans, that were sampled from Japan, Johnston Atoll, Main Hawaiian Islands, and Northwestern Hawaiian Islands. My data consists of SNPs and I will be using migrate to help me with the analysis of the origin. This will help me examine the patterns of gene flow within both species to compare the Hawaiian populations to Johnston Atoll and Japan populations.
 
@@ -145,7 +145,8 @@ jar xvf ECA_Japan.zip
 
 Need to rename the files into Illumina format in order for Stacks to recognize the paired reads.
 
-```{bash eval = F}
+```{bash}
+#|eval: false
 cd raw
 
 for f in *.R1.fq.gz
@@ -159,4 +160,16 @@ mv $f ${f/.R2.fq.gz/_R2_001.fastq.gz}
 done
 
 cd ..
+```
+
+
+# Haplotypes from Stacks
+
+```{bash}
+#|eval: false
+process_radtags -p ./raw/ -o ./cleaned/ --rescue --clean --quality --paired --threads 9 --renz-1 ecoRI --renz-2 mspI  \
+                  --adapter-1 GATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTG \
+                  --adapter-2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT \
+                  --adapter-mm 2
+
 ```
