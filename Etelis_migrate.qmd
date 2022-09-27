@@ -116,9 +116,9 @@ Brian Bowen's student Anne Lee asked me to do a migrate analysis on two species 
 Because these guys are so deep down, and harder to sample, we just have single population samples from the four populations she mentions above.
 
 ::: {#etelis-pics layout-ncol="2"}
-![Etelis carbunculis](http://www.fishbase.se/tools/UploadPhoto/uploads/pic_1176.jpg){#fig-alt="Etelis carbunculus; photo by Thomas Schreiber}
+![Etelis carbunculis; photo by Thomas Schreiber](http://www.fishbase.se/tools/UploadPhoto/uploads/pic_1176.jpg)
 
-![Etelis coruscans](http://www.fishbase.se/tools/UploadPhoto/uploads/1337495269_110.137.1.19.jpg){#fig-alt="Etelis coruscans; photo by Wiwied Soeparto}
+![Etelis coruscans; photo by Wiwied Soeparto](http://www.fishbase.se/tools/UploadPhoto/uploads/1337495269_110.137.1.19.jpg)
 
 Bee-utiful deepwater snappers wondering where they came from, where they are going, and whether they can get back in the water now.
 :::
@@ -166,12 +166,78 @@ cd ..
 
 # Haplotypes from Stacks
 
+## Clean the data with process_radtags 
+
+
+same commands for carbunculus and coruscans
+
 ```{bash}
-#|eval: false
+#| eval: false
 process_radtags -p ./raw/ -o ./cleaned/ --rescue --clean --quality --paired --threads 12 --renz-1 ecoRI --renz-2 mspI  \
+                  --truncate 145 --len-limit 145 \
                   --adapter-1 GATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTG \
                   --adapter-2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT \
                   --adapter-mm 2
 
+```
+
+### E. carbunculus output
+
+> BEGIN total_raw_read_counts
+Total Sequences	255732606
+Reads containing adapter sequence	2116758	0.8%
+Barcode Not Found	0	0.0%
+Low Quality	600765	0.2%
+RAD Cutsite Not Found	1752258	0.7%
+Retained Reads	251262825	98.3%
+END total_raw_read_counts
+
+
+### E. coruscans output
+
+>BEGIN total_raw_read_counts
+Total Sequences 272955592
+Reads containing adapter sequence       1919907 0.7%
+Barcode Not Found       0       0.0%
+Low Quality     8734891 3.2%
+RAD Cutsite Not Found   1884115 0.7%
+Retained Reads  260416679       95.4%
+END total_raw_read_counts
+
+
+
+## Running the denovo_map.pl pipeline
+
+Hmm... gotta rename the cleaned files too. All code is being run on both species.
+
+### More renaming
+
+```{bash}
+#| eval: false
+cd cleaned
+for f in *001.1.fq.gz
+do
+mv $f ${f/_R[12]_001.1.fq.gz/.1.fq.gz}
+done
+
+for f in *001.2.fq.gz
+do
+mv $f ${f/_R[12]_001.2.fq.gz/.2.fq.gz}
+done
+
+#rename the "remainder reads" that have had their pair removed for low quality
+for f in *001.rem.1.fq.gz; do mv $f ${f/_R[12]_001.rem.1.fq.gz/.rem.1.fq.gz}; done
+for f in *001.rem.2.fq.gz; do mv $f ${f/_R[12]_001.rem.2.fq.gz/.rem.2.fq.gz}; done
+```
+
+
+# The pipeline
+
+I'm going to use the denovo_map.pl pipeline. This command will take data from `./cleaned` and the popmap provided by Anne and -m 5 reads per stack, -M 4  distance between stacks, -n 4 distance between catalog loci. Running on 8 -T threads and only keeping loci that appear in 80% of individuals in all 4 populations
+
+```{bash}
+#| eval: false
+denovo_map.pl --samples ./cleaned/ --popmap popmapECO.tsv --out-path ./pipeline --paired \
+-m 5 -M 4 -n 4  -T 8 -r 80 -p 4 -X "populations: --fasta-samples" -X "populations: --filter-haplotype-wise"
 ```
 

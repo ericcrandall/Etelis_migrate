@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Eric Crandall">
+
+<title>Gene Flow Models for Etelis spp. Deepwater Snappers</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a>
+  <ul class="collapse">
+  <li><a href="#r-libraries" id="toc-r-libraries" class="nav-link" data-scroll-target="#r-libraries">R Libraries</a></li>
+  <li><a href="#function-library" id="toc-function-library" class="nav-link" data-scroll-target="#function-library">Function library</a></li>
+  </ul></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#haplotypes-from-stacks" id="toc-haplotypes-from-stacks" class="nav-link" data-scroll-target="#haplotypes-from-stacks">Haplotypes from Stacks</a>
+  <ul class="collapse">
+  <li><a href="#clean-the-data-with-process_radtags" id="toc-clean-the-data-with-process_radtags" class="nav-link" data-scroll-target="#clean-the-data-with-process_radtags">Clean the data with process_radtags</a>
+  <ul class="collapse">
+  <li><a href="#e.-carbunculus-output" id="toc-e.-carbunculus-output" class="nav-link" data-scroll-target="#e.-carbunculus-output">E. carbunculus output</a></li>
+  <li><a href="#e.-coruscans-output" id="toc-e.-coruscans-output" class="nav-link" data-scroll-target="#e.-coruscans-output">E. coruscans output</a></li>
+  </ul></li>
+  <li><a href="#running-the-denovo_map.pl-pipeline" id="toc-running-the-denovo_map.pl-pipeline" class="nav-link" data-scroll-target="#running-the-denovo_map.pl-pipeline">Running the denovo_map.pl pipeline</a>
+  <ul class="collapse">
+  <li><a href="#more-renaming" id="toc-more-renaming" class="nav-link" data-scroll-target="#more-renaming">More renaming</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#the-pipeline" id="toc-the-pipeline" class="nav-link" data-scroll-target="#the-pipeline">The pipeline</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Gene Flow Models for <em>Etelis spp.</em> Deepwater Snappers</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Eric Crandall </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<section id="r-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="r-libraries">R Libraries</h2>
+<p>Here I’m just loading a bunch of R packages that we’ll need.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ape)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phangorn)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pegas)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(strataG)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emo)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coda)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmcmc)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(perm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="function-library" class="level2">
+<h2 class="anchored" data-anchor-id="function-library">Function library</h2>
+<p>And here are some homebrewed functions that will be helpful.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function library</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>harvest.model.likelihoods <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">workingDir =</span> workingDir,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">outfileName =</span> <span class="st">"outfile.txt"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">multilocus =</span> T){</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># this function harvests model marginal likelihoods for models calculated by</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># the program migrate-n (Beerli &amp; Felsenstein 2001).</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># It takes as input a directory full of directories, </span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># each of which contains output from a migrate model, and is named</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># after that model. </span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">#initialize a data frame to take the values</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    modelMarglikes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">model=</span><span class="fu">character</span>(),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                             <span class="at">thermodynamic=</span><span class="fu">numeric</span>(),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                             <span class="at">bezier.corrected=</span><span class="fu">numeric</span>(), </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                             <span class="at">harmonic=</span><span class="fu">numeric</span>()) </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># loop through directories in the working directory, each of which is name</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># after a different model</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">list.dirs</span>(workingDir, <span class="at">full.names =</span> F)[<span class="sc">-</span><span class="dv">1</span>]){ <span class="co">#i&lt;-"stepping.stone"</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>      modelDir<span class="ot">&lt;-</span><span class="fu">file.path</span>(workingDir,i)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(modelDir)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">#scan in the outfile, separating at each newline</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>      outfile<span class="ot">&lt;-</span><span class="fu">scan</span>(<span class="at">file=</span><span class="fu">file.path</span>(modelDir,outfileName),<span class="at">what=</span><span class="st">"character"</span>,<span class="at">sep=</span><span class="st">"</span><span class="sc">\n</span><span class="st">"</span>) </span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#find the line with the likelihoods on it and split on runs of spaces</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>      marglikeline <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(<span class="fu">grep</span>(<span class="st">"  All          "</span>,outfile,<span class="at">value=</span>T),</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>, <span class="at">perl =</span> T)[[<span class="dv">1</span>]][<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  if(length(marglikeline)==0){next}</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>      marglikes <span class="ot">&lt;-</span> <span class="fu">c</span>(i,marglikeline)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>     </span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>      modelMarglikes <span class="ot">&lt;-</span> <span class="fu">rbind</span>(modelMarglikes,marglikes, <span class="at">deparse.level =</span> <span class="dv">2</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(modelMarglikes) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"model"</span>,<span class="st">"thermodynamic"</span>,<span class="st">"bezier.corrected"</span>,<span class="st">"harmonic"</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  modelMarglikes[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">sapply</span>(modelMarglikes[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>], as.numeric)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(modelMarglikes)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>bfcalcs<span class="ot">&lt;-</span><span class="cf">function</span>(df,<span class="at">ml=</span><span class="st">"bezier.corrected"</span>){</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This calculates log bayes factors on data frames output by</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># harvest.model.likelihoods(), following Johnson and Omland (2004)</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># You may choose the likelihood flavor with</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ml = "bezier.corrected", "thermodynamic" or "harmonic"</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="co">#df$thermodynamic &lt;- as.numeric(df$thermodynamic)</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="co">#df$bezier.corrected &lt;- as.numeric(df$bezier.corrected)</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  <span class="co">#df$harmonic &lt;- as.numeric(df$harmonic)</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>  mlcol <span class="ot">&lt;-</span> df[[ml]] </span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    bmvalue <span class="ot">&lt;-</span> mlcol[<span class="fu">which.max</span>(mlcol)]</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    lbf <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>(mlcol<span class="sc">-</span>bmvalue)</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    choice <span class="ot">&lt;-</span> <span class="fu">rank</span>(<span class="sc">-</span>mlcol)</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    modelprob <span class="ot">&lt;-</span> <span class="fu">exp</span>(lbf<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sum</span>(<span class="fu">exp</span>(lbf<span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    dfall <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df,lbf,choice,modelprob)</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(dfall)</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>}   </span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>migrants.per.gen<span class="ot">&lt;-</span><span class="cf">function</span>(x){</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>  <span class="co">#a function for creating Nm vectors out of m and Theta vectors.</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>  <span class="co">#x&lt;-x[[1]]</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>  m<span class="ot">&lt;-</span><span class="fu">names</span>(x)[<span class="fu">which</span>(<span class="fu">grepl</span>(<span class="st">"M_"</span>,<span class="fu">names</span>(x)))] <span class="co">#names of m columns</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>  <span class="co">#theta&lt;-names(x)[which(grepl("Theta_",names(x)))] #names of theta columns</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(n <span class="cf">in</span> m){</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    t<span class="ot">&lt;-</span><span class="fu">paste</span>(<span class="st">"Theta"</span>,<span class="fu">strsplit</span>(n,<span class="at">split=</span><span class="st">"_"</span>)[[<span class="dv">1</span>]][<span class="dv">3</span>],<span class="at">sep=</span><span class="st">"_"</span>)</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    x[,<span class="fu">paste</span>(<span class="st">"Nm"</span>,<span class="fu">strsplit</span>(n,<span class="at">split=</span><span class="st">"_"</span>)[[<span class="dv">1</span>]][<span class="dv">2</span>],<span class="fu">strsplit</span>(n,<span class="at">split=</span><span class="st">"_"</span>)[[<span class="dv">1</span>]][<span class="dv">3</span>],<span class="at">sep=</span><span class="st">"_"</span>)]<span class="ot">&lt;-</span> x[,<span class="fu">which</span>(<span class="fu">names</span>(x)<span class="sc">==</span>n)]<span class="sc">*</span>x[,<span class="fu">which</span>(<span class="fu">names</span>(x)<span class="sc">==</span>t)] </span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    <span class="co">#this hairy little statement makes a new column named "Nm_X_Y" and then fills it by multiplying the M_X_Y column by the Theta_Y column  </span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Brian Bowen’s student Anne Lee asked me to do a migrate analysis on two species of deepwater snapper, <em>Etelis carbunculus</em> and <em>Etelis coruscans</em>. She wrote:</p>
+<blockquote class="blockquote">
+<p>My thesis focuses on assessing the population structure and origin of deepwater snappers, Etelis carbunculus and Etelis coruscans, that were sampled from Japan, Johnston Atoll, Main Hawaiian Islands, and Northwestern Hawaiian Islands. My data consists of SNPs and I will be using migrate to help me with the analysis of the origin. This will help me examine the patterns of gene flow within both species to compare the Hawaiian populations to Johnston Atoll and Japan populations.</p>
+</blockquote>
+<p>Because these guys are so deep down, and harder to sample, we just have single population samples from the four populations she mentions above.</p>
+<div id="etelis-pics" class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://www.fishbase.se/tools/UploadPhoto/uploads/pic_1176.jpg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Etelis carbunculis; photo by Thomas Schreiber</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://www.fishbase.se/tools/UploadPhoto/uploads/1337495269_110.137.1.19.jpg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Etelis coruscans; photo by Wiwied Soeparto</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p>Bee-utiful deepwater snappers wondering where they came from, where they are going, and whether they can get back in the water now.</p>
+</div>
+</div>
+</div>
+<p>I’m also going to see how much I can learn about quarto notebooks, which Rstudio is apparently using to replace Rmarkdown notebooks. They seem like an improvement so far! Following along <a href="https://quarto.org/docs/publishing/github-pages.html">here</a>, using the simple option to render to the <code>docs</code> folder.</p>
+<p>Ann placed all the data on Google Drive, zipped by population. I will download them with the gdown python package. This involves looking up the google id for each file in the URL of the share link and pasting that into gdown thusly. They were quite large, and <code>unzip</code> and <code>gzip</code> wouldn’t work. I used jar (which I didn’t even know could uncompress things) as suggested <a href="https://unix.stackexchange.com/questions/438368/unix-unzip-is-failing-but-mac-archive-utility-works">here</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gdown</span> https://drive.google.com/uc<span class="pp">?</span>id=142BTkLDRNa6TXk1l4vhxRMxcejOg3rMt <span class="at">--output</span> ECA_Japan.zip</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gdown</span> https://drive.google.com/uc<span class="pp">?</span>id=1NFI7bH6kmsDcKwB7Y6IkE1MkOAhypCu0 <span class="at">--output</span> ECA_MHI.zip</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">gdown</span> https://drive.google.com/uc<span class="pp">?</span>id=1hufzYMZNUX_q9-QX3JwIbKYOvjsmSwks <span class="at">--output</span> ECA_NWHI.zip</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">gdown</span> https://drive.google.com/uc<span class="pp">?</span>id=1_Z3zJVPVg7cazG_BWrcoJExM36YcFVqU <span class="at">--output</span> ECO_Japan.zip</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">gdown</span> https://drive.google.com/uc<span class="pp">?</span>id=1N50_iwNGLK6bZmjfrm58lgSZgC4RHw74 <span class="at">--output</span> ECO_Johnston.zip</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">gdown</span> https://drive.google.com/uc<span class="pp">?</span>id=1YvWbC3kkY7IJKjmjOQIJIKPAJD-KnExd <span class="at">--output</span> ECO_MHI.zip</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">gdown</span> https://drive.google.com/uc<span class="pp">?</span>id=1VIBPxE08eZQuTWnW3kWmQBTBbp8FUNEZ <span class="at">--output</span> ECO_NWHI.zip</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#gdown https://drive.google.com/uc?id=1rIWvFeQqaGOSIiNe385eIrHsGqMls2qD --output Etelis_ECO249.R2.fq.gz</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ex">jar</span> xvf ECA_Japan.zip</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a> <span class="co"># etc.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Need to rename the files into Illumina format in order for Stacks to recognize the paired reads.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|eval: false</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> raw</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>.R1.fq.gz</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">.R1.fq.gz</span><span class="op">/</span>_R1_001.fastq.gz<span class="va">}</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>.R2.fq.gz</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">.R2.fq.gz</span><span class="op">/</span>_R2_001.fastq.gz<span class="va">}</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ..</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>bash: line 1: cd: raw: No such file or directory
+mv: rename *.R1.fq.gz to *_R1_001.fastq.gz: No such file or directory
+mv: rename *.R2.fq.gz to *_R2_001.fastq.gz: No such file or directory</code></pre>
+</div>
+</div>
+</section>
+<section id="haplotypes-from-stacks" class="level1">
+<h1>Haplotypes from Stacks</h1>
+<section id="clean-the-data-with-process_radtags" class="level2">
+<h2 class="anchored" data-anchor-id="clean-the-data-with-process_radtags">Clean the data with process_radtags</h2>
+<p>same commands for carbunculus and coruscans</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">process_radtags</span> <span class="at">-p</span> ./raw/ <span class="at">-o</span> ./cleaned/ <span class="at">--rescue</span> <span class="at">--clean</span> <span class="at">--quality</span> <span class="at">--paired</span> <span class="at">--threads</span> 12 <span class="at">--renz-1</span> ecoRI <span class="at">--renz-2</span> mspI  <span class="dt">\</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">--truncate</span> 145 <span class="at">--len-limit</span> 145 <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">--adapter-1</span> GATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTG <span class="dt">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">--adapter-2</span> AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT <span class="dt">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">--adapter-mm</span> 2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="e.-carbunculus-output" class="level3">
+<h3 class="anchored" data-anchor-id="e.-carbunculus-output">E. carbunculus output</h3>
+<blockquote class="blockquote">
+<p>BEGIN total_raw_read_counts Total Sequences 255732606 Reads containing adapter sequence 2116758 0.8% Barcode Not Found 0 0.0% Low Quality 600765 0.2% RAD Cutsite Not Found 1752258 0.7% Retained Reads 251262825 98.3% END total_raw_read_counts</p>
+</blockquote>
+</section>
+<section id="e.-coruscans-output" class="level3">
+<h3 class="anchored" data-anchor-id="e.-coruscans-output">E. coruscans output</h3>
+<blockquote class="blockquote">
+<p>BEGIN total_raw_read_counts Total Sequences 272955592 Reads containing adapter sequence 1919907 0.7% Barcode Not Found 0 0.0% Low Quality 8734891 3.2% RAD Cutsite Not Found 1884115 0.7% Retained Reads 260416679 95.4% END total_raw_read_counts</p>
+</blockquote>
+</section>
+</section>
+<section id="running-the-denovo_map.pl-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="running-the-denovo_map.pl-pipeline">Running the denovo_map.pl pipeline</h2>
+<p>Hmm… gotta rename the cleaned files too. All code is being run on both species.</p>
+<section id="more-renaming" class="level3">
+<h3 class="anchored" data-anchor-id="more-renaming">More renaming</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> cleaned</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>001.1.fq.gz</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">_R[12]_001.1.fq.gz</span><span class="op">/</span>.1.fq.gz<span class="va">}</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>001.2.fq.gz</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">_R[12]_001.2.fq.gz</span><span class="op">/</span>.2.fq.gz<span class="va">}</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#rename the "remainder reads" that have had their pair removed for low quality</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>001.rem.1.fq.gz<span class="kw">;</span> <span class="cf">do</span> <span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">_R[12]_001.rem.1.fq.gz</span><span class="op">/</span>.rem.1.fq.gz<span class="va">}</span><span class="kw">;</span> <span class="cf">done</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>001.rem.2.fq.gz<span class="kw">;</span> <span class="cf">do</span> <span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">_R[12]_001.rem.2.fq.gz</span><span class="op">/</span>.rem.2.fq.gz<span class="va">}</span><span class="kw">;</span> <span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="the-pipeline" class="level1">
+<h1>The pipeline</h1>
+<p>I’m going to use the denovo_map.pl pipeline. This command will take data from <code>./cleaned</code> and the popmap provided by Anne and -m 5 reads per stack, -M 4 distance between stacks, -n 4 distance between catalog loci. Running on 8 -T threads and only keeping loci that appear in 80% of individuals in all 4 populations</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">denovo_map.pl</span> <span class="at">--samples</span> ./cleaned/ <span class="at">--popmap</span> popmapECO.tsv <span class="at">--out-path</span> ./pipeline <span class="at">--paired</span> <span class="dt">\</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>-m 5 <span class="at">-M</span> 4 <span class="at">-n</span> 4  <span class="at">-T</span> 8 <span class="at">-r</span> 80 <span class="at">-p</span> 4 <span class="at">-X</span> <span class="st">"populations: --fasta-samples"</span> <span class="at">-X</span> <span class="st">"populations: --filter-haplotype-wise"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
