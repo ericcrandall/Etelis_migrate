@@ -138,6 +138,7 @@ gdown https://drive.google.com/uc?id=1N50_iwNGLK6bZmjfrm58lgSZgC4RHw74 --output 
 gdown https://drive.google.com/uc?id=1YvWbC3kkY7IJKjmjOQIJIKPAJD-KnExd --output ECO_MHI.zip
 gdown https://drive.google.com/uc?id=1VIBPxE08eZQuTWnW3kWmQBTBbp8FUNEZ --output ECO_NWHI.zip
 
+#gdown https://drive.google.com/uc?id=1rIWvFeQqaGOSIiNe385eIrHsGqMls2qD --output Etelis_ECO249.R2.fq.gz
 jar xvf ECA_Japan.zip
  # etc.
 ```
@@ -167,9 +168,10 @@ cd ..
 
 ```{bash}
 #|eval: false
-process_radtags -p ./raw/ -o ./cleaned/ --rescue --clean --quality --paired --threads 9 --renz-1 ecoRI --renz-2 mspI  \
+process_radtags -p ./raw/ -o ./cleaned/ --rescue --clean --quality --paired --threads 12 --renz-1 ecoRI --renz-2 mspI  \
                   --adapter-1 GATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTG \
                   --adapter-2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT \
                   --adapter-mm 2
 
 ```
+
