@@ -234,13 +234,8 @@ for f in *001.rem.2.fq.gz; do mv $f ${f/_R[12]_001.rem.2.fq.gz/.rem.2.fq.gz}; do
 
 # The pipeline
 
-I'm going to use the denovo_map.pl pipeline. This command will take data from `./cleaned` and the popmap provided by Anne and -m 5 reads per stack, -M 4  distance between stacks, -n 4 distance between catalog loci. Running on 8 -T threads and only keeping loci that appear in 80% of individuals in all 4 populations
 
-```{bash}
-#| eval: false
-denovo_map.pl --samples ./cleaned/ --popmap popmapECO.tsv --out-path ./pipeline --paired \
--m 5 -M 4 -n 4  -T 8 -r 80 -p 4 -X "populations: --fasta-samples" -X "populations: --filter-haplotype-wise"
-```
+## Removing extra flags
 
 Oy - so denovo_map.pl crashed with this message:
 
@@ -262,3 +257,14 @@ cd ../cleaned
 gzip *
 
 ```
+
+## Run denovo_map.pl
+
+I'm going to use the denovo_map.pl pipeline. This command will take data from `./cleaned` and the popmap provided by Anne and -m 5 reads per stack, -M 4  distance between stacks, -n 4 distance between catalog loci. Running on 8 -T threads and only keeping loci that appear in 80% of individuals in all 4 populations
+
+```{bash}
+#| eval: false
+denovo_map.pl --samples ./cleaned/ --popmap popmapECO.tsv --out-path ./pipeline --paired \
+-m 5 -M 4 -n 4  -T 8 -r 80 -p 4 -X "populations: --fasta-samples" -X "populations: --filter-haplotype-wise"
+```
+
