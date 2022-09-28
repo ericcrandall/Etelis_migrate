@@ -3,6 +3,7 @@ title: "Gene Flow Models for *Etelis spp.* Deepwater Snappers"
 author: "Eric Crandall"
 format:
   html:
+    theme: solar
     toc: true
     toc-float: true
     df-print: paged
@@ -183,26 +184,26 @@ process_radtags -p ./raw/ -o ./cleaned/ --rescue --clean --quality --paired --th
 
 ### E. carbunculus output
 
-> BEGIN total_raw_read_counts
-Total Sequences	255732606
-Reads containing adapter sequence	2116758	0.8%
-Barcode Not Found	0	0.0%
-Low Quality	600765	0.2%
-RAD Cutsite Not Found	1752258	0.7%
-Retained Reads	251262825	98.3%
-END total_raw_read_counts
+> BEGIN total_raw_read_counts  
+Total Sequences	255732606  
+Reads containing adapter sequence	2116758	0.8%  
+Barcode Not Found	0	0.0%  
+Low Quality	600765	0.2%  
+RAD Cutsite Not Found	1752258	0.7%  
+Retained Reads	251262825	98.3%  
+END total_raw_read_counts  
 
 
 ### E. coruscans output
 
->BEGIN total_raw_read_counts
-Total Sequences 272955592
-Reads containing adapter sequence       1919907 0.7%
-Barcode Not Found       0       0.0%
-Low Quality     8734891 3.2%
-RAD Cutsite Not Found   1884115 0.7%
-Retained Reads  260416679       95.4%
-END total_raw_read_counts
+>BEGIN total_raw_read_counts  
+Total Sequences 272955592  
+Reads containing adapter sequence       1919907 0.7%  
+Barcode Not Found       0       0.0%  
+Low Quality     8734891 3.2%  
+RAD Cutsite Not Found   1884115 0.7%  
+Retained Reads  260416679       95.4%  
+END total_raw_read_counts  
 
 
 
@@ -241,3 +242,23 @@ denovo_map.pl --samples ./cleaned/ --popmap popmapECO.tsv --out-path ./pipeline 
 -m 5 -M 4 -n 4  -T 8 -r 80 -p 4 -X "populations: --fasta-samples" -X "populations: --filter-haplotype-wise"
 ```
 
+Oy - so denovo_map.pl crashed with this message:
+
+>Error: Failed to find any matching paired-end reads in './cleaned/Etelis_S36.2.fq.gz'.  
+Aborted.
+
+Julian Catchen gives the solution [here](https://groups.google.com/g/stacks-users/c/CT_IunvM3l4/m/SpIorz1nBQAJ). Because these data were already run through `process_radtags` once to demultiplex them, it attached a `\1` to the labels of all primary reads and a `\2` to the labels of all paired reads. When I re-ran them in `process_radtags`, it attached an extra flag to each, which then confused `tsv2bam`. Julian provides the below code to remove the extra flags.
+
+
+```{bash}
+#| eval: false
+
+ls  -1 *.1.fq.gz | sed -E 's/\.1\.fq\.gz//' | while read line; do zcat ${line}.1.fq.gz | sed -E 's/\/1$//' > ../cleaned/${line}.1.fq; done
+
+ls  -1 *.2.fq.gz | sed -E 's/\.2\.fq\.gz//' | while read line; do zcat ${line}.2.fq.gz | sed -E 's/\/2$//' > ../cleaned/${line}.2.fq; done
+
+cd ../cleaned
+
+gzip *
+
+```
