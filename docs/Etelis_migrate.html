@@ -153,7 +153,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#more-renaming" id="toc-more-renaming" class="nav-link" data-scroll-target="#more-renaming">More renaming</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#the-pipeline" id="toc-the-pipeline" class="nav-link" data-scroll-target="#the-pipeline">The pipeline</a></li>
+  <li><a href="#the-pipeline" id="toc-the-pipeline" class="nav-link" data-scroll-target="#the-pipeline">The pipeline</a>
+  <ul class="collapse">
+  <li><a href="#removing-extra-flags" id="toc-removing-extra-flags" class="nav-link" data-scroll-target="#removing-extra-flags">Removing extra flags</a></li>
+  <li><a href="#run-denovo_map.pl" id="toc-run-denovo_map.pl" class="nav-link" data-scroll-target="#run-denovo_map.pl">Run denovo_map.pl</a></li>
+  <li><a href="#populations" id="toc-populations" class="nav-link" data-scroll-target="#populations">Populations</a>
+  <ul class="collapse">
+  <li><a href="#r80" id="toc-r80" class="nav-link" data-scroll-target="#r80">r80</a></li>
+  <li><a href="#r100" id="toc-r100" class="nav-link" data-scroll-target="#r100">r100</a></li>
+  </ul></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -351,7 +360,7 @@ mv: rename *.R2.fq.gz to *_R2_001.fastq.gz: No such file or directory</code></pr
 <h1>Haplotypes from Stacks</h1>
 <section id="clean-the-data-with-process_radtags" class="level2">
 <h2 class="anchored" data-anchor-id="clean-the-data-with-process_radtags">Clean the data with process_radtags</h2>
-<p>same commands for carbunculus and coruscans</p>
+<p>Same commands for carbunculus and coruscans. Paired end. Look for ecoR1 cutsites on read 1 and mspI cutsites on read 2. Remove low quality reads (based on a sliding window average). Remove reads smaller than 145 bp, and trim others to that length.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">process_radtags</span> <span class="at">-p</span> ./raw/ <span class="at">-o</span> ./cleaned/ <span class="at">--rescue</span> <span class="at">--clean</span> <span class="at">--quality</span> <span class="at">--paired</span> <span class="at">--threads</span> 12 <span class="at">--renz-1</span> ecoRI <span class="at">--renz-2</span> mspI  <span class="dt">\</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">--truncate</span> 145 <span class="at">--len-limit</span> 145 <span class="dt">\</span></span>
@@ -361,29 +370,25 @@ mv: rename *.R2.fq.gz to *_R2_001.fastq.gz: No such file or directory</code></pr
 </div>
 <section id="e.-carbunculus-output" class="level3">
 <h3 class="anchored" data-anchor-id="e.-carbunculus-output">E. carbunculus output</h3>
-<blockquote class="blockquote">
-<p>BEGIN total_raw_read_counts<br>
-Total Sequences 255732606<br>
-Reads containing adapter sequence 2116758 0.8%<br>
-Barcode Not Found 0 0.0%<br>
-Low Quality 600765 0.2%<br>
-RAD Cutsite Not Found 1752258 0.7%<br>
-Retained Reads 251262825 98.3%<br>
-END total_raw_read_counts</p>
-</blockquote>
+<pre><code>BEGIN total_raw_read_counts  
+Total Sequences 255732606  
+Reads containing adapter sequence       1957206 0.8%  
+Barcode Not Found       0       0.0%  
+Low Quality     6558845 2.6%  
+RAD Cutsite Not Found   1678118 0.7%  
+Retained Reads  245538437       96.0%  
+END total_raw_read_counts  </code></pre>
 </section>
 <section id="e.-coruscans-output" class="level3">
 <h3 class="anchored" data-anchor-id="e.-coruscans-output">E. coruscans output</h3>
-<blockquote class="blockquote">
-<p>BEGIN total_raw_read_counts<br>
-Total Sequences 272955592<br>
-Reads containing adapter sequence 1919907 0.7%<br>
-Barcode Not Found 0 0.0%<br>
-Low Quality 8734891 3.2%<br>
-RAD Cutsite Not Found 1884115 0.7%<br>
-Retained Reads 260416679 95.4%<br>
-END total_raw_read_counts</p>
-</blockquote>
+<pre><code>BEGIN total_raw_read_counts  
+Total Sequences 272955592  
+Reads containing adapter sequence       1919907 0.7%  
+Barcode Not Found       0       0.0%  
+Low Quality     8734891 3.2%  
+RAD Cutsite Not Found   1884115 0.7%  
+Retained Reads  260416679       95.4%  
+END total_raw_read_counts  </code></pre>
 </section>
 </section>
 <section id="running-the-denovo_map.pl-pipeline" class="level2">
@@ -392,33 +397,203 @@ END total_raw_read_counts</p>
 <section id="more-renaming" class="level3">
 <h3 class="anchored" data-anchor-id="more-renaming">More renaming</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> cleaned</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>001.1.fq.gz</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">_R[12]_001.1.fq.gz</span><span class="op">/</span>.1.fq.gz<span class="va">}</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>001.2.fq.gz</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">_R[12]_001.2.fq.gz</span><span class="op">/</span>.2.fq.gz<span class="va">}</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#rename the "remainder reads" that have had their pair removed for low quality</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>001.rem.1.fq.gz<span class="kw">;</span> <span class="cf">do</span> <span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">_R[12]_001.rem.1.fq.gz</span><span class="op">/</span>.rem.1.fq.gz<span class="va">}</span><span class="kw">;</span> <span class="cf">done</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>001.rem.2.fq.gz<span class="kw">;</span> <span class="cf">do</span> <span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">_R[12]_001.rem.2.fq.gz</span><span class="op">/</span>.rem.2.fq.gz<span class="va">}</span><span class="kw">;</span> <span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> cleaned</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>001.1.fq.gz</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">_R[12]_001.1.fq.gz</span><span class="op">/</span>.1.fq.gz<span class="va">}</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>001.2.fq.gz</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">_R[12]_001.2.fq.gz</span><span class="op">/</span>.2.fq.gz<span class="va">}</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#rename the "remainder reads" that have had their pair removed for low quality</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>001.rem.1.fq.gz<span class="kw">;</span> <span class="cf">do</span> <span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">_R[12]_001.rem.1.fq.gz</span><span class="op">/</span>.rem.1.fq.gz<span class="va">}</span><span class="kw">;</span> <span class="cf">done</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>001.rem.2.fq.gz<span class="kw">;</span> <span class="cf">do</span> <span class="fu">mv</span> <span class="va">$f</span> <span class="va">${f</span><span class="op">/</span><span class="ss">_R[12]_001.rem.2.fq.gz</span><span class="op">/</span>.rem.2.fq.gz<span class="va">}</span><span class="kw">;</span> <span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
 </section>
 <section id="the-pipeline" class="level1">
 <h1>The pipeline</h1>
+<section id="removing-extra-flags" class="level2">
+<h2 class="anchored" data-anchor-id="removing-extra-flags">Removing extra flags</h2>
+<p>Oy - so denovo_map.pl crashed with this message:</p>
+<blockquote class="blockquote">
+<p>Error: Failed to find any matching paired-end reads in ‘./cleaned/Etelis_S36.2.fq.gz’.<br>
+Aborted.</p>
+</blockquote>
+<p>Julian Catchen gives the solution <a href="https://groups.google.com/g/stacks-users/c/CT_IunvM3l4/m/SpIorz1nBQAJ">here</a>. Because these data were already run through <code>process_radtags</code> once to demultiplex them, it attached a <code>\1</code> to the labels of all primary reads and a <code>\2</code> to the labels of all paired reads. When I re-ran them in <code>process_radtags</code>, it attached an extra flag to each, which then confused <code>tsv2bam</code>. Julian provides the below code to remove the extra flags.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>  <span class="at">-1</span> <span class="pp">*</span>.1.fq.gz <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">'s/\.1\.fq\.gz//'</span> <span class="kw">|</span> <span class="cf">while</span> <span class="bu">read</span> <span class="va">line</span><span class="kw">;</span> <span class="cf">do</span> <span class="fu">zcat</span> <span class="va">${line}</span>.1.fq.gz <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">'s/\/1$//'</span> <span class="op">&gt;</span> ../cleaned/<span class="va">${line}</span>.1.fq<span class="kw">;</span> <span class="cf">done</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>  <span class="at">-1</span> <span class="pp">*</span>.2.fq.gz <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">'s/\.2\.fq\.gz//'</span> <span class="kw">|</span> <span class="cf">while</span> <span class="bu">read</span> <span class="va">line</span><span class="kw">;</span> <span class="cf">do</span> <span class="fu">zcat</span> <span class="va">${line}</span>.2.fq.gz <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">'s/\/2$//'</span> <span class="op">&gt;</span> ../cleaned/<span class="va">${line}</span>.2.fq<span class="kw">;</span> <span class="cf">done</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../cleaned</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="ex">parallel</span> gzip ::: <span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="run-denovo_map.pl" class="level2">
+<h2 class="anchored" data-anchor-id="run-denovo_map.pl">Run denovo_map.pl</h2>
 <p>I’m going to use the denovo_map.pl pipeline. This command will take data from <code>./cleaned</code> and the popmap provided by Anne and -m 5 reads per stack, -M 4 distance between stacks, -n 4 distance between catalog loci. Running on 8 -T threads and only keeping loci that appear in 80% of individuals in all 4 populations</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">denovo_map.pl</span> <span class="at">--samples</span> ./cleaned/ <span class="at">--popmap</span> popmapECO.tsv <span class="at">--out-path</span> ./pipeline <span class="at">--paired</span> <span class="dt">\</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>-m 5 <span class="at">-M</span> 4 <span class="at">-n</span> 4  <span class="at">-T</span> 8 <span class="at">-r</span> 80 <span class="at">-p</span> 4 <span class="at">-X</span> <span class="st">"populations: --fasta-samples"</span> <span class="at">-X</span> <span class="st">"populations: --filter-haplotype-wise"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">denovo_map.pl</span> <span class="at">--samples</span> ./cleaned/ <span class="at">--popmap</span> popmapECA.tsv <span class="at">--out-path</span> ./pipeline <span class="at">--paired</span> <span class="dt">\</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>-m 5 <span class="at">-M</span> 4 <span class="at">-n</span> 4  <span class="at">-T</span> 12 <span class="at">-r</span> 80 <span class="at">-p</span> 4 <span class="at">-X</span> <span class="st">"populations: --fasta-samples"</span> <span class="at">-X</span> <span class="st">"populations: --filter-haplotype-wise"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="populations" class="level2">
+<h2 class="anchored" data-anchor-id="populations">Populations</h2>
+<p>Now I need to re-run <code>populations</code> to get more statistics. Original populations output is in output1, this will be in output2.</p>
+<section id="r80" class="level3">
+<h3 class="anchored" data-anchor-id="r80">r80</h3>
+<p>Settings for keeping loci that occur in 80 percent of indivs per population (so 4/5 of the Johnston invivs for coruscans). I’m being intentionally stringent by setting the p-value cutoff for hwe at 0.05.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">populations</span> <span class="at">-P</span> ./ <span class="at">-O</span> ./output2_r80 <span class="at">-M</span> ../popmapECO.tsv <span class="at">-t</span> 12 <span class="at">-p</span> 4 <span class="at">-r</span> 80 <span class="at">-H</span> <span class="at">--hwe</span> <span class="at">--fstats</span> <span class="at">--p-value-cutoff</span> 0.05 <span class="at">--fasta-loci</span> <span class="at">--fasta-samples</span> <span class="at">--vcf</span> <span class="at">--genepop</span> <span class="at">--structure</span> <span class="at">--treemix</span> <span class="at">--fasta-samples-raw</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="e.-carbunculus" class="level4">
+<h4 class="anchored" data-anchor-id="e.-carbunculus">E. carbunculus</h4>
+<pre><code>Removed 98351 loci that did not pass sample/population constraints from 115429 loci.
+Kept 17078 loci, composed of 5539395 sites; 17697 of those sites were filtered, 49261 variant sites remained.
+Number of loci with PE contig: 17078.00 (100.0%);
+  Mean length of loci: 314.36bp (stderr 0.38);
+Number of loci with SE/PE overlap: 2546.00 (14.9%);
+  Mean length of overlapping loci: 285.08bp (stderr 0.47); mean overlap: 27.61bp (stderr 0.13);
+Mean genotyped sites per locus: 315.85bp (stderr 0.37).
+
+Population summary statistics (more detail in populations.sumstats_summary.tsv):
+  Japan: 13.333 samples per locus; pi: 0.16058; all/variant/polymorphic sites: 5394107/49261/33997; private alleles: 6596
+  MHI: 13.55 samples per locus; pi: 0.15487; all/variant/polymorphic sites: 5394107/49261/31541; private alleles: 3166
+  NWHI: 25.142 samples per locus; pi: 0.15329; all/variant/polymorphic sites: 5394107/49261/38082; private alleles: 7321
+
+Number of variable sites found to be significantly out of Hardy-Weinberg equilibrium (&lt;0.05):
+  Japan: 1145
+  MHI: 1103
+  NWHI: 1527
+Number of loci found to be significantly out of Hardy-Weinberg equilibrium (&lt;0.05):
+  Japan: 3917
+  MHI: 4185
+  NWHI: 3407
+(more detail in populations.sumstats.tsv and populations.hapstats.tsv)
+
+Population pair divergence statistics (more in populations.fst_summary.tsv and populations.phistats_summary.tsv):
+  Japan-MHI: mean Fst: 0.030208; mean Phi_st: 0.023147; mean Fst': 0.025616; mean Dxy: 0.0019853
+  Japan-NWHI: mean Fst: 0.02638; mean Phi_st: 0.028095; mean Fst': 0.029652; mean Dxy: 0.0019372
+  MHI-NWHI: mean Fst: 0.014407; mean Phi_st: 0.0018347; mean Fst': 0.0016037; mean Dxy: 0.0018308</code></pre>
+</section>
+<section id="e.-coruscans" class="level4">
+<h4 class="anchored" data-anchor-id="e.-coruscans">E. coruscans</h4>
+<pre><code>Removed 130579 loci that did not pass sample/population constraints from 141967 loci.
+Kept 11388 loci, composed of 3690405 sites; 32281 of those sites were filtered, 59470 variant sites remained.
+Number of loci with PE contig: 11388.00 (100.0%);
+  Mean length of loci: 314.06bp (stderr 0.42);
+Number of loci with SE/PE overlap: 1079.00 (9.5%);
+  Mean length of overlapping loci: 291.05bp (stderr 0.59); mean overlap: 24.47bp (stderr 0.12);
+Mean genotyped sites per locus: 315.02bp (stderr 0.42).
+
+Population summary statistics (more detail in populations.sumstats_summary.tsv):
+  Johnston_Atoll: 4.1993 samples per locus; pi: 0.074411; all/variant/polymorphic sites: 3587423/59470/15449; private alleles: 5208
+  MHI: 13.68 samples per locus; pi: 0.060304; all/variant/polymorphic sites: 3587423/59470/25569; private alleles: 7241
+  NWHI: 26.37 samples per locus; pi: 0.060932; all/variant/polymorphic sites: 3587423/59470/38902; private alleles: 15366
+  Japan: 13.217 samples per locus; pi: 0.054013; all/variant/polymorphic sites: 3587423/59470/22717; private alleles: 6028
+
+Number of variable sites found to be significantly out of Hardy-Weinberg equilibrium (&lt;0.05):
+  Johnston_Atoll: 7
+  MHI: 1134
+  NWHI: 1648
+  Japan: 700
+Number of loci found to be significantly out of Hardy-Weinberg equilibrium (&lt;0.05):
+  Johnston_Atoll: 3998
+  MHI: 2984
+  NWHI: 2673
+  Japan: 3395
+(more detail in populations.sumstats.tsv and populations.hapstats.tsv)
+
+Population pair divergence statistics (more in populations.fst_summary.tsv and populations.phistats_summary.tsv):
+  Johnston_Atoll-MHI: mean Fst: 0.038243; mean Phi_st: 0.012337; mean Fst': 0.0011598; mean Dxy: 0.0014711
+  Johnston_Atoll-NWHI: mean Fst: 0.022267; mean Phi_st: 0.0056917; mean Fst': -0.0033667; mean Dxy: 0.0013478
+  Johnston_Atoll-Japan: mean Fst: 0.041778; mean Phi_st: 0.018924; mean Fst': 0.0048455; mean Dxy: 0.0014546
+  MHI-NWHI: mean Fst: 0.013568; mean Phi_st: 0.0027592; mean Fst': 0.0011102; mean Dxy: 0.0012735
+  MHI-Japan: mean Fst: 0.021407; mean Phi_st: 0.0058972; mean Fst': 0.0028619; mean Dxy: 0.0013316
+  NWHI-Japan: mean Fst: 0.013484; mean Phi_st: 0.002933; mean Fst': 0.0018245; mean Dxy: 0.0012352</code></pre>
+</section>
+</section>
+<section id="r100" class="level3">
+<h3 class="anchored" data-anchor-id="r100">r100</h3>
+<p>Settings for keeping loci that occur in 100 percent of indivs per population ::: {.cell}</p>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">populations</span> <span class="at">-P</span> ./ <span class="at">-O</span> ./output3_r100 <span class="at">-M</span> ../popmapECO.tsv <span class="at">-t</span> 12 <span class="at">-p</span> 4 <span class="at">-r</span> 100 <span class="at">-H</span> <span class="at">--hwe</span> <span class="at">--fstats</span> <span class="at">--p-value-cutoff</span> 0.05 <span class="at">--fasta-loci</span> <span class="at">--fasta-samples</span> <span class="at">--vcf</span> <span class="at">--genepop</span> <span class="at">--structure</span> <span class="at">--treemix</span> <span class="at">--fasta-samples-raw</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>:::</p>
+<section id="e.-carbunculus-1" class="level4">
+<h4 class="anchored" data-anchor-id="e.-carbunculus-1">E. carbunculus</h4>
+<pre><code>Removed 111882 loci that did not pass sample/population constraints from 115429 loci.
+Kept 3547 loci, composed of 1134453 sites; 6916 of those sites were filtered, 6537 variant sites remained.
+Number of loci with PE contig: 3547.00 (100.0%);
+  Mean length of loci: 309.83bp (stderr 0.69);
+Number of loci with SE/PE overlap: 288.00 (8.1%);
+  Mean length of overlapping loci: 285.06bp (stderr 1.00); mean overlap: 24.45bp (stderr 0.24);
+Mean genotyped sites per locus: 310.68bp (stderr 0.68).
+
+Population summary statistics (more detail in populations.sumstats_summary.tsv):
+  Japan: 14 samples per locus; pi: 0.10528; all/variant/polymorphic sites: 1101972/6537/3955; private alleles: 1170
+  MHI: 14 samples per locus; pi: 0.09766; all/variant/polymorphic sites: 1101972/6537/3434; private alleles: 511
+  NWHI: 27 samples per locus; pi: 0.097747; all/variant/polymorphic sites: 1101972/6537/4642; private alleles: 1340
+
+Number of variable sites found to be significantly out of Hardy-Weinberg equilibrium (&lt;0.05):
+  Japan: 101
+  MHI: 90
+  NWHI: 110
+Number of loci found to be significantly out of Hardy-Weinberg equilibrium (&lt;0.05):
+  Japan: 1197
+  MHI: 1358
+  NWHI: 1331
+(more detail in populations.sumstats.tsv and populations.hapstats.tsv)
+
+Population pair divergence statistics (more in populations.fst_summary.tsv and populations.phistats_summary.tsv):
+  Japan-MHI: mean Fst: 0.025802; mean Phi_st: 0.015567; mean Fst': 0.0094451; mean Dxy: 0.00087231
+  Japan-NWHI: mean Fst: 0.020607; mean Phi_st: 0.018272; mean Fst': 0.010517; mean Dxy: 0.00082861
+  MHI-NWHI: mean Fst: 0.012892; mean Phi_st: 0.00097809; mean Fst': 0.00022075; mean Dxy: 0.00081207</code></pre>
+</section>
+<section id="e.-coruscans-1" class="level4">
+<h4 class="anchored" data-anchor-id="e.-coruscans-1">E. coruscans</h4>
+<pre><code>Removed 140925 loci that did not pass sample/population constraints from 141967 loci.
+Kept 1042 loci, composed of 334846 sites; 3569 of those sites were filtered, 3654 variant sites remained.
+Number of loci with PE contig: 1042.00 (100.0%);
+  Mean length of loci: 311.35bp (stderr 1.36);
+Number of loci with SE/PE overlap: 117.00 (11.2%);
+  Mean length of overlapping loci: 285.68bp (stderr 1.71); mean overlap: 24.41bp (stderr 0.38);
+Mean genotyped sites per locus: 312.62bp (stderr 1.33).
+
+Population summary statistics (more detail in populations.sumstats_summary.tsv):
+  Johnston_Atoll: 5 samples per locus; pi: 0.060494; all/variant/polymorphic sites: 325749/3654/975; private alleles: 520
+  MHI: 14 samples per locus; pi: 0.036669; all/variant/polymorphic sites: 325749/3654/1226; private alleles: 470
+  NWHI: 27 samples per locus; pi: 0.037317; all/variant/polymorphic sites: 325749/3654/2064; private alleles: 1019
+  Japan: 14 samples per locus; pi: 0.033766; all/variant/polymorphic sites: 325749/3654/1143; private alleles: 463
+
+Number of variable sites found to be significantly out of Hardy-Weinberg equilibrium (&lt;0.05):
+  Johnston_Atoll: 0
+  MHI: 32
+  NWHI: 45
+  Japan: 19
+Number of loci found to be significantly out of Hardy-Weinberg equilibrium (&lt;0.05):
+  Johnston_Atoll: 524
+  MHI: 422
+  NWHI: 405
+  Japan: 396
+(more detail in populations.sumstats.tsv and populations.hapstats.tsv)
+
+Population pair divergence statistics (more in populations.fst_summary.tsv and populations.phistats_summary.tsv):
+  Johnston_Atoll-MHI: mean Fst: 0.039663; mean Phi_st: 0.02039; mean Fst': 0.0012821; mean Dxy: 0.00073676
+  Johnston_Atoll-NWHI: mean Fst: 0.026268; mean Phi_st: 0.015567; mean Fst': 0.00037957; mean Dxy: 0.0006556
+  Johnston_Atoll-Japan: mean Fst: 0.041015; mean Phi_st: 0.020409; mean Fst': 0.0021605; mean Dxy: 0.0007176
+  MHI-NWHI: mean Fst: 0.012433; mean Phi_st: 0.00025697; mean Fst': 4.0397e-05; mean Dxy: 0.00049144
+  MHI-Japan: mean Fst: 0.019806; mean Phi_st: 0.0039369; mean Fst': 0.00060169; mean Dxy: 0.00050736
+  NWHI-Japan: mean Fst: 0.012751; mean Phi_st: 0.0020762; mean Fst': 0.00052502; mean Dxy: 0.00047009</code></pre>
 
 
+</section>
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
