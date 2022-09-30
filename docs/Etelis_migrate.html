@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.1.189">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,15 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -54,7 +59,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -67,7 +72,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -131,7 +136,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -162,6 +167,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#r80" id="toc-r80" class="nav-link" data-scroll-target="#r80">r80</a></li>
   <li><a href="#r100" id="toc-r100" class="nav-link" data-scroll-target="#r100">r100</a></li>
   </ul></li>
+  <li><a href="#download-the-populations-output" id="toc-download-the-populations-output" class="nav-link" data-scroll-target="#download-the-populations-output">Download the populations output</a></li>
+  </ul></li>
+  <li><a href="#evaluate-the-haplotypes" id="toc-evaluate-the-haplotypes" class="nav-link" data-scroll-target="#evaluate-the-haplotypes">Evaluate the Haplotypes</a>
+  <ul class="collapse">
+  <li><a href="#snpr" id="toc-snpr" class="nav-link" data-scroll-target="#snpr">SNPr</a></li>
+  <li><a href="#adegenet" id="toc-adegenet" class="nav-link" data-scroll-target="#adegenet">Adegenet</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -203,12 +214,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ape)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phangorn)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pegas)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(strataG)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emo)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coda)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmcmc)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(perm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#library(strataG)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#library(emo)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coda)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmcmc)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(perm)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(snpR)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(adegenet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -589,10 +601,70 @@ Population pair divergence statistics (more in populations.fst_summary.tsv and p
   MHI-NWHI: mean Fst: 0.012433; mean Phi_st: 0.00025697; mean Fst': 4.0397e-05; mean Dxy: 0.00049144
   MHI-Japan: mean Fst: 0.019806; mean Phi_st: 0.0039369; mean Fst': 0.00060169; mean Dxy: 0.00050736
   NWHI-Japan: mean Fst: 0.012751; mean Phi_st: 0.0020762; mean Fst': 0.00052502; mean Dxy: 0.00047009</code></pre>
-
-
 </section>
 </section>
+</section>
+<section id="download-the-populations-output" class="level2">
+<h2 class="anchored" data-anchor-id="download-the-populations-output">Download the populations output</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> argo:./Etelis/coruscans/pipeline/output3_r100 ./populations_r100</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> argo:./Etelis/carbunculus/pipeline/output3_r100 ./populations_r100 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="evaluate-the-haplotypes" class="level1">
+<h1>Evaluate the Haplotypes</h1>
+<p>I will use Will Hemstrom’s new package <a href="https://github.com/hemstrow/snpR">SNPr</a> to further evaluate and filter the haplotypes.</p>
+<section id="snpr" class="level2">
+<h2 class="anchored" data-anchor-id="snpr">SNPr</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>popmap <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"coruscans/popmapECO.tsv"</span>,<span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"sampID"</span>,<span class="st">"pop"</span>))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">read_vcf</span>(<span class="at">file =</span> <span class="st">"coruscans/populations_r100/populations.haps.vcf"</span>,<span class="at">sample.meta =</span> popmap)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_ho</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_he</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_maf</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_pi</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_private</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_hwe</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_fis</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">get.snpR.stats</span>(ecor_haps, <span class="st">"pop"</span>, <span class="at">stats =</span> <span class="fu">c</span>(<span class="st">"maf"</span>, <span class="st">"ho"</span>,<span class="st">"he"</span>,<span class="st">"hwe"</span>, <span class="st">"fis"</span>,<span class="st">"pi"</span>, <span class="st">"private"</span>)) </span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co"># and dang, just like that we can get a PCA</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">plot_clusters</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>p<span class="sc">$</span>plots<span class="sc">$</span>pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Hmmm… I’m thinking that it is assuming that the data are biallelic.</p>
+</section>
+<section id="adegenet" class="level2">
+<h2 class="anchored" data-anchor-id="adegenet">Adegenet</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">read.genepop</span>(<span class="st">"coruscans/populations_r100/populations.haps.gen"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Converting data from a Genepop .gen file to a genind object... 
+
+
+File description:  Stacks v2.61; GenePop v4.1.3; September 30, 2022 
+
+...done.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(ecor_haps<span class="sc">$</span>pop) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"JA"</span>,<span class="st">"MHI"</span>,<span class="st">"NWHI"</span>,<span class="st">"OK"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>ecor_dapc <span class="ot">&lt;-</span> <span class="fu">dapc</span>(ecor_haps,<span class="at">pop =</span>  ecor_haps<span class="sc">$</span>pop, <span class="at">scale =</span> T, <span class="at">pca.select=</span><span class="st">"nbEig"</span>, <span class="at">n.pca =</span> <span class="dv">50</span>, <span class="at">n.da=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in .local(x, ...): Some scaling values are null.
+ Corresponding alleles are removed.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scatter</span>(ecor_dapc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
 </section>
 </section>
 
@@ -666,7 +738,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);

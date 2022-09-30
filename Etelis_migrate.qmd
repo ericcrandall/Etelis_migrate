@@ -26,12 +26,13 @@ library(tidyverse)
 library(ape)
 library(phangorn)
 library(pegas)
-library(strataG)
-library(knitr)
-library(emo)
+#library(strataG)
+#library(emo)
 library(coda)
 library(ggmcmc)
 library(perm)
+library(snpR)
+library(adegenet)
 ```
 
 ## Function library
@@ -424,3 +425,54 @@ Population pair divergence statistics (more in populations.fst_summary.tsv and p
   MHI-Japan: mean Fst: 0.019806; mean Phi_st: 0.0039369; mean Fst': 0.00060169; mean Dxy: 0.00050736
   NWHI-Japan: mean Fst: 0.012751; mean Phi_st: 0.0020762; mean Fst': 0.00052502; mean Dxy: 0.00047009
   ```
+  
+## Download the populations output
+
+```{bash}
+#| eval: false
+
+scp -r argo:./Etelis/coruscans/pipeline/output3_r100 ./populations_r100
+scp -r argo:./Etelis/carbunculus/pipeline/output3_r100 ./populations_r100 
+```
+
+# Evaluate the Haplotypes
+
+I will use Will Hemstrom's new package [SNPr](https://github.com/hemstrow/snpR) to further evaluate and filter the haplotypes. 
+
+## SNPr
+
+```{r}
+#| eval: false
+
+popmap <- read_tsv("coruscans/popmapECO.tsv",col_names = c("sampID","pop"))
+ecor_haps <- read_vcf(file = "coruscans/populations_r100/populations.haps.vcf",sample.meta = popmap)
+
+ecor_haps <- calc_ho(ecor_haps, facets = "pop")
+ecor_haps <- calc_he(ecor_haps, facets = "pop")
+ecor_haps <- calc_maf(ecor_haps, facets = "pop")
+ecor_haps <- calc_pi(ecor_haps, facets = "pop")
+ecor_haps <- calc_private(ecor_haps, facets = "pop")
+ecor_haps <- calc_hwe(ecor_haps, facets = "pop")
+ecor_haps <- calc_fis(ecor_haps, facets = "pop")
+
+stats <- get.snpR.stats(ecor_haps, "pop", stats = c("maf", "ho","he","hwe", "fis","pi", "private")) 
+
+
+# and dang, just like that we can get a PCA
+p <- plot_clusters(ecor_haps, facets = "pop")
+p$plots$pca
+```
+
+Hmmm... I'm thinking that it is assuming that the data are biallelic.
+
+## Adegenet
+
+```{r}
+ecor_haps <- read.genepop("coruscans/populations_r100/populations.haps.gen")
+levels(ecor_haps$pop) <- c("JA","MHI","NWHI","OK")
+
+ecor_dapc <- dapc(ecor_haps,pop =  ecor_haps$pop, scale = T, pca.select="nbEig", n.pca = 50, n.da=3)
+
+scatter(ecor_dapc)
+
+```

@@ -38,5 +38,8 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-
+# large fasta files
+*samples.fa
+/coruscans/populations_r100
+/carbunculus/populations_r100
 /.quarto/
