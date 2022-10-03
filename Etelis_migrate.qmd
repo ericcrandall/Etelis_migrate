@@ -31,7 +31,7 @@ library(pegas)
 library(coda)
 library(ggmcmc)
 library(perm)
-library(snpR)
+#library(snpR)
 library(adegenet)
 ```
 
@@ -356,6 +356,9 @@ Population pair divergence statistics (more in populations.fst_summary.tsv and p
 Settings for keeping loci that occur in 100 percent of indivs per population 
 ```{bash eval = F}
 populations -P ./ -O ./output3_r100 -M ../popmapECO.tsv -t 12 -p 4 -r 100 -H --hwe --fstats --p-value-cutoff 0.05 --fasta-loci --fasta-samples --vcf --genepop --structure --treemix --fasta-samples-raw 
+
+# and again with single SNPs from each locus so we can test for linkage and selection
+populations -P ./ -O ./output4_r100.SNP -M ../popmapECA.tsv -t 12 -p 3 -r 100 --hwe --fstats --p-value-cutoff 0.05  --vcf --genepop  --write-random-snp
 ```
 
 #### E. carbunculus
@@ -437,34 +440,6 @@ scp -r argo:./Etelis/carbunculus/pipeline/output3_r100 ./populations_r100
 
 # Evaluate the Haplotypes
 
-I will use Will Hemstrom's new package [SNPr](https://github.com/hemstrow/snpR) to further evaluate and filter the haplotypes. 
-
-## SNPr
-
-```{r}
-#| eval: false
-
-popmap <- read_tsv("coruscans/popmapECO.tsv",col_names = c("sampID","pop"))
-ecor_haps <- read_vcf(file = "coruscans/populations_r100/populations.haps.vcf",sample.meta = popmap)
-
-ecor_haps <- calc_ho(ecor_haps, facets = "pop")
-ecor_haps <- calc_he(ecor_haps, facets = "pop")
-ecor_haps <- calc_maf(ecor_haps, facets = "pop")
-ecor_haps <- calc_pi(ecor_haps, facets = "pop")
-ecor_haps <- calc_private(ecor_haps, facets = "pop")
-ecor_haps <- calc_hwe(ecor_haps, facets = "pop")
-ecor_haps <- calc_fis(ecor_haps, facets = "pop")
-
-stats <- get.snpR.stats(ecor_haps, "pop", stats = c("maf", "ho","he","hwe", "fis","pi", "private")) 
-
-
-# and dang, just like that we can get a PCA
-p <- plot_clusters(ecor_haps, facets = "pop")
-p$plots$pca
-```
-
-Hmmm... I'm thinking that it is assuming that the data are biallelic.
-
 ## Adegenet
 
 ```{r}
@@ -473,6 +448,41 @@ levels(ecor_haps$pop) <- c("JA","MHI","NWHI","OK")
 
 ecor_dapc <- dapc(ecor_haps,pop =  ecor_haps$pop, scale = T, pca.select="nbEig", n.pca = 50, n.da=3)
 
-scatter(ecor_dapc)
+scatter(ecor_dapc, title = "E. coruscans")
+
+ecor_hwe <- hw.test(ecor_haps, B = 1000)
+
+ecar_haps
+
+
 
 ```
+
+I will use Will Hemstrom's new package [SNPr](https://github.com/hemstrow/snpR) to further evaluate and filter the SNPs that I randomly selected from each locus. 
+
+## SNPr
+
+```{r}
+#| eval: false
+
+popmap <- read_tsv("coruscans/popmapECO.tsv",col_names = c("sampID","pop"))
+ecor_snps <- read_vcf(file = "coruscans/populations_r100/populations.randsnp.vcf",sample.meta = popmap)
+
+ecor_snps <- calc_ho(ecor_snps, facets = "pop")
+ecor_snps <- calc_he(ecor_snps, facets = "pop")
+ecor_snps <- calc_maf(ecor_snps, facets = "pop")
+ecor_snps <- calc_pi(ecor_snps, facets = "pop")
+ecor_snps <- calc_private(ecor_snps, facets = "pop")
+ecor_snps <- calc_hwe(ecor_snps, facets = "pop")
+ecor_snps <- calc_fis(ecor_snps, facets = "pop")
+
+stats <- get.snpR.stats(ecor_snps, "pop", stats = c("maf", "ho","he","hwe", "fis","pi", "private")) 
+
+
+# and dang, just like that we can get a PCA
+p <- plot_clusters(ecor_snps, facets = "pop")
+p$plots$pca
+
+#gotta deal with that one weirdo at Johnston. Filter HWE, filter LD, filter selection with PCAadapt.
+```
+
