@@ -31,8 +31,9 @@ library(pegas)
 library(coda)
 library(ggmcmc)
 library(perm)
-#library(snpR)
+library(snpR)
 library(adegenet)
+library(pcadapt)
 ```
 
 ## Function library
@@ -128,7 +129,7 @@ Bee-utiful deepwater snappers wondering where they came from, where they are goi
 I'm also going to see how much I can learn about quarto notebooks, which Rstudio is apparently using to replace Rmarkdown notebooks. They seem like an improvement so far! Following along [here](https://quarto.org/docs/publishing/github-pages.html), using the simple option to render to the `docs` folder.
 
 
-Ann placed all the data on Google Drive, zipped by population.  I will download them with the gdown python package. This involves looking up the google id for each file in the URL of the share link and pasting that into gdown thusly. They were quite large, and `unzip` and `gzip` wouldn't work. I used jar (which I didn't even know could uncompress things) as suggested [here](https://unix.stackexchange.com/questions/438368/unix-unzip-is-failing-but-mac-archive-utility-works)
+Anne placed all the data on Google Drive, zipped by population.  I will download them with the gdown python package. This involves looking up the google id for each file in the URL of the share link and pasting that into gdown thusly. They were quite large, and `unzip` and `gzip` wouldn't work. I used jar (which I didn't even know could uncompress things) as suggested [here](https://unix.stackexchange.com/questions/438368/unix-unzip-is-failing-but-mac-archive-utility-works)
 
 ```{bash}
 #| eval: false
@@ -438,7 +439,7 @@ scp -r argo:./Etelis/coruscans/pipeline/output3_r100 ./populations_r100
 scp -r argo:./Etelis/carbunculus/pipeline/output3_r100 ./populations_r100 
 ```
 
-# Evaluate the Haplotypes
+# Evaluate the genomic data
 
 ## Adegenet
 
@@ -452,22 +453,79 @@ scatter(ecor_dapc, title = "E. coruscans")
 
 ecor_hwe <- hw.test(ecor_haps, B = 1000)
 
-ecar_haps
+```
 
+Let's take a look with the randomly selected SNPs
 
+```{r}
+ecor_snps.genind <- read.genepop("coruscans/populations_r100/populations.randsnp.gen")
+levels(ecor_snps.genind$pop) <- c("JA","MHI","NWHI","OK")
+
+ecor_dapc_snps <- dapc(ecor_snps.genind,pop =  ecor_snps.genind$pop, scale = T,
+                       pca.select="nbEig", n.pca = 50, n.da=3)
+
+scatter(ecor_dapc_snps)
 
 ```
 
-I will use Will Hemstrom's new package [SNPr](https://github.com/hemstrow/snpR) to further evaluate and filter the SNPs that I randomly selected from each locus. 
-
 ## SNPr
 
+I will use Will Hemstrom's new package [SNPr](https://github.com/hemstrow/snpR) to further evaluate and filter the SNPs that I randomly selected from each locus. 
+
 ```{r}
-#| eval: false
-
 popmap <- read_tsv("coruscans/popmapECO.tsv",col_names = c("sampID","pop"))
-ecor_snps <- read_vcf(file = "coruscans/populations_r100/populations.randsnp.vcf",sample.meta = popmap)
+ecor_snps <- read_vcf(file = "coruscans/populations_r100/populations.randsnp.vcf",
+                      sample.meta = popmap)
+```
 
+### Filtering
+
+I've already implemented stringent filters in Stacks to only include individuals with all loci and loci found in all individuals. Now going to implement a strict HWE filter - if a locus is out of HWE in any population (`hwe_facets = "pop"`) after a Bonferroni correction, then it will be removed. Also going to remove non-variant loci, and loci with only a single minor allele ("singletons").
+
+```{r}
+ecor_snps <- filter_snps(ecor_snps, min_ind = 0.9999, min_loci = 0.9999, re_run = "full", 
+                         hwe = 0.05, fwe_method = "BY", hwe_facets = "pop", singletons = T,
+                         verbose = T)
+
+```
+
+
+### Individual Stats
+
+snpR uses facets to subset data on either sample metadata (such as sample ID, or population) or SNP metadata. Here we will look at per-individual stats. Also, note that the calculations are just attached to the data object, so we don't lose track of them. Nice.
+
+```{r}
+ecor_snps <- calc_hs(ecor_snps, facets = "sampID")
+ecor_snps <- calc_he(ecor_snps, facets = "sampID")
+ecor_snps <- calc_ho(ecor_snps, facets = "sampID")
+
+# and dang, just like that we can get a PCA
+p <- plot_clusters(ecor_snps, facets = "pop")
+p$plots$pca
+
+```
+
+
+so there's that one weirdo at Johnston, who is A150... we can identify him like this. He has double the mean $H_e$ and $H_o$.
+
+```{r}
+ecor_snps <- calc_genetic_distances(ecor_snps, facets = "sampID",method = "Nei")
+stats.ind <- get.snpR.stats(ecor_snps, facets="sampID", stats = c("hs","ho","he"))
+ind.dists <- get.snpR.stats(ecor_snps,facets="sampID", stats = "genetic_distance")                  
+heatmap(as.matrix(ind.dists$sampID$.base$Nei))
+# drop'im
+ecor_snps <- ecor_snps[,-which("Etelis_A150" %in% names(ecor_snps))]
+
+p2 <- plot_clusters(ecor_snps, facets = "pop")
+p2$plots$pca
+
+```
+
+### Population Stats
+
+And here are some summary stats about each population
+
+```{r}
 ecor_snps <- calc_ho(ecor_snps, facets = "pop")
 ecor_snps <- calc_he(ecor_snps, facets = "pop")
 ecor_snps <- calc_maf(ecor_snps, facets = "pop")
@@ -475,14 +533,100 @@ ecor_snps <- calc_pi(ecor_snps, facets = "pop")
 ecor_snps <- calc_private(ecor_snps, facets = "pop")
 ecor_snps <- calc_hwe(ecor_snps, facets = "pop")
 ecor_snps <- calc_fis(ecor_snps, facets = "pop")
+ecor_snps <- calc_pairwise_fst(ecor_snps, facets = "pop")
 
-stats <- get.snpR.stats(ecor_snps, "pop", stats = c("maf", "ho","he","hwe", "fis","pi", "private")) 
+stats <- get.snpR.stats(ecor_snps, facets = "pop", stats = c("maf", "ho","he","hwe", "fis","pi", "private"))
+stats$weighted.means
 
+# and here is Fst
 
-# and dang, just like that we can get a PCA
-p <- plot_clusters(ecor_snps, facets = "pop")
-p$plots$pca
-
-#gotta deal with that one weirdo at Johnston. Filter HWE, filter LD, filter selection with PCAadapt.
+ecor_fst <- get.snpR.stats(ecor_snps, facets = "pop", stats = c("fst"))
+ecor_fst$fst.matrix
 ```
 
+### Linkage Disequilibrium
+
+A little stuck on LD. But there are so few markers (intentionally) that it really shouldn't be an issue.
+
+```{r}
+#| eval: false
+ecor_snps <- calc_pairwise_ld(ecor_snps, facets ="CHROM", verbose = T)
+ldstats <- get.snpR.stats(ecor_snps, stats = "ld", facets = "CHROM")
+ld <- plot_pairwise_ld_heatmap(ecor_snps, facets=c("CHROM"))
+```
+
+
+## Remove loci under selection using pcadapt
+
+Following along [here](https://bcm-uga.github.io/pcadapt/articles/pcadapt.html. 
+
+First, write out the data into plink format
+
+```{r}
+#| eval: false
+format_snps(ecor_snps, output = "plink", facets = "pop", 
+            outfile = "coruscans/plink/coruscans.plink",chr = "CHROM", 
+            position = "position" )
+
+
+
+```
+
+### Scree Plot
+
+```{r}
+
+ecor_plink <- read.pcadapt("coruscans/plink/coruscans.plink.bed",type="bed")
+
+pca20 <- pcadapt(ecor_plink, K = 20)
+
+plot(pca20, option = "screeplot")
+
+```
+
+Based on the scree plot I think we'll use 5 PCs.
+
+### PCA
+
+```{r}
+pca5 <- pcadapt(ecor_plink, K = 5)
+plot(pca5, option = "scores", pop = popmap$pop[-1])
+
+```
+
+
+```{r}
+plot(pca5, option = "manhattan")
+
+#qqplot
+plot(pca5, option = "qqplot")
+#histogram
+hist(pca5$pvalues, xlab = "p-values", main = NULL, breaks = 50, col = "orange")
+```
+
+### Outliers
+
+
+
+```{r}
+ 
+padj <- p.adjust(pca5$pvalues, method = "none")
+alpha <- 0.125
+pca5_outliers <- which(padj < alpha)
+
+
+```
+
+Just because there is a little cluster of `length(pca5_outliers)` in the qqplot and histogram, I'm going to mark them as outliers.
+
+```{r}
+#| eval: false
+#remove outliers
+ecor_snps2 <- ecor_snps[-pca5_outliers,]
+#write to vcf
+format_snps(ecor_snps, output = "vcf", facets = "pop", 
+            outfile = "coruscans/hwe.pcadapt.filtered.snps.vcf",chr = "CHROM", 
+            position = "position" )
+
+write.csv(pca5_outliers, "coruscans/pcadapt.outliers.csv")
+```

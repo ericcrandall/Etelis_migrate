@@ -125,6 +125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
 <script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -169,10 +170,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </ul></li>
   <li><a href="#download-the-populations-output" id="toc-download-the-populations-output" class="nav-link" data-scroll-target="#download-the-populations-output">Download the populations output</a></li>
   </ul></li>
-  <li><a href="#evaluate-the-haplotypes" id="toc-evaluate-the-haplotypes" class="nav-link" data-scroll-target="#evaluate-the-haplotypes">Evaluate the Haplotypes</a>
+  <li><a href="#evaluate-the-genomic-data" id="toc-evaluate-the-genomic-data" class="nav-link" data-scroll-target="#evaluate-the-genomic-data">Evaluate the genomic data</a>
   <ul class="collapse">
-  <li><a href="#snpr" id="toc-snpr" class="nav-link" data-scroll-target="#snpr">SNPr</a></li>
   <li><a href="#adegenet" id="toc-adegenet" class="nav-link" data-scroll-target="#adegenet">Adegenet</a></li>
+  <li><a href="#snpr" id="toc-snpr" class="nav-link" data-scroll-target="#snpr">SNPr</a>
+  <ul class="collapse">
+  <li><a href="#filtering" id="toc-filtering" class="nav-link" data-scroll-target="#filtering">Filtering</a></li>
+  <li><a href="#individual-stats" id="toc-individual-stats" class="nav-link" data-scroll-target="#individual-stats">Individual Stats</a></li>
+  <li><a href="#population-stats" id="toc-population-stats" class="nav-link" data-scroll-target="#population-stats">Population Stats</a></li>
+  <li><a href="#linkage-disequilibrium" id="toc-linkage-disequilibrium" class="nav-link" data-scroll-target="#linkage-disequilibrium">Linkage Disequilibrium</a></li>
+  </ul></li>
+  <li><a href="#remove-loci-under-selection-using-pcadapt" id="toc-remove-loci-under-selection-using-pcadapt" class="nav-link" data-scroll-target="#remove-loci-under-selection-using-pcadapt">Remove loci under selection using pcadapt</a>
+  <ul class="collapse">
+  <li><a href="#scree-plot" id="toc-scree-plot" class="nav-link" data-scroll-target="#scree-plot">Scree Plot</a></li>
+  <li><a href="#pca" id="toc-pca" class="nav-link" data-scroll-target="#pca">PCA</a></li>
+  <li><a href="#outliers" id="toc-outliers" class="nav-link" data-scroll-target="#outliers">Outliers</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -220,7 +233,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmcmc)</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(perm)</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(snpR)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(adegenet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(adegenet)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pcadapt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -331,7 +345,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>I’m also going to see how much I can learn about quarto notebooks, which Rstudio is apparently using to replace Rmarkdown notebooks. They seem like an improvement so far! Following along <a href="https://quarto.org/docs/publishing/github-pages.html">here</a>, using the simple option to render to the <code>docs</code> folder.</p>
-<p>Ann placed all the data on Google Drive, zipped by population. I will download them with the gdown python package. This involves looking up the google id for each file in the URL of the share link and pasting that into gdown thusly. They were quite large, and <code>unzip</code> and <code>gzip</code> wouldn’t work. I used jar (which I didn’t even know could uncompress things) as suggested <a href="https://unix.stackexchange.com/questions/438368/unix-unzip-is-failing-but-mac-archive-utility-works">here</a></p>
+<p>Anne placed all the data on Google Drive, zipped by population. I will download them with the gdown python package. This involves looking up the google id for each file in the URL of the share link and pasting that into gdown thusly. They were quite large, and <code>unzip</code> and <code>gzip</code> wouldn’t work. I used jar (which I didn’t even know could uncompress things) as suggested <a href="https://unix.stackexchange.com/questions/438368/unix-unzip-is-failing-but-mac-archive-utility-works">here</a></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gdown</span> https://drive.google.com/uc<span class="pp">?</span>id=142BTkLDRNa6TXk1l4vhxRMxcejOg3rMt <span class="at">--output</span> ECA_Japan.zip</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gdown</span> https://drive.google.com/uc<span class="pp">?</span>id=1NFI7bH6kmsDcKwB7Y6IkE1MkOAhypCu0 <span class="at">--output</span> ECA_MHI.zip</span>
@@ -534,7 +548,10 @@ Population pair divergence statistics (more in populations.fst_summary.tsv and p
 <section id="r100" class="level3">
 <h3 class="anchored" data-anchor-id="r100">r100</h3>
 <p>Settings for keeping loci that occur in 100 percent of indivs per population ::: {.cell}</p>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">populations</span> <span class="at">-P</span> ./ <span class="at">-O</span> ./output3_r100 <span class="at">-M</span> ../popmapECO.tsv <span class="at">-t</span> 12 <span class="at">-p</span> 4 <span class="at">-r</span> 100 <span class="at">-H</span> <span class="at">--hwe</span> <span class="at">--fstats</span> <span class="at">--p-value-cutoff</span> 0.05 <span class="at">--fasta-loci</span> <span class="at">--fasta-samples</span> <span class="at">--vcf</span> <span class="at">--genepop</span> <span class="at">--structure</span> <span class="at">--treemix</span> <span class="at">--fasta-samples-raw</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">populations</span> <span class="at">-P</span> ./ <span class="at">-O</span> ./output3_r100 <span class="at">-M</span> ../popmapECO.tsv <span class="at">-t</span> 12 <span class="at">-p</span> 4 <span class="at">-r</span> 100 <span class="at">-H</span> <span class="at">--hwe</span> <span class="at">--fstats</span> <span class="at">--p-value-cutoff</span> 0.05 <span class="at">--fasta-loci</span> <span class="at">--fasta-samples</span> <span class="at">--vcf</span> <span class="at">--genepop</span> <span class="at">--structure</span> <span class="at">--treemix</span> <span class="at">--fasta-samples-raw</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># and again with single SNPs from each locus so we can test for linkage and selection</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">populations</span> <span class="at">-P</span> ./ <span class="at">-O</span> ./output4_r100.SNP <span class="at">-M</span> ../popmapECA.tsv <span class="at">-t</span> 12 <span class="at">-p</span> 3 <span class="at">-r</span> 100 <span class="at">--hwe</span> <span class="at">--fstats</span> <span class="at">--p-value-cutoff</span> 0.05  <span class="at">--vcf</span> <span class="at">--genepop</span>  <span class="at">--write-random-snp</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>:::</p>
 <section id="e.-carbunculus-1" class="level4">
 <h4 class="anchored" data-anchor-id="e.-carbunculus-1">E. carbunculus</h4>
@@ -612,36 +629,12 @@ Population pair divergence statistics (more in populations.fst_summary.tsv and p
 </div>
 </section>
 </section>
-<section id="evaluate-the-haplotypes" class="level1">
-<h1>Evaluate the Haplotypes</h1>
-<p>I will use Will Hemstrom’s new package <a href="https://github.com/hemstrow/snpR">SNPr</a> to further evaluate and filter the haplotypes.</p>
-<section id="snpr" class="level2">
-<h2 class="anchored" data-anchor-id="snpr">SNPr</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>popmap <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"coruscans/popmapECO.tsv"</span>,<span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"sampID"</span>,<span class="st">"pop"</span>))</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">read_vcf</span>(<span class="at">file =</span> <span class="st">"coruscans/populations_r100/populations.haps.vcf"</span>,<span class="at">sample.meta =</span> popmap)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_ho</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_he</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_maf</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_pi</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_private</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_hwe</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">calc_fis</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">get.snpR.stats</span>(ecor_haps, <span class="st">"pop"</span>, <span class="at">stats =</span> <span class="fu">c</span>(<span class="st">"maf"</span>, <span class="st">"ho"</span>,<span class="st">"he"</span>,<span class="st">"hwe"</span>, <span class="st">"fis"</span>,<span class="st">"pi"</span>, <span class="st">"private"</span>)) </span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co"># and dang, just like that we can get a PCA</span></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">plot_clusters</span>(ecor_haps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>p<span class="sc">$</span>plots<span class="sc">$</span>pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Hmmm… I’m thinking that it is assuming that the data are biallelic.</p>
-</section>
+<section id="evaluate-the-genomic-data" class="level1">
+<h1>Evaluate the genomic data</h1>
 <section id="adegenet" class="level2">
 <h2 class="anchored" data-anchor-id="adegenet">Adegenet</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">read.genepop</span>(<span class="st">"coruscans/populations_r100/populations.haps.gen"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">read.genepop</span>(<span class="st">"coruscans/populations_r100/populations.haps.gen"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
  Converting data from a Genepop .gen file to a genind object... 
@@ -651,20 +644,281 @@ File description:  Stacks v2.61; GenePop v4.1.3; September 30, 2022
 
 ...done.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(ecor_haps<span class="sc">$</span>pop) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"JA"</span>,<span class="st">"MHI"</span>,<span class="st">"NWHI"</span>,<span class="st">"OK"</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>ecor_dapc <span class="ot">&lt;-</span> <span class="fu">dapc</span>(ecor_haps,<span class="at">pop =</span>  ecor_haps<span class="sc">$</span>pop, <span class="at">scale =</span> T, <span class="at">pca.select=</span><span class="st">"nbEig"</span>, <span class="at">n.pca =</span> <span class="dv">50</span>, <span class="at">n.da=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(ecor_haps<span class="sc">$</span>pop) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"JA"</span>,<span class="st">"MHI"</span>,<span class="st">"NWHI"</span>,<span class="st">"OK"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>ecor_dapc <span class="ot">&lt;-</span> <span class="fu">dapc</span>(ecor_haps,<span class="at">pop =</span>  ecor_haps<span class="sc">$</span>pop, <span class="at">scale =</span> T, <span class="at">pca.select=</span><span class="st">"nbEig"</span>, <span class="at">n.pca =</span> <span class="dv">50</span>, <span class="at">n.da=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in .local(x, ...): Some scaling values are null.
  Corresponding alleles are removed.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scatter</span>(ecor_dapc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scatter</span>(ecor_dapc, <span class="at">title =</span> <span class="st">"E. coruscans"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in plot.xy(xy.coords(x, y), type = type, ...): "title" is not a
+graphical parameter</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ecor_hwe <span class="ot">&lt;-</span> <span class="fu">hw.test</span>(ecor_haps, <span class="at">B =</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s take a look with the randomly selected SNPs</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ecor_snps.genind <span class="ot">&lt;-</span> <span class="fu">read.genepop</span>(<span class="st">"coruscans/populations_r100/populations.randsnp.gen"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Converting data from a Genepop .gen file to a genind object... 
+
+
+File description:  # Stacks v2.61; GenePop v4.1.3; September 30, 2022 
+
+...done.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(ecor_snps.genind<span class="sc">$</span>pop) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"JA"</span>,<span class="st">"MHI"</span>,<span class="st">"NWHI"</span>,<span class="st">"OK"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>ecor_dapc_snps <span class="ot">&lt;-</span> <span class="fu">dapc</span>(ecor_snps.genind,<span class="at">pop =</span>  ecor_snps.genind<span class="sc">$</span>pop, <span class="at">scale =</span> T,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">pca.select=</span><span class="st">"nbEig"</span>, <span class="at">n.pca =</span> <span class="dv">50</span>, <span class="at">n.da=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in .local(x, ...): Some scaling values are null.
+ Corresponding alleles are removed.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scatter</span>(ecor_dapc_snps)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+</section>
+<section id="snpr" class="level2">
+<h2 class="anchored" data-anchor-id="snpr">SNPr</h2>
+<p>I will use Will Hemstrom’s new package <a href="https://github.com/hemstrow/snpR">SNPr</a> to further evaluate and filter the SNPs that I randomly selected from each locus.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>popmap <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"coruscans/popmapECO.tsv"</span>,<span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"sampID"</span>,<span class="st">"pop"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 60 Columns: 2
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: "\t"
+chr (2): sampID, pop
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">read_vcf</span>(<span class="at">file =</span> <span class="st">"coruscans/populations_r100/populations.randsnp.vcf"</span>,</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sample.meta =</span> popmap)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Scanning file to determine attributes.
+File attributes:
+  meta lines: 14
+  header_line: 15
+  variant count: 929
+  column count: 69
+
+Meta line 14 read in.
+All meta lines processed.
+gt matrix initialized.
+Character matrix gt created.
+  Character matrix gt rows: 929
+  Character matrix gt cols: 69
+  skip: 0
+  nrows: 929
+  row_num: 0
+
+Processed variant: 929
+All variants processed</code></pre>
+</div>
+</div>
+<section id="filtering" class="level3">
+<h3 class="anchored" data-anchor-id="filtering">Filtering</h3>
+<p>I’ve already implemented stringent filters in Stacks to only include individuals with all loci and loci found in all individuals. Now going to implement a strict HWE filter - if a locus is out of HWE in any population (<code>hwe_facets = "pop"</code>) after a Bonferroni correction, then it will be removed. Also going to remove non-variant loci, and loci with only a single minor allele (“singletons”).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">filter_snps</span>(ecor_snps, <span class="at">min_ind =</span> <span class="fl">0.9999</span>, <span class="at">min_loci =</span> <span class="fl">0.9999</span>, <span class="at">re_run =</span> <span class="st">"full"</span>, </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">hwe =</span> <span class="fl">0.05</span>, <span class="at">fwe_method =</span> <span class="st">"BY"</span>, <span class="at">hwe_facets =</span> <span class="st">"pop"</span>, <span class="at">singletons =</span> T,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">verbose =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Initializing...
+Filtering loci. Starting loci: 929 
+Filtering non-biallelic loci...
+    0 bad loci
+Filtering non_polymorphic loci...
+    0 bad loci
+Filtering loci sequenced in few individuals...
+    0 bad loci
+Filtering singletons.
+    521 bad loci
+Filtering loci out of hwe...
+     7  bad loci
+    Ending loci: 401 
+Filtering individuals. Starting individuals: 60 
+Filtering out individuals sequenced in few kept loci...
+No individuals removed.</code></pre>
+</div>
+</div>
+</section>
+<section id="individual-stats" class="level3">
+<h3 class="anchored" data-anchor-id="individual-stats">Individual Stats</h3>
+<p>snpR uses facets to subset data on either sample metadata (such as sample ID, or population) or SNP metadata. Here we will look at per-individual stats. Also, note that the calculations are just attached to the data object, so we don’t lose track of them. Nice.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_hs</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"sampID"</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_he</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"sampID"</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_ho</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"sampID"</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co"># and dang, just like that we can get a PCA</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">plot_clusters</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Formatting data...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>p<span class="sc">$</span>plots<span class="sc">$</span>pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>so there’s that one weirdo at Johnston, who is A150… we can identify him like this. He has double the mean <span class="math inline">\(H_e\)</span> and <span class="math inline">\(H_o\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_genetic_distances</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"sampID"</span>,<span class="at">method =</span> <span class="st">"Nei"</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>stats.ind <span class="ot">&lt;-</span> <span class="fu">get.snpR.stats</span>(ecor_snps, <span class="at">facets=</span><span class="st">"sampID"</span>, <span class="at">stats =</span> <span class="fu">c</span>(<span class="st">"hs"</span>,<span class="st">"ho"</span>,<span class="st">"he"</span>))</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>ind.dists <span class="ot">&lt;-</span> <span class="fu">get.snpR.stats</span>(ecor_snps,<span class="at">facets=</span><span class="st">"sampID"</span>, <span class="at">stats =</span> <span class="st">"genetic_distance"</span>)                  </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmap</span>(<span class="fu">as.matrix</span>(ind.dists<span class="sc">$</span>sampID<span class="sc">$</span>.base<span class="sc">$</span>Nei))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># drop'im</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> ecor_snps[,<span class="sc">-</span><span class="fu">which</span>(<span class="st">"Etelis_A150"</span> <span class="sc">%in%</span> <span class="fu">names</span>(ecor_snps))]</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">plot_clusters</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Formatting data...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>p2<span class="sc">$</span>plots<span class="sc">$</span>pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-17-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="population-stats" class="level3">
+<h3 class="anchored" data-anchor-id="population-stats">Population Stats</h3>
+<p>And here are some summary stats about each population</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_ho</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_he</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_maf</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_pi</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_private</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_hwe</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_fis</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_pairwise_fst</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"pop"</span>)</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">get.snpR.stats</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"pop"</span>, <span class="at">stats =</span> <span class="fu">c</span>(<span class="st">"maf"</span>, <span class="st">"ho"</span>,<span class="st">"he"</span>,<span class="st">"hwe"</span>, <span class="st">"fis"</span>,<span class="st">"pi"</span>, <span class="st">"private"</span>))</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>stats<span class="sc">$</span>weighted.means</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["facet"],"name":[1],"type":["chr"],"align":["left"]},{"label":["subfacet"],"name":[2],"type":["fct"],"align":["left"]},{"label":["snp.facet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["snp.subfacet"],"name":[4],"type":["chr"],"align":["left"]},{"label":["weighted_mean_ho"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["weighted_mean_he"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["weighted_mean_pi"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["weighted_mean_fis"],"name":[8],"type":["dbl"],"align":["right"]}],"data":[{"1":"pop","2":"Japan","3":".base","4":".base","5":"0.06519416","6":"0.06117360","7":"0.06343929","8":"0.003630184"},{"1":"pop","2":"Johnston_Atoll","3":".base","4":".base","5":"0.07668329","6":"0.06585100","7":"0.07525828","8":"-0.019140083"},{"1":"pop","2":"MHI","3":".base","4":".base","5":"0.07035981","6":"0.07044252","7":"0.07305150","8":"0.026566652"},{"1":"pop","2":"NWHI","3":".base","4":".base","5":"0.06779348","6":"0.06941494","7":"0.07072466","8":"0.029907538"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># and here is Fst</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>ecor_fst <span class="ot">&lt;-</span> <span class="fu">get.snpR.stats</span>(ecor_snps, <span class="at">facets =</span> <span class="st">"pop"</span>, <span class="at">stats =</span> <span class="fu">c</span>(<span class="st">"fst"</span>))</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>ecor_fst<span class="sc">$</span>fst.matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$pop
+               p1 Johnston_Atoll           MHI         NWHI
+1:          Japan     0.01160639  0.0071644684  0.000928317
+2: Johnston_Atoll             NA -0.0004782547 -0.014014024
+3:            MHI             NA            NA  0.001275046</code></pre>
+</div>
+</div>
+</section>
+<section id="linkage-disequilibrium" class="level3">
+<h3 class="anchored" data-anchor-id="linkage-disequilibrium">Linkage Disequilibrium</h3>
+<p>A little stuck on LD. But there are so few markers (intentionally) that it really shouldn’t be an issue.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>ecor_snps <span class="ot">&lt;-</span> <span class="fu">calc_pairwise_ld</span>(ecor_snps, <span class="at">facets =</span><span class="st">"CHROM"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>ldstats <span class="ot">&lt;-</span> <span class="fu">get.snpR.stats</span>(ecor_snps, <span class="at">stats =</span> <span class="st">"ld"</span>, <span class="at">facets =</span> <span class="st">"CHROM"</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>ld <span class="ot">&lt;-</span> <span class="fu">plot_pairwise_ld_heatmap</span>(ecor_snps, <span class="at">facets=</span><span class="fu">c</span>(<span class="st">"CHROM"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="remove-loci-under-selection-using-pcadapt" class="level2">
+<h2 class="anchored" data-anchor-id="remove-loci-under-selection-using-pcadapt">Remove loci under selection using pcadapt</h2>
+<p>Following along [here](https://bcm-uga.github.io/pcadapt/articles/pcadapt.html.</p>
+<p>First, write out the data into plink format</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format_snps</span>(ecor_snps, <span class="at">output =</span> <span class="st">"plink"</span>, <span class="at">facets =</span> <span class="st">"pop"</span>, </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">outfile =</span> <span class="st">"coruscans/plink/coruscans.plink"</span>,<span class="at">chr =</span> <span class="st">"CHROM"</span>, </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">position =</span> <span class="st">"position"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="scree-plot" class="level3">
+<h3 class="anchored" data-anchor-id="scree-plot">Scree Plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>ecor_plink <span class="ot">&lt;-</span> <span class="fu">read.pcadapt</span>(<span class="st">"coruscans/plink/coruscans.plink.bed"</span>,<span class="at">type=</span><span class="st">"bed"</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>pca20 <span class="ot">&lt;-</span> <span class="fu">pcadapt</span>(ecor_plink, <span class="at">K =</span> <span class="dv">20</span>)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pca20, <span class="at">option =</span> <span class="st">"screeplot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
+"none")` instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Based on the scree plot I think we’ll use 5 PCs.</p>
+</section>
+<section id="pca" class="level3">
+<h3 class="anchored" data-anchor-id="pca">PCA</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>pca5 <span class="ot">&lt;-</span> <span class="fu">pcadapt</span>(ecor_plink, <span class="at">K =</span> <span class="dv">5</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pca5, <span class="at">option =</span> <span class="st">"scores"</span>, <span class="at">pop =</span> popmap<span class="sc">$</span>pop[<span class="sc">-</span><span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Use of `df$Pop` is discouraged. Use `Pop` instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pca5, <span class="at">option =</span> <span class="st">"manhattan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co">#qqplot</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pca5, <span class="at">option =</span> <span class="st">"qqplot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
+"none")` instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-23-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co">#histogram</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(pca5<span class="sc">$</span>pvalues, <span class="at">xlab =</span> <span class="st">"p-values"</span>, <span class="at">main =</span> <span class="cn">NULL</span>, <span class="at">breaks =</span> <span class="dv">50</span>, <span class="at">col =</span> <span class="st">"orange"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-23-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="outliers" class="level3">
+<h3 class="anchored" data-anchor-id="outliers">Outliers</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>padj <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(pca5<span class="sc">$</span>pvalues, <span class="at">method =</span> <span class="st">"none"</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.125</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>pca5_outliers <span class="ot">&lt;-</span> <span class="fu">which</span>(padj <span class="sc">&lt;</span> alpha)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Just because there is a little cluster of <code>length(pca5_outliers)</code> in the qqplot and histogram, I’m going to mark them as outliers.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co">#remove outliers</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>ecor_snps2 <span class="ot">&lt;-</span> ecor_snps[<span class="sc">-</span>pca5_outliers,]</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="co">#write to vcf</span></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="fu">format_snps</span>(ecor_snps, <span class="at">output =</span> <span class="st">"vcf"</span>, <span class="at">facets =</span> <span class="st">"pop"</span>, </span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">outfile =</span> <span class="st">"coruscans/hwe.pcadapt.filtered.snps.vcf"</span>,<span class="at">chr =</span> <span class="st">"CHROM"</span>, </span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">position =</span> <span class="st">"position"</span> )</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(pca5_outliers, <span class="st">"coruscans/pcadapt.outliers.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
+</section>
 </section>
 </section>
 
