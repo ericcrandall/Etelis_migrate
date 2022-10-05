@@ -643,3 +643,7 @@ popmapECO.tsvpopulations.snps.vcf Ecoruscans.mig
 
 ```
 
+# Migrate
+
+I installed Migrate 5.0.4 as described [here](https://ericcrandall.github.io/Palythoa_tuberculosa/Ptuberculosa_migrate.html).
+
