@@ -624,9 +624,22 @@ Just because there is a little cluster of `length(pca5_outliers)` in the qqplot 
 #remove outliers
 ecor_snps2 <- ecor_snps[-pca5_outliers,]
 #write to vcf
-format_snps(ecor_snps, output = "vcf", facets = "pop", 
+format_snps(ecor_snps2, output = "vcf", facets = "pop", 
             outfile = "coruscans/hwe.pcadapt.filtered.snps.vcf",chr = "CHROM", 
             position = "position" )
 
 write.csv(pca5_outliers, "coruscans/pcadapt.outliers.csv")
 ```
+
+## Fasta2Genotype
+
+Paul Maier created [this script](https://github.com/paulmaier/fasta2genotype) to convert Stacks haplotypes to migrate format. I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work.
+
+```{bash}
+#| eval: false
+
+python2 ../../fasta2genotype/fasta2genotype.py populations.samples2.fa ecor_whitelist.txt \
+popmapECO.tsvpopulations.snps.vcf Ecoruscans.mig
+
+```
+
