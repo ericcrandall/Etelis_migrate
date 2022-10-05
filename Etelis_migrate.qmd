@@ -633,7 +633,25 @@ write.csv(pca5_outliers, "coruscans/pcadapt.outliers.csv")
 
 ## Fasta2Genotype
 
-Paul Maier created [this script](https://github.com/paulmaier/fasta2genotype) to convert Stacks haplotypes to migrate format. I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work.
+Paul Maier created [this script](https://github.com/paulmaier/fasta2genotype) to convert Stacks haplotypes to migrate format. I had a doozy of a time trying to get this to work this time around: the script was written in python2. which is nearly deprecated. I first tried to use `2to3` to upgrade the script to python3, but there were a few stray tabs I couldn't figure out. I eventually landed [here](https://stackoverflow.com/questions/60298514/how-to-reinstall-python2-from-homebrew), and used the following commands to install [`pyenv`](https://github.com/pyenv/pyenv), which can handle multiple python installs.
+
+```{bash}
+#| eval: false
+brew install pyenv
+pyenv install 2.7.18
+pyenv versions
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc\necho 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc\necho 'eval "$(pyenv init -)"' >> ~/.zshrc
+exec "$SHELL"
+pyenv shell 2.7.18 # use python 2 for this shell session
+
+ pip install numpy
+ pip install --upgrade pip # need to update pip to be able to install scipy
+ pip install scipy
+
+
+```
+
+I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work.
 
 ```{bash}
 #| eval: false
