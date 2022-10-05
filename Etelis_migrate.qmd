@@ -638,7 +638,7 @@ Paul Maier created [this script](https://github.com/paulmaier/fasta2genotype) to
 ```{bash}
 #| eval: false
 
-python2 ../../fasta2genotype/fasta2genotype.py populations.samples2.fa ecor_whitelist.txt \
+python ../../fasta2genotype/fasta2genotype.py populations.samples2.fa ecor_whitelist.txt \
 popmapECO.tsvpopulations.snps.vcf Ecoruscans.mig
 
 ```
@@ -646,4 +646,3 @@ popmapECO.tsvpopulations.snps.vcf Ecoruscans.mig
 # Migrate
 
 I installed Migrate 5.0.4 as described [here](https://ericcrandall.github.io/Palythoa_tuberculosa/Ptuberculosa_migrate.html).
-
