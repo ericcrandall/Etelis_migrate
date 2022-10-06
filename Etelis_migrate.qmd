@@ -444,11 +444,11 @@ scp -r argo:./Etelis/carbunculus/pipeline/output3_r100 ./populations_r100
 
 ```{r}
 ecor_haps <- read.genepop("coruscans/populations_r100/populations.haps.gen")
-levels(ecor_haps$pop) <- c("JA","MHI","NWHI","OK")
+levels(ecor_haps$pop) <- c("JA","MHI","NWHI","JP")
 
 ecor_dapc <- dapc(ecor_haps,pop =  ecor_haps$pop, scale = T, pca.select="nbEig", n.pca = 50, n.da=3)
 
-scatter(ecor_dapc, title = "E. coruscans")
+scatter(ecor_dapc)
 
 ecor_hwe <- hw.test(ecor_haps, B = 1000)
 
@@ -606,28 +606,37 @@ hist(pca5$pvalues, xlab = "p-values", main = NULL, breaks = 50, col = "orange")
 ### Outliers
 
 
-
+Just because there is a little cluster of `length(pca5_outliers)` in the qqplot and histogram, I'm going to mark them as outliers and remove them.
 ```{r}
  
 padj <- p.adjust(pca5$pvalues, method = "none")
 alpha <- 0.125
 pca5_outliers <- which(padj < alpha)
 
-
+#remove outliers
+ecor_snps2 <- ecor_snps[-pca5_outliers,]
 ```
 
-Just because there is a little cluster of `length(pca5_outliers)` in the qqplot and histogram, I'm going to mark them as outliers.
+### Write out filtered SNPs and haplotypes
+
 
 ```{r}
 #| eval: false
-#remove outliers
-ecor_snps2 <- ecor_snps[-pca5_outliers,]
+
 #write to vcf
 format_snps(ecor_snps2, output = "vcf", facets = "pop", 
             outfile = "coruscans/hwe.pcadapt.filtered.snps.vcf",chr = "CHROM", 
             position = "position" )
 
 write.csv(pca5_outliers, "coruscans/pcadapt.outliers.csv")
+#grab the locus names and write them to a whitelist to be included in the migrate data file.
+whitelist <- ecor_snps2@snp.meta$CHROM
+write.table(sort(as.numeric(ecor_snps2@snp.meta$CHROM)), "coruscans/ecor_whitelist.txt", quote=F, row.names = F,col.names =F )
+
+ecor_haps2 <- ecor_haps[,loc = locNames(ecor_haps) %in% whitelist]
+# write them out
+genind_to_genepop(ecor_haps2,output = "coruscans/hwe.pcadapt.filtered.haps.txt")
+
 ```
 
 ## Fasta2Genotype
@@ -654,7 +663,7 @@ pyenv shell 2.7.18 # use python 2 for this shell session
 ```
 
 ### Run it
-I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by `fasta2genotype.py`
+I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by `fasta2genotype.py`. Finally, I created a whitelist by editing the vcf file output above of the fully cleaned set of SNPs.
 
 ```{bash}
 #| eval: false
