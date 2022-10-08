@@ -33,6 +33,7 @@ library(perm)
 library(snpR)
 library(adegenet)
 library(pcadapt)
+library(knitr)
 ```
 
 ## Function library
@@ -669,7 +670,7 @@ I had to remove all the [individualName] tokens from the populations.samples.fa 
 #| eval: false
 
 python ../../fasta2genotype/fasta2genotype.py populations_r100/populations.samples2.fa ecor_whitelist.txt \
-popmapECO_f2g.tsv populations_r100/populations.snps.vcf Ecoruscans.mig
+popmapECO_f2g.tsv NA Ecoruscans2.mig
 
 
 ###################################################################
@@ -716,6 +717,153 @@ Outputting migrate-n file...
 
 ```
 
+I then re-ran the script, selecting phylip output, with locus name headers, and all other options the same. I need the locus names in the order output by the script in order to run modeltest.
+
+
 # Migrate
 
 I installed Migrate 5.0.4 as described [here](https://ericcrandall.github.io/Palythoa_tuberculosa/Ptuberculosa_migrate.html).
+
+## Mutation Models
+
+ I need to figure out an overall mutation model to use with RAD loci. [I received this advice one](https://groups.google.com/g/migrate-support/c/XjV_4jZW4RI/m/HbRWoGY6AwAJ) from Peter about how to construct these. I'll use `modelTest` in the phangorn package to see where that gets me.
+
+I renamed the FASTA headers in `populations.samples.fa` with BBEdit to create `population.samples3.fa`
+
+```{bash}
+#| eval: false
+Find: >CLocus_\d+_Sample_\d+_Locus_(\d+)_Allele_([01]) \[Etelis_(.+)\]
+Replace: >\3_L\1_A\2
+
+#first token is sample name, second is locus number(name) third is allele
+
+#Also remove bad indiv A150
+Find: >A150_.+\n.+\n
+Replace:
+
+```
+
+Lets load in the data and calculate some statistics for each locus. Previously Migrate-n only implemented the F84 (=HKY) model, with two rates (Transitions and Transversions) and gamma distributed rate variability.
+
+Now it will take these possible models: 
+ 1  Jukes-Cantor model
+ 2  Kimura 2-parameter model
+ 3  Felsenstein 1981 (F81) model
+ 4  Felsenstein 1984 (F84) model
+ 5  Hasegawa-Kishino-Yano model
+ 6  Tamura-Nei model
+
+
+
+
+```{r}
+#| eval: false
+
+fastadata <- read.FASTA("coruscans/populations_r100/populations.samples3.fa")
+
+#  read in the locus lengths, as optional additional way to make sure the stats
+# and the migrate infile are ordered the same
+#migrate_lengths <- read_lines("coruscans/Ecoruscans.mig", skip = 1, n_max=1) %>% 
+#  str_split("\\t", simplify = T) %>%  t(.) %>% tibble(length=.) %>% na.omit()
+
+migrate_loci <- read_lines("coruscans/Ecoruscans.phy", skip = 1, n_max=1) %>% 
+  str_split("\\t", simplify = T) %>%  t(.) %>% tibble(locus_name=.) %>% filter(locus_name!="")
+
+stats <- tibble(locus = character(), 
+                length = numeric(),
+                segSites = numeric(),
+                nHaps = numeric(),
+                nucDiv = numeric(),
+                ttRatio = numeric(),
+                model = character(),
+                gammaShape = numeric(),
+                rate1 = numeric(), 
+                rate2 = numeric(), 
+                rate3 = numeric(),
+                rate4 = numeric(),
+                Q1= numeric(),
+                Q2 = numeric(),
+                Q3 = numeric(),
+                )
+                
+for(l in migrate_loci$locus_name){
+  L <- paste0("L",l,"_")
+  print(paste("Now Doing Locus", l, match(l,  migrate_loci$locus_name), "out of", length(migrate_loci$locus_name)))
+  locus_dnabin <- fastadata[str_which(names(fastadata),pattern = L)]
+  # convert to package formats
+  locus_dnabin <- as.matrix(locus_dnabin)
+  locus_gtypes <- sequence2gtypes(locus_dnabin)
+  locus_phy <- phyDat(locus_dnabin)
+  #create a haplotype network .. to be continued
+  haps <- haplotype(locus_dnabin)
+  nhaps <- length(dimnames(haps)[[1]])
+  #tcs <- haploNet(haps)
+  #find parameters of HKY (F84) model
+  modeltest <- modelTest(locus_phy, model = c("JC","K80", "F81", "HKY","TrN"), 
+                         G = T, I = F, k = 4, mc.cores = 5)
+  # pick out the best model. If multiple models are tied for best, pick the simplest one
+  bestmodel <- modeltest$Model[which(modeltest$BIC == min(modeltest$BIC))][1]
+  #open the object environment
+  env <- attr(modeltest,"env")
+  bestparams <- get(bestmodel, env)
+  bestparams <- eval(bestparams, env=env)
+  # use this code for v3, which only has F84 (HKY)
+  #HKY <- modelTest(locus_phy, model = c("HKY"), 
+  #                       G = T, I = F, k = 4)
+  #env <- attr(HKY, "env")
+  #HKYG <- get("HKY+G", env)
+  #model <- eval(HKYG, env=env)
+  # calculate TiTv Ratio
+  ttratio <- TiTvRatio(locus_gtypes)
+  
+  stats <- bind_rows(stats, tibble(locus=L, 
+                          length = length(locus_dnabin[1,]),
+                          segSites = length(seg.sites(locus_dnabin)),
+                          nHaps = length(dimnames(haps)[[1]]),
+                          nucDiv = nuc.div(locus_dnabin),
+                          ttRatio =  ttratio[3],
+                          model = bestmodel,
+                          gammaShape = bestparams$shape,
+                          rate1 = bestparams$g[1],
+                          rate2 = bestparams$g[2],
+                          rate3 = bestparams$g[3],
+                          rate4 = bestparams$g[4],
+                          Q1 = sort(unique(bestparams$Q))[1],
+                          Q2 = sort(unique(bestparams$Q))[2],
+                          Q3 = sort(unique(bestparams$Q))[3]
+                          ))
+                         
+                        
+}
+
+#stats <- stats[which(stats$length %in% migrate_lengths$length),]
+#setdiff(stats$length, as.numeric(migrate_lengths$length))
+# write_csv(stats, "coruscans/migrate_locus_statistics.csv")
+```
+
+### Write a model block
+
+Write a space delimited textfile that can be added to the migrate data file in the format that Peter suggested.
+
+```{r}
+#| eval: false
+stats <- read_csv("./coruscans/migrate_locus_statistics.csv")
+kable(stats)
+
+
+# write a space delimited textfile that can be added to the migrate data file
+# following Peter's suggestion here:
+#https://groups.google.com/g/migrate-support/c/XjV_4jZW4RI/m/HbRWoGY6AwAJ
+migrate_mutation_models <- tibble(prefix = "#$",
+                                 locus=1:length(stats$locus),
+                                 type = "s",
+                                 model = stats$model,
+                                 q1 = stats$Q2,
+                                 q2 = stats$Q3)
+
+#write_delim(migrate_mutation_models,"./coruscans/migrate_modelblock.txt", na="", delim = " ")
+```
+Read them back in so we don't have to recalculate them every time I knit.
+
+
+So we have a `r length(which(stats$segSites == 0))` invariant loci, and the mean overall transition:transversion ratio is `r mean(!is.infinite(stats$ttRatio),na.rm = T)`. Mean gamma shape parameter is `r mean(stats$gammaShape)`, which argues for only one rate.
