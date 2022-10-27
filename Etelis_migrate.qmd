@@ -820,6 +820,7 @@ ecar_snps2 <- ecar_snps[-pca2_outliers,]
 
 #### Write out filtered SNPs and haplotypes
 
+I'm going to write a whitelist with 388 randomly selected SNPs - to be in parity with coruscans. Adding more would take longer.
 
 ```{r}
 #| eval: false
@@ -832,7 +833,7 @@ format_snps(ecar_snps2, output = "vcf", facets = "pop",
 write.csv(pca2_outliers, "carbunculus/pcadapt.outliers.csv")
 #grab the locus names, pick a random subset of 388, and write them to a whitelist to be included in the migrate data file.
 whitelist <- ecar_snps2@snp.meta$CHROM[sample(1:nsnps(ecar_snps2),388)]
-write.table(sort(as.numeric(ecar_snps2@snp.meta$CHROM)), 
+write.table(sort(as.numeric(whitelist)), 
             "carbunculus/ecar_whitelist.txt", quote=F, row.names = F,col.names =F )
 
 ecar_haps2 <- ecar_haps[,loc = locNames(ecar_haps) %in% whitelist]
@@ -865,7 +866,11 @@ pyenv shell 2.7.18 # use python 2 for this shell session
 
 ```
 
-## Run it
+## E. coruscans
+
+### Run it
+
+
 I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by `fasta2genotype.py`. Finally, I created a whitelist by editing the vcf file output above of the fully cleaned set of SNPs.
 
 ```{bash}
@@ -920,6 +925,22 @@ Outputting migrate-n file...
 ```
 
 I then re-ran the script, selecting phylip output, with locus name headers, and all other options the same. I need the locus names in the order output by the script in order to run modeltest.
+
+## E. carbunculus
+
+### Run it
+
+I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by `fasta2genotype.py`. Finally, I created a whitelist of 388 randomly selected loci by editing the vcf file output above of the fully cleaned set of SNPs. Used the same options as E. coruscans.
+
+```{bash}
+#| eval: false
+
+python ../../fasta2genotype/fasta2genotype.py populations_r100/populations.samples2.fa ecar_whitelist.txt \
+popmapECA_f2g.tsv NA Ecarbunculus.mig
+
+```
+
+I then re-ran the script, selecting phylip output, with full sequences, haploid, all loci, not separated by ! locus name headers, and all other options the same. I need the locus names in the order output by the script in order to run modeltest. This is only needed to get the locus names in the next step.
 
 
 # Migrate
