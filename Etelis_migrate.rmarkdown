@@ -11,11 +11,13 @@ editor: source
 bibliography: "./etelis.bib"
 ---
 
+
 # Setup
 
 ## R Libraries
 
 Here I'm just loading a bunch of R packages that we'll need.
+
 
 ```{r}
 #| label: setup library
@@ -37,9 +39,11 @@ library(knitr)
 library(graph4lg)
 ```
 
+
 ## Function library
 
 And here are some homebrewed functions that will be helpful.
+
 
 ```{r}
 #| label: setup function library
@@ -111,6 +115,7 @@ migrants.per.gen<-function(x){
 
 ```
 
+
 # Introduction
 
 Brian Bowen's student Anne Lee asked me to do a migrate analysis on two species of deepwater snapper, *Etelis carbunculus* and *Etelis coruscans*. She wrote:
@@ -132,6 +137,7 @@ I'm also going to see how much I can learn about quarto notebooks, which Rstudio
 
 Anne placed all the data on Google Drive, zipped by population.  I will download them with the gdown python package. This involves looking up the google id for each file in the URL of the share link and pasting that into gdown thusly. They were quite large, and `unzip` and `gzip` wouldn't work. I used jar (which I didn't even know could uncompress things) as suggested [here](https://unix.stackexchange.com/questions/438368/unix-unzip-is-failing-but-mac-archive-utility-works)
 
+
 ```{bash}
 #| eval: false
 gdown https://drive.google.com/uc?id=142BTkLDRNa6TXk1l4vhxRMxcejOg3rMt --output ECA_Japan.zip
@@ -148,7 +154,9 @@ jar xvf ECA_Japan.zip
 ```
 
 
+
 Need to rename the files into Illumina format in order for Stacks to recognize the paired reads.
+
 
 ```{bash}
 #| eval: false
@@ -168,12 +176,14 @@ cd ..
 ```
 
 
+
 # Haplotypes from Stacks
 
 ## Clean the data with process_radtags 
 
 
 Same commands for carbunculus and coruscans. Paired end. Look for ecoR1 cutsites on read 1 and mspI cutsites on read 2. Remove low quality reads (based on a sliding window average). Remove reads smaller than 145 bp, and trim others to that length.
+
 
 ```{bash}
 #| eval: false
@@ -184,6 +194,7 @@ process_radtags -p ./raw/ -o ./cleaned/ --rescue --clean --quality --paired --th
                   --adapter-mm 2
 
 ```
+
 
 ### E. carbunculus output
 
@@ -219,6 +230,7 @@ Hmm... gotta rename the cleaned files too. All code is being run on both species
 
 ### More renaming
 
+
 ```{bash}
 #| eval: false
 cd cleaned
@@ -238,6 +250,7 @@ for f in *001.rem.2.fq.gz; do mv $f ${f/_R[12]_001.rem.2.fq.gz/.rem.2.fq.gz}; do
 ```
 
 
+
 # The pipeline
 
 
@@ -249,6 +262,7 @@ Oy - so denovo_map.pl crashed with this message:
 Aborted.
 
 Julian Catchen gives the solution [here](https://groups.google.com/g/stacks-users/c/CT_IunvM3l4/m/SpIorz1nBQAJ). Because these data were already run through `process_radtags` once to demultiplex them, it attached a `\1` to the labels of all primary reads and a `\2` to the labels of all paired reads. When I re-ran them in `process_radtags`, it attached an extra flag to each, which then confused `tsv2bam`. Julian provides the below code to remove the extra flags.
+
 
 
 ```{bash}
@@ -264,15 +278,18 @@ parallel gzip ::: *
 
 ```
 
+
 ## Run denovo_map.pl
 
 I'm going to use the denovo_map.pl pipeline. This command will take data from `./cleaned` and the popmap provided by Anne and -m 5 reads per stack, -M 4  distance between stacks, -n 4 distance between catalog loci. Running on 8 -T threads and only keeping loci that appear in 80% of individuals in all 4 populations
+
 
 ```{bash}
 #| eval: false
 denovo_map.pl --samples ./cleaned/ --popmap popmapECA.tsv --out-path ./pipeline --paired \
 -m 5 -M 4 -n 4  -T 12 -r 80 -p 4 -X "populations: --fasta-samples" -X "populations: --filter-haplotype-wise"
 ```
+
 
 ## Populations
 
@@ -281,9 +298,11 @@ Now I need to re-run `populations` to get more statistics. Original populations 
 ### r80
 
 Settings for keeping loci that occur in 80 percent of indivs per population (so 4/5 of the Johnston invivs for coruscans). I'm being intentionally stringent by setting the p-value cutoff for hwe at 0.05.
+
 ```{bash eval = F}
 populations -P ./ -O ./output2_r80 -M ../popmapECO.tsv -t 12 -p 4 -r 80 -H --hwe --fstats --p-value-cutoff 0.05 --fasta-loci --fasta-samples --vcf --genepop --structure --treemix --fasta-samples-raw 
 ```
+
 
 #### E. carbunculus
 
@@ -446,6 +465,7 @@ scp -r argo:./Etelis/carbunculus/pipeline/output3_r100 ./populations_r100
 
 ### Adegenet
 
+
 ```{r}
 ecor_haps <- read.genepop("coruscans/populations_r100/populations.haps.gen")
 levels(ecor_haps$pop) <- c("JA","MHI","NWHI","JP")
@@ -458,7 +478,9 @@ ecor_hwe <- hw.test(ecor_haps, B = 1000)
 
 ```
 
+
 Let's take a look with the randomly selected SNPs
+
 
 ```{r}
 ecor_snps.genind <- read.genepop("coruscans/populations_r100/populations.randsnp.gen")
@@ -471,9 +493,11 @@ scatter(ecor_dapc_snps)
 
 ```
 
+
 ### SNPr
 
 I will use Will Hemstrom's new package [SNPr](https://github.com/hemstrow/snpR) to further evaluate and filter the SNPs that I randomly selected from each locus. 
+
 
 ```{r}
 popmap <- read_tsv("coruscans/popmapECO.tsv",col_names = c("sampID","pop"))
@@ -481,9 +505,11 @@ ecor_snps <- read_vcf(file = "coruscans/populations_r100/populations.randsnp.vcf
                       sample.meta = popmap)
 ```
 
+
 #### Filtering
 
 I've already implemented stringent filters in Stacks to only include individuals with all loci and loci found in all individuals. Now going to implement a strict HWE filter - if a locus is out of HWE in any population (`hwe_facets = "pop"`) after a Bonferroni correction, then it will be removed. Also going to remove non-variant loci, and loci with only a single minor allele ("singletons").
+
 
 ```{r}
 ecor_snps <- filter_snps(ecor_snps, min_ind = 0.9999, min_loci = 0.9999, re_run = "full", 
@@ -493,9 +519,11 @@ ecor_snps <- filter_snps(ecor_snps, min_ind = 0.9999, min_loci = 0.9999, re_run 
 ```
 
 
+
 #### Individual Stats
 
 snpR uses facets to subset data on either sample metadata (such as sample ID, or population) or SNP metadata. Here we will look at per-individual stats. Also, note that the calculations are just attached to the data object, so we don't lose track of them. Nice.
+
 
 ```{r}
 ecor_snps <- calc_hs(ecor_snps, facets = "sampID")
@@ -509,7 +537,9 @@ p$plots$pca
 ```
 
 
+
 so there's that one weirdo at Johnston, who is A150... we can identify him like this. He has double the mean $H_e$ and $H_o$.
+
 
 ```{r}
 ecor_snps <- calc_genetic_distances(ecor_snps, facets = "sampID",method = "Nei")
@@ -524,9 +554,11 @@ p2$plots$pca
 
 ```
 
+
 #### Population Stats
 
 And here are some summary stats about each population
+
 
 ```{r}
 ecor_snps <- calc_ho(ecor_snps, facets = "pop")
@@ -547,9 +579,11 @@ ecor_fst <- get.snpR.stats(ecor_snps, facets = "pop", stats = c("fst"))
 ecor_fst$fst.matrix
 ```
 
+
 #### Linkage Disequilibrium
 
 A little stuck on LD. But there are so few markers (intentionally) that it really shouldn't be an issue.
+
 
 ```{r}
 #| eval: false
@@ -559,11 +593,13 @@ ld <- plot_pairwise_ld_heatmap(ecor_snps, facets=c("CHROM"))
 ```
 
 
+
 ### Remove loci under selection using pcadapt
 
 Following along [here](https://bcm-uga.github.io/pcadapt/articles/pcadapt.html. 
 
 First, write out the data into plink format
+
 
 ```{r}
 #| eval: false
@@ -575,7 +611,9 @@ format_snps(ecor_snps, output = "plink", facets = "pop",
 
 ```
 
+
 #### Scree Plot
+
 
 ```{r}
 
@@ -587,16 +625,17 @@ plot(pca20, option = "screeplot")
 
 ```
 
+
 Based on the scree plot I think we'll use 5 PCs.
 
 #### PCA
+
 
 ```{r}
 pca5 <- pcadapt(ecor_plink, K = 5)
 plot(pca5, option = "scores", pop = popmap$pop[-1])
 
 ```
-
 
 ```{r}
 plot(pca5, option = "manhattan")
@@ -607,10 +646,12 @@ plot(pca5, option = "qqplot")
 hist(pca5$pvalues, xlab = "p-values", main = NULL, breaks = 50, col = "orange")
 ```
 
+
 #### Outliers
 
 
 Just because there is a little cluster of `length(pca5_outliers)` in the qqplot and histogram, I'm going to mark them as outliers and remove them.
+
 ```{r}
  
 padj <- p.adjust(pca5$pvalues, method = "none")
@@ -621,7 +662,9 @@ pca5_outliers <- which(padj < alpha)
 ecor_snps2 <- ecor_snps[-pca5_outliers,]
 ```
 
+
 #### Write out filtered SNPs and haplotypes
+
 
 
 ```{r}
@@ -643,9 +686,11 @@ genind_to_genepop(ecor_haps2,output = "coruscans/hwe.pcadapt.filtered.haps.txt")
 
 ```
 
+
 ## E. carbunculus
 
 ### Adegenet
+
 
 ```{r}
 ecar_haps <- read.genepop("carbunculus/populations_r100/populations.haps.gen")
@@ -658,7 +703,9 @@ scatter(ecar_dapc)
 
 ```
 
+
 Let's take a look with the randomly selected SNPs
+
 
 ```{r}
 ecar_snps.genind <- read.genepop("carbunculus/populations_r100/populations.randsnp.gen")
@@ -671,9 +718,11 @@ scatter(ecar_dapc_snps)
 
 ```
 
+
 ### SNPr
 
 I will use Will Hemstrom's new package [SNPr](https://github.com/hemstrow/snpR) to further evaluate and filter the SNPs that I randomly selected from each locus. 
+
 
 ```{r}
 ecar_popmap <- read_tsv("carbunculus/popmapECA.tsv",col_names = c("sampID","pop"))
@@ -681,9 +730,11 @@ ecar_snps <- read_vcf(file = "carbunculus/populations_r100/populations.randsnp.v
                       sample.meta = ecar_popmap)
 ```
 
+
 #### Filtering
 
 I've already implemented stringent filters in Stacks to only include individuals with all loci and loci found in all individuals. Now going to implement a strict HWE filter - if a locus is out of HWE in any population (`hwe_facets = "pop"`) after a Bonferroni correction, then it will be removed. Also going to remove non-variant loci, and loci with only a single minor allele ("singletons").
+
 
 ```{r}
 ecar_snps <- filter_snps(ecar_snps, min_ind = 0.9999, min_loci = 0.9999, re_run = "full", 
@@ -693,9 +744,11 @@ ecar_snps <- filter_snps(ecar_snps, min_ind = 0.9999, min_loci = 0.9999, re_run 
 ```
 
 
+
 #### Individual Stats
 
 snpR uses facets to subset data on either sample metadata (such as sample ID, or population) or SNP metadata. Here we will look at per-individual stats. Also, note that the calculations are just attached to the data object, so we don't lose track of them. Nice.
+
 
 ```{r}
 ecar_snps <- calc_hs(ecar_snps, facets = "sampID")
@@ -709,7 +762,9 @@ p$plots$pca
 ```
 
 
+
 The separation between both Hawaiian populations and Japan is pretty evident even in the PCA.
+
 
 ```{r}
 ecar_snps <- calc_genetic_distances(ecar_snps, facets = "sampID",method = "Nei")
@@ -717,11 +772,13 @@ stats.ind <- get.snpR.stats(ecar_snps, facets="sampID", stats = c("hs","ho","he"
 ind.dists <- get.snpR.stats(ecar_snps,facets="sampID", stats = "genetic_distance")                  
 heatmap(as.matrix(ind.dists$sampID$.base$Nei))
 ```
+
 And there doesn't seem to be any reason to drop any individuals.
 
 #### Population Stats
 
 And here are some summary stats about each population
+
 
 ```{r}
 ecar_snps <- calc_ho(ecar_snps, facets = "pop")
@@ -742,9 +799,11 @@ ecar_fst <- get.snpR.stats(ecar_snps, facets = "pop", stats = c("fst"))
 ecar_fst$fst.matrix
 ```
 
+
 #### Linkage Disequilibrium
 
 A little stuck on LD. But there are so few markers (intentionally) that it really shouldn't be an issue.
+
 
 ```{r}
 #| eval: false
@@ -754,11 +813,13 @@ ld <- plot_pairwise_ld_heatmap(ecar_snps, facets=c("CHROM"))
 ```
 
 
+
 ### Remove loci under selection using pcadapt
 
 Following along [here](https://bcm-uga.github.io/pcadapt/articles/pcadapt.html. 
 
 First, write out the data into plink format
+
 
 ```{r}
 #| eval: false
@@ -770,7 +831,9 @@ format_snps(ecar_snps, output = "plink", facets = "pop",
 
 ```
 
+
 #### Scree Plot
+
 
 ```{r}
 
@@ -782,16 +845,17 @@ plot(pca20, option = "screeplot")
 
 ```
 
+
 Based on the scree plot I think we'll use 2 PCs.
 
 #### PCA
+
 
 ```{r}
 pca2 <- pcadapt(ecar_plink, K = 2)
 plot(pca2, option = "scores", pop = ecar_popmap$pop)
 
 ```
-
 
 ```{r}
 plot(pca2, option = "manhattan")
@@ -802,10 +866,12 @@ plot(pca2, option = "qqplot")
 hist(pca2$pvalues, xlab = "p-values", main = NULL, breaks = 50, col = "orange")
 ```
 
+
 #### Outliers
 
 
 Just because there is a little cluster of `length(pca5_outliers)` in the qqplot and histogram, I'm going to be super-conservative and use the same p-value cutoff as coruscans, mark them as outliers and remove them.
+
 ```{r}
  
 padj <- p.adjust(pca2$pvalues, method = "none")
@@ -818,7 +884,9 @@ ecar_snps2 <- ecar_snps[-pca2_outliers,]
 # pick 388
 ```
 
+
 #### Write out filtered SNPs and haplotypes
+
 
 
 ```{r}
@@ -842,12 +910,14 @@ genind_to_genepop(ecar_haps2,output = "carbunculus/hwe.pcadapt.filtered.haps.txt
 ```
 
 
+
 # Fasta2Genotype
 
 Paul Maier created [this script](https://github.com/paulmaier/fasta2genotype) to convert Stacks haplotypes to migrate format. 
 
 ## Install Python2
 I had a doozy of a time trying to get this to work this time around: the script was written in python2. which is nearly deprecated. I first tried to use `2to3` to upgrade the script to python3, but there were a few stray tabs I couldn't figure out. I eventually landed [here](https://stackoverflow.com/questions/60298514/how-to-reinstall-python2-from-homebrew), and used the following commands to install [`pyenv`](https://github.com/pyenv/pyenv), which can handle multiple python installs.
+
 
 ```{bash}
 #| eval: false
@@ -865,8 +935,10 @@ pyenv shell 2.7.18 # use python 2 for this shell session
 
 ```
 
+
 ## Run it
 I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by `fasta2genotype.py`. Finally, I created a whitelist by editing the vcf file output above of the fully cleaned set of SNPs.
+
 
 ```{bash}
 #| eval: false
@@ -919,6 +991,7 @@ Outputting migrate-n file...
 
 ```
 
+
 I then re-ran the script, selecting phylip output, with locus name headers, and all other options the same. I need the locus names in the order output by the script in order to run modeltest.
 
 
@@ -931,6 +1004,7 @@ I installed Migrate 5.0.4 as described [here](https://ericcrandall.github.io/Pal
  I need to figure out an overall mutation model to use with RAD loci. [I received this advice one](https://groups.google.com/g/migrate-support/c/XjV_4jZW4RI/m/HbRWoGY6AwAJ) from Peter about how to construct these. I'll use `modelTest` in the phangorn package to see where that gets me.
 
 I renamed the FASTA headers in `populations.samples.fa` with BBEdit to create `population.samples3.fa`
+
 
 ```{bash}
 #| eval: false
@@ -945,6 +1019,7 @@ Replace:
 
 ```
 
+
 Lets load in the data and calculate some statistics for each locus. Previously Migrate-n only implemented the F84 (=HKY) model, with two rates (Transitions and Transversions) and gamma distributed rate variability.
 
 Now it will take these possible models: 
@@ -954,6 +1029,7 @@ Now it will take these possible models:
  4  Felsenstein 1984 (F84) model
  5  Hasegawa-Kishino-Yano model
  6  Tamura-Nei model
+
 
 
 
@@ -1043,9 +1119,11 @@ for(l in migrate_loci$locus_name){
 # write_csv(stats, "coruscans/migrate_locus_statistics.csv")
 ```
 
+
 ### Write a model block
 
 Write a space delimited textfile that can be added to the migrate data file in the format that Peter suggested.
+
 
 ```{r}
 #| eval: false
@@ -1065,6 +1143,7 @@ migrate_mutation_models <- tibble(prefix = "#$",
 
 #write_delim(migrate_mutation_models,"./coruscans/migrate_modelblock.txt", na="", delim = " ")
 ```
+
 Read them back in so we don't have to recalculate them every time I knit.
 
 
@@ -1073,6 +1152,7 @@ So we have a `r length(which(stats$segSites == 0))` invariant loci, and the mean
 ## Parmfile
 
 Here's the parmfile I am using, based on my parmfile for *Palythoa tuberculosa*. This one depicts a model of divergence without gene flow. Migration prior is increased to have a maximum of 1e8 (100,000,000), and mean of 1e4 (10,000). This reflects a prior expectation that $m/\mu$ will not be larger than this value, if m is not larger than 0.1 (10% of population migrates), assuming a nuclear mutation rate of 1e-9. Also on average one out of every 100K individuals will send a migrant (m = 1e-5).
+
 
 ```{bash parmfile, eval = F}
 ################################################################################
@@ -1159,8 +1239,10 @@ end
 
 ```
 
+
 ### Copy It Up
 Copy it up, and then make a total of 10 replicate copies of the folder.
+
 
 ```{bash}
 #| eval: false
@@ -1171,6 +1253,7 @@ for a in $(seq 2 10); do cp -r rep1 rep$a; done
 
 ```
 
+
 ## Metapopulation Models
 
 To be added.
@@ -1178,6 +1261,7 @@ To be added.
 ## Bash Script
 
 So we will do 10 replicates of 3 replicates.  This will start at r1, and run all models for that before moving on. Pretty sure this will finish one whole model before moving on to the next one (since all threads are being used for different loci)
+
 
 ```{bash}
 #| eval: false
@@ -1202,3 +1286,4 @@ for r in */
 		cd ..
 	done
 ```
+
