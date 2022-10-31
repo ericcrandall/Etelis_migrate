@@ -26,7 +26,7 @@ library(tidyverse)
 library(ape)
 library(phangorn)
 library(pegas)
-#library(strataG)
+library(strataG)
 library(coda)
 library(ggmcmc)
 library(perm)
@@ -947,7 +947,7 @@ I then re-ran the script, selecting phylip output, with full sequences, haploid,
 
 I installed Migrate 5.0.4 as described [here](https://ericcrandall.github.io/Palythoa_tuberculosa/Ptuberculosa_migrate.html).
 
-## Mutation Models
+## Mutation Models (code used for both species)
 
  I need to figure out an overall mutation model to use with RAD loci. [I received this advice one](https://groups.google.com/g/migrate-support/c/XjV_4jZW4RI/m/HbRWoGY6AwAJ) from Peter about how to construct these. I'll use `modelTest` in the phangorn package to see where that gets me.
 
@@ -960,7 +960,7 @@ Replace: >\3_L\1_A\2
 
 #first token is sample name, second is locus number(name) third is allele
 
-#Also remove bad indiv A150
+#Also remove bad indiv A150 in coruscans
 Find: >A150_.+\n.+\n
 Replace:
 
@@ -982,14 +982,14 @@ Now it will take these possible models:
 ```{r}
 #| eval: false
 
-fastadata <- read.FASTA("coruscans/populations_r100/populations.samples3.fa")
+fastadata <- read.FASTA("carbunculus/populations_r100/populations.samples3.fa")
 
 #  read in the locus lengths, as optional additional way to make sure the stats
 # and the migrate infile are ordered the same
 #migrate_lengths <- read_lines("coruscans/Ecoruscans.mig", skip = 1, n_max=1) %>% 
 #  str_split("\\t", simplify = T) %>%  t(.) %>% tibble(length=.) %>% na.omit()
 
-migrate_loci <- read_lines("coruscans/Ecoruscans.phy", skip = 1, n_max=1) %>% 
+migrate_loci <- read_lines("carbunculus/Ecarbunculus.phy", skip = 1, n_max=1) %>% 
   str_split("\\t", simplify = T) %>%  t(.) %>% tibble(locus_name=.) %>% filter(locus_name!="")
 
 stats <- tibble(locus = character(), 
@@ -1061,10 +1061,10 @@ for(l in migrate_loci$locus_name){
 
 #stats <- stats[which(stats$length %in% migrate_lengths$length),]
 #setdiff(stats$length, as.numeric(migrate_lengths$length))
-# write_csv(stats, "coruscans/migrate_locus_statistics.csv")
+# write_csv(stats, "carbunculus/migrate_locus_statistics.csv")
 ```
 
-### Write a model block
+#### Write a model block
 
 Write a space delimited textfile that can be added to the migrate data file in the format that Peter suggested.
 
@@ -1090,6 +1090,15 @@ Read them back in so we don't have to recalculate them every time I knit.
 
 
 So we have a `r length(which(stats$segSites == 0))` invariant loci, and the mean overall transition:transversion ratio is `r mean(!is.infinite(stats$ttRatio),na.rm = T)`. Mean gamma shape parameter is `r mean(stats$gammaShape)`, which argues for only one rate.
+
+## Metapopulation Models
+
+To be added.
+
+### E. coruscans
+
+### E. carbunculus
+
 
 ## Parmfile
 
@@ -1119,7 +1128,7 @@ fast-likelihood=NO
 inheritance-scalars={1.00000000000000000000}
 haplotyping=YES:no-report
 population-relabel={1 2 3 4}
-infile=../../Ecoruscans2.mig
+infile=../../Ecarbunculus.mig
 random-seed=AUTO #OWN:410568459
 title= Etelis coruscans
 progress=YES
@@ -1192,9 +1201,7 @@ for a in $(seq 2 10); do cp -r rep1 rep$a; done
 
 ```
 
-## Metapopulation Models
 
-To be added.
 
 ## Bash Script
 

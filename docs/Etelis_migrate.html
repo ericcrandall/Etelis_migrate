@@ -188,19 +188,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#fasta2genotype" id="toc-fasta2genotype" class="nav-link" data-scroll-target="#fasta2genotype">Fasta2Genotype</a>
   <ul class="collapse">
   <li><a href="#install-python2" id="toc-install-python2" class="nav-link" data-scroll-target="#install-python2">Install Python2</a></li>
+  <li><a href="#e.-coruscans-3" id="toc-e.-coruscans-3" class="nav-link" data-scroll-target="#e.-coruscans-3">E. coruscans</a>
+  <ul class="collapse">
   <li><a href="#run-it" id="toc-run-it" class="nav-link" data-scroll-target="#run-it">Run it</a></li>
+  </ul></li>
+  <li><a href="#e.-carbunculus-3" id="toc-e.-carbunculus-3" class="nav-link" data-scroll-target="#e.-carbunculus-3">E. carbunculus</a>
+  <ul class="collapse">
+  <li><a href="#run-it-1" id="toc-run-it-1" class="nav-link" data-scroll-target="#run-it-1">Run it</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#migrate" id="toc-migrate" class="nav-link" data-scroll-target="#migrate">Migrate</a>
   <ul class="collapse">
-  <li><a href="#mutation-models" id="toc-mutation-models" class="nav-link" data-scroll-target="#mutation-models">Mutation Models</a>
+  <li><a href="#mutation-models-code-used-for-both-species" id="toc-mutation-models-code-used-for-both-species" class="nav-link" data-scroll-target="#mutation-models-code-used-for-both-species">Mutation Models (code used for both species)</a></li>
+  <li><a href="#metapopulation-models" id="toc-metapopulation-models" class="nav-link" data-scroll-target="#metapopulation-models">Metapopulation Models</a>
   <ul class="collapse">
-  <li><a href="#write-a-model-block" id="toc-write-a-model-block" class="nav-link" data-scroll-target="#write-a-model-block">Write a model block</a></li>
+  <li><a href="#e.-coruscans-4" id="toc-e.-coruscans-4" class="nav-link" data-scroll-target="#e.-coruscans-4">E. coruscans</a></li>
+  <li><a href="#e.-carbunculus-4" id="toc-e.-carbunculus-4" class="nav-link" data-scroll-target="#e.-carbunculus-4">E. carbunculus</a></li>
   </ul></li>
   <li><a href="#parmfile" id="toc-parmfile" class="nav-link" data-scroll-target="#parmfile">Parmfile</a>
   <ul class="collapse">
   <li><a href="#copy-it-up" id="toc-copy-it-up" class="nav-link" data-scroll-target="#copy-it-up">Copy It Up</a></li>
   </ul></li>
-  <li><a href="#metapopulation-models" id="toc-metapopulation-models" class="nav-link" data-scroll-target="#metapopulation-models">Metapopulation Models</a></li>
   <li><a href="#bash-script" id="toc-bash-script" class="nav-link" data-scroll-target="#bash-script">Bash Script</a></li>
   </ul></li>
   </ul>
@@ -243,7 +251,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ape)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phangorn)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pegas)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#library(strataG)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(strataG)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coda)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmcmc)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(perm)</span>
@@ -1206,6 +1214,7 @@ No individuals removed.</code></pre>
 </section>
 <section id="write-out-filtered-snps-and-haplotypes-1" class="level4">
 <h4 class="anchored" data-anchor-id="write-out-filtered-snps-and-haplotypes-1">Write out filtered SNPs and haplotypes</h4>
+<p>I’m going to write a whitelist with 388 randomly selected SNPs - to be in parity with coruscans. Adding more would take longer.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co">#write to vcf</span></span>
 <span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="fu">format_snps</span>(ecar_snps2, <span class="at">output =</span> <span class="st">"vcf"</span>, <span class="at">facets =</span> <span class="st">"pop"</span>, </span>
@@ -1215,7 +1224,7 @@ No individuals removed.</code></pre>
 <span id="cb91-6"><a href="#cb91-6" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(pca2_outliers, <span class="st">"carbunculus/pcadapt.outliers.csv"</span>)</span>
 <span id="cb91-7"><a href="#cb91-7" aria-hidden="true" tabindex="-1"></a><span class="co">#grab the locus names, pick a random subset of 388, and write them to a whitelist to be included in the migrate data file.</span></span>
 <span id="cb91-8"><a href="#cb91-8" aria-hidden="true" tabindex="-1"></a>whitelist <span class="ot">&lt;-</span> ecar_snps2<span class="sc">@</span>snp.meta<span class="sc">$</span>CHROM[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nsnps</span>(ecar_snps2),<span class="dv">388</span>)]</span>
-<span id="cb91-9"><a href="#cb91-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(<span class="fu">sort</span>(<span class="fu">as.numeric</span>(ecar_snps2<span class="sc">@</span>snp.meta<span class="sc">$</span>CHROM)), </span>
+<span id="cb91-9"><a href="#cb91-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(<span class="fu">sort</span>(<span class="fu">as.numeric</span>(whitelist)), </span>
 <span id="cb91-10"><a href="#cb91-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">"carbunculus/ecar_whitelist.txt"</span>, <span class="at">quote=</span>F, <span class="at">row.names =</span> F,<span class="at">col.names =</span>F )</span>
 <span id="cb91-11"><a href="#cb91-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb91-12"><a href="#cb91-12" aria-hidden="true" tabindex="-1"></a>ecar_haps2 <span class="ot">&lt;-</span> ecar_haps[,loc <span class="ot">=</span> <span class="fu">locNames</span>(ecar_haps) <span class="sc">%in%</span> whitelist]</span>
@@ -1245,8 +1254,10 @@ No individuals removed.</code></pre>
 <span id="cb92-10"><a href="#cb92-10" aria-hidden="true" tabindex="-1"></a> <span class="ex">pip</span> install scipy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="run-it" class="level2">
-<h2 class="anchored" data-anchor-id="run-it">Run it</h2>
+<section id="e.-coruscans-3" class="level2">
+<h2 class="anchored" data-anchor-id="e.-coruscans-3">E. coruscans</h2>
+<section id="run-it" class="level3">
+<h3 class="anchored" data-anchor-id="run-it">Run it</h3>
 <p>I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by <code>fasta2genotype.py</code>. Finally, I created a whitelist by editing the vcf file output above of the fully cleaned set of SNPs.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb93"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> ../../fasta2genotype/fasta2genotype.py populations_r100/populations.samples2.fa ecor_whitelist.txt <span class="dt">\</span></span>
@@ -1297,254 +1308,273 @@ No individuals removed.</code></pre>
 <p>I then re-ran the script, selecting phylip output, with locus name headers, and all other options the same. I need the locus names in the order output by the script in order to run modeltest.</p>
 </section>
 </section>
+<section id="e.-carbunculus-3" class="level2">
+<h2 class="anchored" data-anchor-id="e.-carbunculus-3">E. carbunculus</h2>
+<section id="run-it-1" class="level3">
+<h3 class="anchored" data-anchor-id="run-it-1">Run it</h3>
+<p>I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by <code>fasta2genotype.py</code>. Finally, I created a whitelist of 388 randomly selected loci by editing the vcf file output above of the fully cleaned set of SNPs. Used the same options as E. coruscans.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> ../../fasta2genotype/fasta2genotype.py populations_r100/populations.samples2.fa ecar_whitelist.txt <span class="dt">\</span></span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>popmapECA_f2g.tsv NA Ecarbunculus.mig</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I then re-ran the script, selecting phylip output, with full sequences, haploid, all loci, not separated by ! locus name headers, and all other options the same. I need the locus names in the order output by the script in order to run modeltest. This is only needed to get the locus names in the next step.</p>
+</section>
+</section>
+</section>
 <section id="migrate" class="level1">
 <h1>Migrate</h1>
 <p>I installed Migrate 5.0.4 as described <a href="https://ericcrandall.github.io/Palythoa_tuberculosa/Ptuberculosa_migrate.html">here</a>.</p>
-<section id="mutation-models" class="level2">
-<h2 class="anchored" data-anchor-id="mutation-models">Mutation Models</h2>
+<section id="mutation-models-code-used-for-both-species" class="level2">
+<h2 class="anchored" data-anchor-id="mutation-models-code-used-for-both-species">Mutation Models (code used for both species)</h2>
 <p>I need to figure out an overall mutation model to use with RAD loci. <a href="https://groups.google.com/g/migrate-support/c/XjV_4jZW4RI/m/HbRWoGY6AwAJ">I received this advice one</a> from Peter about how to construct these. I’ll use <code>modelTest</code> in the phangorn package to see where that gets me.</p>
 <p>I renamed the FASTA headers in <code>populations.samples.fa</code> with BBEdit to create <code>population.samples3.fa</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Find:</span> <span class="op">&gt;</span>CLocus_\d+_Sample_\d+_Locus_<span class="er">(</span><span class="ex">\d+</span><span class="kw">)</span><span class="ex">_Allele_</span><span class="er">(</span><span class="ex">[01]</span><span class="kw">)</span> <span class="ex">\[Etelis_</span><span class="er">(</span><span class="bu">.</span>+<span class="kw">)</span><span class="ex">\]</span></span>
-<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Replace:</span> <span class="op">&gt;</span><span class="dt">\3</span>_L\1_A\2</span>
-<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb94-4"><a href="#cb94-4" aria-hidden="true" tabindex="-1"></a><span class="co">#first token is sample name, second is locus number(name) third is allele</span></span>
-<span id="cb94-5"><a href="#cb94-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb94-6"><a href="#cb94-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Also remove bad indiv A150</span></span>
-<span id="cb94-7"><a href="#cb94-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Find:</span> <span class="op">&gt;</span>A150_.+\n.+\n</span>
-<span id="cb94-8"><a href="#cb94-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Replace:</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Find:</span> <span class="op">&gt;</span>CLocus_\d+_Sample_\d+_Locus_<span class="er">(</span><span class="ex">\d+</span><span class="kw">)</span><span class="ex">_Allele_</span><span class="er">(</span><span class="ex">[01]</span><span class="kw">)</span> <span class="ex">\[Etelis_</span><span class="er">(</span><span class="bu">.</span>+<span class="kw">)</span><span class="ex">\]</span></span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Replace:</span> <span class="op">&gt;</span><span class="dt">\3</span>_L\1_A\2</span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a><span class="co">#first token is sample name, second is locus number(name) third is allele</span></span>
+<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-6"><a href="#cb95-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Also remove bad indiv A150 in coruscans</span></span>
+<span id="cb95-7"><a href="#cb95-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Find:</span> <span class="op">&gt;</span>A150_.+\n.+\n</span>
+<span id="cb95-8"><a href="#cb95-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Replace:</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Lets load in the data and calculate some statistics for each locus. Previously Migrate-n only implemented the F84 (=HKY) model, with two rates (Transitions and Transversions) and gamma distributed rate variability.</p>
 <p>Now it will take these possible models: 1 Jukes-Cantor model 2 Kimura 2-parameter model 3 Felsenstein 1981 (F81) model 4 Felsenstein 1984 (F84) model 5 Hasegawa-Kishino-Yano model 6 Tamura-Nei model</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>fastadata <span class="ot">&lt;-</span> <span class="fu">read.FASTA</span>(<span class="st">"coruscans/populations_r100/populations.samples3.fa"</span>)</span>
-<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  read in the locus lengths, as optional additional way to make sure the stats</span></span>
-<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a><span class="co"># and the migrate infile are ordered the same</span></span>
-<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a><span class="co">#migrate_lengths &lt;- read_lines("coruscans/Ecoruscans.mig", skip = 1, n_max=1) %&gt;% </span></span>
-<span id="cb95-6"><a href="#cb95-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  str_split("\\t", simplify = T) %&gt;%  t(.) %&gt;% tibble(length=.) %&gt;% na.omit()</span></span>
-<span id="cb95-7"><a href="#cb95-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb95-8"><a href="#cb95-8" aria-hidden="true" tabindex="-1"></a>migrate_loci <span class="ot">&lt;-</span> <span class="fu">read_lines</span>(<span class="st">"coruscans/Ecoruscans.phy"</span>, <span class="at">skip =</span> <span class="dv">1</span>, <span class="at">n_max=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb95-9"><a href="#cb95-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_split</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">t"</span>, <span class="at">simplify =</span> T) <span class="sc">%&gt;%</span>  <span class="fu">t</span>(.) <span class="sc">%&gt;%</span> <span class="fu">tibble</span>(<span class="at">locus_name=</span>.) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(locus_name<span class="sc">!=</span><span class="st">""</span>)</span>
-<span id="cb95-10"><a href="#cb95-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb95-11"><a href="#cb95-11" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">locus =</span> <span class="fu">character</span>(), </span>
-<span id="cb95-12"><a href="#cb95-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">length =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb95-13"><a href="#cb95-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">segSites =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb95-14"><a href="#cb95-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">nHaps =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb95-15"><a href="#cb95-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">nucDiv =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb95-16"><a href="#cb95-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">ttRatio =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb95-17"><a href="#cb95-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">model =</span> <span class="fu">character</span>(),</span>
-<span id="cb95-18"><a href="#cb95-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">gammaShape =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb95-19"><a href="#cb95-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">rate1 =</span> <span class="fu">numeric</span>(), </span>
-<span id="cb95-20"><a href="#cb95-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">rate2 =</span> <span class="fu">numeric</span>(), </span>
-<span id="cb95-21"><a href="#cb95-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">rate3 =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb95-22"><a href="#cb95-22" aria-hidden="true" tabindex="-1"></a>                <span class="at">rate4 =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb95-23"><a href="#cb95-23" aria-hidden="true" tabindex="-1"></a>                <span class="at">Q1=</span> <span class="fu">numeric</span>(),</span>
-<span id="cb95-24"><a href="#cb95-24" aria-hidden="true" tabindex="-1"></a>                <span class="at">Q2 =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb95-25"><a href="#cb95-25" aria-hidden="true" tabindex="-1"></a>                <span class="at">Q3 =</span> <span class="fu">numeric</span>(),</span>
-<span id="cb95-26"><a href="#cb95-26" aria-hidden="true" tabindex="-1"></a>                )</span>
-<span id="cb95-27"><a href="#cb95-27" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb95-28"><a href="#cb95-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(l <span class="cf">in</span> migrate_loci<span class="sc">$</span>locus_name){</span>
-<span id="cb95-29"><a href="#cb95-29" aria-hidden="true" tabindex="-1"></a>  L <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"L"</span>,l,<span class="st">"_"</span>)</span>
-<span id="cb95-30"><a href="#cb95-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Now Doing Locus"</span>, l, <span class="fu">match</span>(l,  migrate_loci<span class="sc">$</span>locus_name), <span class="st">"out of"</span>, <span class="fu">length</span>(migrate_loci<span class="sc">$</span>locus_name)))</span>
-<span id="cb95-31"><a href="#cb95-31" aria-hidden="true" tabindex="-1"></a>  locus_dnabin <span class="ot">&lt;-</span> fastadata[<span class="fu">str_which</span>(<span class="fu">names</span>(fastadata),<span class="at">pattern =</span> L)]</span>
-<span id="cb95-32"><a href="#cb95-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert to package formats</span></span>
-<span id="cb95-33"><a href="#cb95-33" aria-hidden="true" tabindex="-1"></a>  locus_dnabin <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(locus_dnabin)</span>
-<span id="cb95-34"><a href="#cb95-34" aria-hidden="true" tabindex="-1"></a>  locus_gtypes <span class="ot">&lt;-</span> <span class="fu">sequence2gtypes</span>(locus_dnabin)</span>
-<span id="cb95-35"><a href="#cb95-35" aria-hidden="true" tabindex="-1"></a>  locus_phy <span class="ot">&lt;-</span> <span class="fu">phyDat</span>(locus_dnabin)</span>
-<span id="cb95-36"><a href="#cb95-36" aria-hidden="true" tabindex="-1"></a>  <span class="co">#create a haplotype network .. to be continued</span></span>
-<span id="cb95-37"><a href="#cb95-37" aria-hidden="true" tabindex="-1"></a>  haps <span class="ot">&lt;-</span> <span class="fu">haplotype</span>(locus_dnabin)</span>
-<span id="cb95-38"><a href="#cb95-38" aria-hidden="true" tabindex="-1"></a>  nhaps <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">dimnames</span>(haps)[[<span class="dv">1</span>]])</span>
-<span id="cb95-39"><a href="#cb95-39" aria-hidden="true" tabindex="-1"></a>  <span class="co">#tcs &lt;- haploNet(haps)</span></span>
-<span id="cb95-40"><a href="#cb95-40" aria-hidden="true" tabindex="-1"></a>  <span class="co">#find parameters of HKY (F84) model</span></span>
-<span id="cb95-41"><a href="#cb95-41" aria-hidden="true" tabindex="-1"></a>  modeltest <span class="ot">&lt;-</span> <span class="fu">modelTest</span>(locus_phy, <span class="at">model =</span> <span class="fu">c</span>(<span class="st">"JC"</span>,<span class="st">"K80"</span>, <span class="st">"F81"</span>, <span class="st">"HKY"</span>,<span class="st">"TrN"</span>), </span>
-<span id="cb95-42"><a href="#cb95-42" aria-hidden="true" tabindex="-1"></a>                         <span class="at">G =</span> T, <span class="at">I =</span> F, <span class="at">k =</span> <span class="dv">4</span>, <span class="at">mc.cores =</span> <span class="dv">5</span>)</span>
-<span id="cb95-43"><a href="#cb95-43" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pick out the best model. If multiple models are tied for best, pick the simplest one</span></span>
-<span id="cb95-44"><a href="#cb95-44" aria-hidden="true" tabindex="-1"></a>  bestmodel <span class="ot">&lt;-</span> modeltest<span class="sc">$</span>Model[<span class="fu">which</span>(modeltest<span class="sc">$</span>BIC <span class="sc">==</span> <span class="fu">min</span>(modeltest<span class="sc">$</span>BIC))][<span class="dv">1</span>]</span>
-<span id="cb95-45"><a href="#cb95-45" aria-hidden="true" tabindex="-1"></a>  <span class="co">#open the object environment</span></span>
-<span id="cb95-46"><a href="#cb95-46" aria-hidden="true" tabindex="-1"></a>  env <span class="ot">&lt;-</span> <span class="fu">attr</span>(modeltest,<span class="st">"env"</span>)</span>
-<span id="cb95-47"><a href="#cb95-47" aria-hidden="true" tabindex="-1"></a>  bestparams <span class="ot">&lt;-</span> <span class="fu">get</span>(bestmodel, env)</span>
-<span id="cb95-48"><a href="#cb95-48" aria-hidden="true" tabindex="-1"></a>  bestparams <span class="ot">&lt;-</span> <span class="fu">eval</span>(bestparams, <span class="at">env=</span>env)</span>
-<span id="cb95-49"><a href="#cb95-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># use this code for v3, which only has F84 (HKY)</span></span>
-<span id="cb95-50"><a href="#cb95-50" aria-hidden="true" tabindex="-1"></a>  <span class="co">#HKY &lt;- modelTest(locus_phy, model = c("HKY"), </span></span>
-<span id="cb95-51"><a href="#cb95-51" aria-hidden="true" tabindex="-1"></a>  <span class="co">#                       G = T, I = F, k = 4)</span></span>
-<span id="cb95-52"><a href="#cb95-52" aria-hidden="true" tabindex="-1"></a>  <span class="co">#env &lt;- attr(HKY, "env")</span></span>
-<span id="cb95-53"><a href="#cb95-53" aria-hidden="true" tabindex="-1"></a>  <span class="co">#HKYG &lt;- get("HKY+G", env)</span></span>
-<span id="cb95-54"><a href="#cb95-54" aria-hidden="true" tabindex="-1"></a>  <span class="co">#model &lt;- eval(HKYG, env=env)</span></span>
-<span id="cb95-55"><a href="#cb95-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate TiTv Ratio</span></span>
-<span id="cb95-56"><a href="#cb95-56" aria-hidden="true" tabindex="-1"></a>  ttratio <span class="ot">&lt;-</span> <span class="fu">TiTvRatio</span>(locus_gtypes)</span>
-<span id="cb95-57"><a href="#cb95-57" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb95-58"><a href="#cb95-58" aria-hidden="true" tabindex="-1"></a>  stats <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(stats, <span class="fu">tibble</span>(<span class="at">locus=</span>L, </span>
-<span id="cb95-59"><a href="#cb95-59" aria-hidden="true" tabindex="-1"></a>                          <span class="at">length =</span> <span class="fu">length</span>(locus_dnabin[<span class="dv">1</span>,]),</span>
-<span id="cb95-60"><a href="#cb95-60" aria-hidden="true" tabindex="-1"></a>                          <span class="at">segSites =</span> <span class="fu">length</span>(<span class="fu">seg.sites</span>(locus_dnabin)),</span>
-<span id="cb95-61"><a href="#cb95-61" aria-hidden="true" tabindex="-1"></a>                          <span class="at">nHaps =</span> <span class="fu">length</span>(<span class="fu">dimnames</span>(haps)[[<span class="dv">1</span>]]),</span>
-<span id="cb95-62"><a href="#cb95-62" aria-hidden="true" tabindex="-1"></a>                          <span class="at">nucDiv =</span> <span class="fu">nuc.div</span>(locus_dnabin),</span>
-<span id="cb95-63"><a href="#cb95-63" aria-hidden="true" tabindex="-1"></a>                          <span class="at">ttRatio =</span>  ttratio[<span class="dv">3</span>],</span>
-<span id="cb95-64"><a href="#cb95-64" aria-hidden="true" tabindex="-1"></a>                          <span class="at">model =</span> bestmodel,</span>
-<span id="cb95-65"><a href="#cb95-65" aria-hidden="true" tabindex="-1"></a>                          <span class="at">gammaShape =</span> bestparams<span class="sc">$</span>shape,</span>
-<span id="cb95-66"><a href="#cb95-66" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rate1 =</span> bestparams<span class="sc">$</span>g[<span class="dv">1</span>],</span>
-<span id="cb95-67"><a href="#cb95-67" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rate2 =</span> bestparams<span class="sc">$</span>g[<span class="dv">2</span>],</span>
-<span id="cb95-68"><a href="#cb95-68" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rate3 =</span> bestparams<span class="sc">$</span>g[<span class="dv">3</span>],</span>
-<span id="cb95-69"><a href="#cb95-69" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rate4 =</span> bestparams<span class="sc">$</span>g[<span class="dv">4</span>],</span>
-<span id="cb95-70"><a href="#cb95-70" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Q1 =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(bestparams<span class="sc">$</span>Q))[<span class="dv">1</span>],</span>
-<span id="cb95-71"><a href="#cb95-71" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Q2 =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(bestparams<span class="sc">$</span>Q))[<span class="dv">2</span>],</span>
-<span id="cb95-72"><a href="#cb95-72" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Q3 =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(bestparams<span class="sc">$</span>Q))[<span class="dv">3</span>]</span>
-<span id="cb95-73"><a href="#cb95-73" aria-hidden="true" tabindex="-1"></a>                          ))</span>
-<span id="cb95-74"><a href="#cb95-74" aria-hidden="true" tabindex="-1"></a>                         </span>
-<span id="cb95-75"><a href="#cb95-75" aria-hidden="true" tabindex="-1"></a>                        </span>
-<span id="cb95-76"><a href="#cb95-76" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb95-77"><a href="#cb95-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb95-78"><a href="#cb95-78" aria-hidden="true" tabindex="-1"></a><span class="co">#stats &lt;- stats[which(stats$length %in% migrate_lengths$length),]</span></span>
-<span id="cb95-79"><a href="#cb95-79" aria-hidden="true" tabindex="-1"></a><span class="co">#setdiff(stats$length, as.numeric(migrate_lengths$length))</span></span>
-<span id="cb95-80"><a href="#cb95-80" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(stats, "coruscans/migrate_locus_statistics.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>fastadata <span class="ot">&lt;-</span> <span class="fu">read.FASTA</span>(<span class="st">"carbunculus/populations_r100/populations.samples3.fa"</span>)</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  read in the locus lengths, as optional additional way to make sure the stats</span></span>
+<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a><span class="co"># and the migrate infile are ordered the same</span></span>
+<span id="cb96-5"><a href="#cb96-5" aria-hidden="true" tabindex="-1"></a><span class="co">#migrate_lengths &lt;- read_lines("coruscans/Ecoruscans.mig", skip = 1, n_max=1) %&gt;% </span></span>
+<span id="cb96-6"><a href="#cb96-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  str_split("\\t", simplify = T) %&gt;%  t(.) %&gt;% tibble(length=.) %&gt;% na.omit()</span></span>
+<span id="cb96-7"><a href="#cb96-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-8"><a href="#cb96-8" aria-hidden="true" tabindex="-1"></a>migrate_loci <span class="ot">&lt;-</span> <span class="fu">read_lines</span>(<span class="st">"carbunculus/Ecarbunculus.phy"</span>, <span class="at">skip =</span> <span class="dv">1</span>, <span class="at">n_max=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb96-9"><a href="#cb96-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_split</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">t"</span>, <span class="at">simplify =</span> T) <span class="sc">%&gt;%</span>  <span class="fu">t</span>(.) <span class="sc">%&gt;%</span> <span class="fu">tibble</span>(<span class="at">locus_name=</span>.) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(locus_name<span class="sc">!=</span><span class="st">""</span>)</span>
+<span id="cb96-10"><a href="#cb96-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-11"><a href="#cb96-11" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">locus =</span> <span class="fu">character</span>(), </span>
+<span id="cb96-12"><a href="#cb96-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">length =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb96-13"><a href="#cb96-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">segSites =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb96-14"><a href="#cb96-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">nHaps =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb96-15"><a href="#cb96-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">nucDiv =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb96-16"><a href="#cb96-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">ttRatio =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb96-17"><a href="#cb96-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">model =</span> <span class="fu">character</span>(),</span>
+<span id="cb96-18"><a href="#cb96-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">gammaShape =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb96-19"><a href="#cb96-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">rate1 =</span> <span class="fu">numeric</span>(), </span>
+<span id="cb96-20"><a href="#cb96-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">rate2 =</span> <span class="fu">numeric</span>(), </span>
+<span id="cb96-21"><a href="#cb96-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">rate3 =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb96-22"><a href="#cb96-22" aria-hidden="true" tabindex="-1"></a>                <span class="at">rate4 =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb96-23"><a href="#cb96-23" aria-hidden="true" tabindex="-1"></a>                <span class="at">Q1=</span> <span class="fu">numeric</span>(),</span>
+<span id="cb96-24"><a href="#cb96-24" aria-hidden="true" tabindex="-1"></a>                <span class="at">Q2 =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb96-25"><a href="#cb96-25" aria-hidden="true" tabindex="-1"></a>                <span class="at">Q3 =</span> <span class="fu">numeric</span>(),</span>
+<span id="cb96-26"><a href="#cb96-26" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb96-27"><a href="#cb96-27" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb96-28"><a href="#cb96-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(l <span class="cf">in</span> migrate_loci<span class="sc">$</span>locus_name){</span>
+<span id="cb96-29"><a href="#cb96-29" aria-hidden="true" tabindex="-1"></a>  L <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"L"</span>,l,<span class="st">"_"</span>)</span>
+<span id="cb96-30"><a href="#cb96-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Now Doing Locus"</span>, l, <span class="fu">match</span>(l,  migrate_loci<span class="sc">$</span>locus_name), <span class="st">"out of"</span>, <span class="fu">length</span>(migrate_loci<span class="sc">$</span>locus_name)))</span>
+<span id="cb96-31"><a href="#cb96-31" aria-hidden="true" tabindex="-1"></a>  locus_dnabin <span class="ot">&lt;-</span> fastadata[<span class="fu">str_which</span>(<span class="fu">names</span>(fastadata),<span class="at">pattern =</span> L)]</span>
+<span id="cb96-32"><a href="#cb96-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert to package formats</span></span>
+<span id="cb96-33"><a href="#cb96-33" aria-hidden="true" tabindex="-1"></a>  locus_dnabin <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(locus_dnabin)</span>
+<span id="cb96-34"><a href="#cb96-34" aria-hidden="true" tabindex="-1"></a>  locus_gtypes <span class="ot">&lt;-</span> <span class="fu">sequence2gtypes</span>(locus_dnabin)</span>
+<span id="cb96-35"><a href="#cb96-35" aria-hidden="true" tabindex="-1"></a>  locus_phy <span class="ot">&lt;-</span> <span class="fu">phyDat</span>(locus_dnabin)</span>
+<span id="cb96-36"><a href="#cb96-36" aria-hidden="true" tabindex="-1"></a>  <span class="co">#create a haplotype network .. to be continued</span></span>
+<span id="cb96-37"><a href="#cb96-37" aria-hidden="true" tabindex="-1"></a>  haps <span class="ot">&lt;-</span> <span class="fu">haplotype</span>(locus_dnabin)</span>
+<span id="cb96-38"><a href="#cb96-38" aria-hidden="true" tabindex="-1"></a>  nhaps <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">dimnames</span>(haps)[[<span class="dv">1</span>]])</span>
+<span id="cb96-39"><a href="#cb96-39" aria-hidden="true" tabindex="-1"></a>  <span class="co">#tcs &lt;- haploNet(haps)</span></span>
+<span id="cb96-40"><a href="#cb96-40" aria-hidden="true" tabindex="-1"></a>  <span class="co">#find parameters of HKY (F84) model</span></span>
+<span id="cb96-41"><a href="#cb96-41" aria-hidden="true" tabindex="-1"></a>  modeltest <span class="ot">&lt;-</span> <span class="fu">modelTest</span>(locus_phy, <span class="at">model =</span> <span class="fu">c</span>(<span class="st">"JC"</span>,<span class="st">"K80"</span>, <span class="st">"F81"</span>, <span class="st">"HKY"</span>,<span class="st">"TrN"</span>), </span>
+<span id="cb96-42"><a href="#cb96-42" aria-hidden="true" tabindex="-1"></a>                         <span class="at">G =</span> T, <span class="at">I =</span> F, <span class="at">k =</span> <span class="dv">4</span>, <span class="at">mc.cores =</span> <span class="dv">5</span>)</span>
+<span id="cb96-43"><a href="#cb96-43" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pick out the best model. If multiple models are tied for best, pick the simplest one</span></span>
+<span id="cb96-44"><a href="#cb96-44" aria-hidden="true" tabindex="-1"></a>  bestmodel <span class="ot">&lt;-</span> modeltest<span class="sc">$</span>Model[<span class="fu">which</span>(modeltest<span class="sc">$</span>BIC <span class="sc">==</span> <span class="fu">min</span>(modeltest<span class="sc">$</span>BIC))][<span class="dv">1</span>]</span>
+<span id="cb96-45"><a href="#cb96-45" aria-hidden="true" tabindex="-1"></a>  <span class="co">#open the object environment</span></span>
+<span id="cb96-46"><a href="#cb96-46" aria-hidden="true" tabindex="-1"></a>  env <span class="ot">&lt;-</span> <span class="fu">attr</span>(modeltest,<span class="st">"env"</span>)</span>
+<span id="cb96-47"><a href="#cb96-47" aria-hidden="true" tabindex="-1"></a>  bestparams <span class="ot">&lt;-</span> <span class="fu">get</span>(bestmodel, env)</span>
+<span id="cb96-48"><a href="#cb96-48" aria-hidden="true" tabindex="-1"></a>  bestparams <span class="ot">&lt;-</span> <span class="fu">eval</span>(bestparams, <span class="at">env=</span>env)</span>
+<span id="cb96-49"><a href="#cb96-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># use this code for v3, which only has F84 (HKY)</span></span>
+<span id="cb96-50"><a href="#cb96-50" aria-hidden="true" tabindex="-1"></a>  <span class="co">#HKY &lt;- modelTest(locus_phy, model = c("HKY"), </span></span>
+<span id="cb96-51"><a href="#cb96-51" aria-hidden="true" tabindex="-1"></a>  <span class="co">#                       G = T, I = F, k = 4)</span></span>
+<span id="cb96-52"><a href="#cb96-52" aria-hidden="true" tabindex="-1"></a>  <span class="co">#env &lt;- attr(HKY, "env")</span></span>
+<span id="cb96-53"><a href="#cb96-53" aria-hidden="true" tabindex="-1"></a>  <span class="co">#HKYG &lt;- get("HKY+G", env)</span></span>
+<span id="cb96-54"><a href="#cb96-54" aria-hidden="true" tabindex="-1"></a>  <span class="co">#model &lt;- eval(HKYG, env=env)</span></span>
+<span id="cb96-55"><a href="#cb96-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate TiTv Ratio</span></span>
+<span id="cb96-56"><a href="#cb96-56" aria-hidden="true" tabindex="-1"></a>  ttratio <span class="ot">&lt;-</span> <span class="fu">TiTvRatio</span>(locus_gtypes)</span>
+<span id="cb96-57"><a href="#cb96-57" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb96-58"><a href="#cb96-58" aria-hidden="true" tabindex="-1"></a>  stats <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(stats, <span class="fu">tibble</span>(<span class="at">locus=</span>L, </span>
+<span id="cb96-59"><a href="#cb96-59" aria-hidden="true" tabindex="-1"></a>                          <span class="at">length =</span> <span class="fu">length</span>(locus_dnabin[<span class="dv">1</span>,]),</span>
+<span id="cb96-60"><a href="#cb96-60" aria-hidden="true" tabindex="-1"></a>                          <span class="at">segSites =</span> <span class="fu">length</span>(<span class="fu">seg.sites</span>(locus_dnabin)),</span>
+<span id="cb96-61"><a href="#cb96-61" aria-hidden="true" tabindex="-1"></a>                          <span class="at">nHaps =</span> <span class="fu">length</span>(<span class="fu">dimnames</span>(haps)[[<span class="dv">1</span>]]),</span>
+<span id="cb96-62"><a href="#cb96-62" aria-hidden="true" tabindex="-1"></a>                          <span class="at">nucDiv =</span> <span class="fu">nuc.div</span>(locus_dnabin),</span>
+<span id="cb96-63"><a href="#cb96-63" aria-hidden="true" tabindex="-1"></a>                          <span class="at">ttRatio =</span>  ttratio[<span class="dv">3</span>],</span>
+<span id="cb96-64"><a href="#cb96-64" aria-hidden="true" tabindex="-1"></a>                          <span class="at">model =</span> bestmodel,</span>
+<span id="cb96-65"><a href="#cb96-65" aria-hidden="true" tabindex="-1"></a>                          <span class="at">gammaShape =</span> bestparams<span class="sc">$</span>shape,</span>
+<span id="cb96-66"><a href="#cb96-66" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rate1 =</span> bestparams<span class="sc">$</span>g[<span class="dv">1</span>],</span>
+<span id="cb96-67"><a href="#cb96-67" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rate2 =</span> bestparams<span class="sc">$</span>g[<span class="dv">2</span>],</span>
+<span id="cb96-68"><a href="#cb96-68" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rate3 =</span> bestparams<span class="sc">$</span>g[<span class="dv">3</span>],</span>
+<span id="cb96-69"><a href="#cb96-69" aria-hidden="true" tabindex="-1"></a>                          <span class="at">rate4 =</span> bestparams<span class="sc">$</span>g[<span class="dv">4</span>],</span>
+<span id="cb96-70"><a href="#cb96-70" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Q1 =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(bestparams<span class="sc">$</span>Q))[<span class="dv">1</span>],</span>
+<span id="cb96-71"><a href="#cb96-71" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Q2 =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(bestparams<span class="sc">$</span>Q))[<span class="dv">2</span>],</span>
+<span id="cb96-72"><a href="#cb96-72" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Q3 =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(bestparams<span class="sc">$</span>Q))[<span class="dv">3</span>]</span>
+<span id="cb96-73"><a href="#cb96-73" aria-hidden="true" tabindex="-1"></a>                          ))</span>
+<span id="cb96-74"><a href="#cb96-74" aria-hidden="true" tabindex="-1"></a>                         </span>
+<span id="cb96-75"><a href="#cb96-75" aria-hidden="true" tabindex="-1"></a>                        </span>
+<span id="cb96-76"><a href="#cb96-76" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb96-77"><a href="#cb96-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-78"><a href="#cb96-78" aria-hidden="true" tabindex="-1"></a><span class="co">#stats &lt;- stats[which(stats$length %in% migrate_lengths$length),]</span></span>
+<span id="cb96-79"><a href="#cb96-79" aria-hidden="true" tabindex="-1"></a><span class="co">#setdiff(stats$length, as.numeric(migrate_lengths$length))</span></span>
+<span id="cb96-80"><a href="#cb96-80" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(stats, "carbunculus/migrate_locus_statistics.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="write-a-model-block" class="level3">
-<h3 class="anchored" data-anchor-id="write-a-model-block">Write a model block</h3>
+<section id="write-a-model-block" class="level4">
+<h4 class="anchored" data-anchor-id="write-a-model-block">Write a model block</h4>
 <p>Write a space delimited textfile that can be added to the migrate data file in the format that Peter suggested.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./coruscans/migrate_locus_statistics.csv"</span>)</span>
-<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(stats)</span>
-<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb96-5"><a href="#cb96-5" aria-hidden="true" tabindex="-1"></a><span class="co"># write a space delimited textfile that can be added to the migrate data file</span></span>
-<span id="cb96-6"><a href="#cb96-6" aria-hidden="true" tabindex="-1"></a><span class="co"># following Peter's suggestion here:</span></span>
-<span id="cb96-7"><a href="#cb96-7" aria-hidden="true" tabindex="-1"></a><span class="co">#https://groups.google.com/g/migrate-support/c/XjV_4jZW4RI/m/HbRWoGY6AwAJ</span></span>
-<span id="cb96-8"><a href="#cb96-8" aria-hidden="true" tabindex="-1"></a>migrate_mutation_models <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">prefix =</span> <span class="st">"#$"</span>,</span>
-<span id="cb96-9"><a href="#cb96-9" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">locus=</span><span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(stats<span class="sc">$</span>locus),</span>
-<span id="cb96-10"><a href="#cb96-10" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">type =</span> <span class="st">"s"</span>,</span>
-<span id="cb96-11"><a href="#cb96-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">model =</span> stats<span class="sc">$</span>model,</span>
-<span id="cb96-12"><a href="#cb96-12" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">q1 =</span> stats<span class="sc">$</span>Q2,</span>
-<span id="cb96-13"><a href="#cb96-13" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">q2 =</span> stats<span class="sc">$</span>Q3)</span>
-<span id="cb96-14"><a href="#cb96-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb96-15"><a href="#cb96-15" aria-hidden="true" tabindex="-1"></a><span class="co">#write_delim(migrate_mutation_models,"./coruscans/migrate_modelblock.txt", na="", delim = " ")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./coruscans/migrate_locus_statistics.csv"</span>)</span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(stats)</span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="co"># write a space delimited textfile that can be added to the migrate data file</span></span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a><span class="co"># following Peter's suggestion here:</span></span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a><span class="co">#https://groups.google.com/g/migrate-support/c/XjV_4jZW4RI/m/HbRWoGY6AwAJ</span></span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a>migrate_mutation_models <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">prefix =</span> <span class="st">"#$"</span>,</span>
+<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">locus=</span><span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(stats<span class="sc">$</span>locus),</span>
+<span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">type =</span> <span class="st">"s"</span>,</span>
+<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">model =</span> stats<span class="sc">$</span>model,</span>
+<span id="cb97-12"><a href="#cb97-12" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">q1 =</span> stats<span class="sc">$</span>Q2,</span>
+<span id="cb97-13"><a href="#cb97-13" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">q2 =</span> stats<span class="sc">$</span>Q3)</span>
+<span id="cb97-14"><a href="#cb97-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-15"><a href="#cb97-15" aria-hidden="true" tabindex="-1"></a><span class="co">#write_delim(migrate_mutation_models,"./coruscans/migrate_modelblock.txt", na="", delim = " ")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Read them back in so we don’t have to recalculate them every time I knit.</p>
 <p>So we have a 0 invariant loci, and the mean overall transition:transversion ratio is NaN. Mean gamma shape parameter is NA, which argues for only one rate.</p>
+</section>
+</section>
+<section id="metapopulation-models" class="level2">
+<h2 class="anchored" data-anchor-id="metapopulation-models">Metapopulation Models</h2>
+<p>To be added.</p>
+<section id="e.-coruscans-4" class="level3">
+<h3 class="anchored" data-anchor-id="e.-coruscans-4">E. coruscans</h3>
+</section>
+<section id="e.-carbunculus-4" class="level3">
+<h3 class="anchored" data-anchor-id="e.-carbunculus-4">E. carbunculus</h3>
 </section>
 </section>
 <section id="parmfile" class="level2">
 <h2 class="anchored" data-anchor-id="parmfile">Parmfile</h2>
 <p>Here’s the parmfile I am using, based on my parmfile for <em>Palythoa tuberculosa</em>. This one depicts a model of divergence without gene flow. Migration prior is increased to have a maximum of 1e8 (100,000,000), and mean of 1e4 (10,000). This reflects a prior expectation that <span class="math inline">\(m/\mu\)</span> will not be larger than this value, if m is not larger than 0.1 (10% of population migrates), assuming a nuclear mutation rate of 1e-9. Also on average one out of every 100K individuals will send a migrant (m = 1e-5).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co">################################################################################</span></span>
-<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Parmfile for Migrate 4.4.4(git:v4-series-26-ge85c6ff)-June-1-2019 [do not remove these first TWO lines]</span></span>
-<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a><span class="co"># generated automatically on</span></span>
-<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fri Feb 4 2022</span></span>
-<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="va">menu</span><span class="op">=</span>NO</span>
-<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a><span class="va">nmlength</span><span class="op">=</span>10</span>
-<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a><span class="va">datatype</span><span class="op">=</span>SequenceData</span>
-<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a><span class="va">datamodel</span><span class="op">=</span>HKY</span>
-<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a><span class="va">ttratio</span><span class="op">=</span>1.000000</span>
-<span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a><span class="ex">freqs-from-data=YES</span> </span>
-<span id="cb97-12"><a href="#cb97-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb97-13"><a href="#cb97-13" aria-hidden="true" tabindex="-1"></a><span class="ex">seqerror-rate=</span><span class="dt">{0.0001</span><span class="op">,</span><span class="dt">0.0001</span><span class="op">,</span><span class="dt">0.0001</span><span class="op">,</span><span class="dt">0.0001}</span></span>
-<span id="cb97-14"><a href="#cb97-14" aria-hidden="true" tabindex="-1"></a><span class="va">categories</span><span class="op">=</span>1 <span class="co">#no categories file specified</span></span>
-<span id="cb97-15"><a href="#cb97-15" aria-hidden="true" tabindex="-1"></a><span class="va">rates</span><span class="op">=</span>1: <span class="ex">1.000000</span> </span>
-<span id="cb97-16"><a href="#cb97-16" aria-hidden="true" tabindex="-1"></a><span class="ex">prob-rates=1:</span> 1.000000 </span>
-<span id="cb97-17"><a href="#cb97-17" aria-hidden="true" tabindex="-1"></a><span class="va">autocorrelation</span><span class="op">=</span>NO</span>
-<span id="cb97-18"><a href="#cb97-18" aria-hidden="true" tabindex="-1"></a><span class="va">weights</span><span class="op">=</span>NO</span>
-<span id="cb97-19"><a href="#cb97-19" aria-hidden="true" tabindex="-1"></a><span class="va">recover</span><span class="op">=</span>NO</span>
-<span id="cb97-20"><a href="#cb97-20" aria-hidden="true" tabindex="-1"></a><span class="ex">fast-likelihood=NO</span></span>
-<span id="cb97-21"><a href="#cb97-21" aria-hidden="true" tabindex="-1"></a><span class="ex">inheritance-scalars={1.00000000000000000000}</span></span>
-<span id="cb97-22"><a href="#cb97-22" aria-hidden="true" tabindex="-1"></a><span class="va">haplotyping</span><span class="op">=</span>YES:no-report</span>
-<span id="cb97-23"><a href="#cb97-23" aria-hidden="true" tabindex="-1"></a><span class="ex">population-relabel={1</span> 2 3 4}</span>
-<span id="cb97-24"><a href="#cb97-24" aria-hidden="true" tabindex="-1"></a><span class="va">infile</span><span class="op">=</span>../../Ecoruscans2.mig</span>
-<span id="cb97-25"><a href="#cb97-25" aria-hidden="true" tabindex="-1"></a><span class="ex">random-seed=AUTO</span> <span class="co">#OWN:410568459</span></span>
-<span id="cb97-26"><a href="#cb97-26" aria-hidden="true" tabindex="-1"></a><span class="va">title</span><span class="op">=</span> <span class="ex">Etelis</span> coruscans</span>
-<span id="cb97-27"><a href="#cb97-27" aria-hidden="true" tabindex="-1"></a><span class="va">progress</span><span class="op">=</span>YES</span>
-<span id="cb97-28"><a href="#cb97-28" aria-hidden="true" tabindex="-1"></a><span class="va">logfile</span><span class="op">=</span>YES:logfile.txt</span>
-<span id="cb97-29"><a href="#cb97-29" aria-hidden="true" tabindex="-1"></a><span class="ex">print-data=NO</span></span>
-<span id="cb97-30"><a href="#cb97-30" aria-hidden="true" tabindex="-1"></a><span class="va">outfile</span><span class="op">=</span>outfile.txt</span>
-<span id="cb97-31"><a href="#cb97-31" aria-hidden="true" tabindex="-1"></a><span class="ex">pdf-outfile=outfile.pdf</span></span>
-<span id="cb97-32"><a href="#cb97-32" aria-hidden="true" tabindex="-1"></a><span class="ex">pdf-terse=YES</span></span>
-<span id="cb97-33"><a href="#cb97-33" aria-hidden="true" tabindex="-1"></a><span class="ex">use-M=YES</span></span>
-<span id="cb97-34"><a href="#cb97-34" aria-hidden="true" tabindex="-1"></a><span class="ex">print-tree=NONE</span></span>
-<span id="cb97-35"><a href="#cb97-35" aria-hidden="true" tabindex="-1"></a><span class="ex">mig-histogram=MIGRATIONEVENTSONLY</span></span>
-<span id="cb97-36"><a href="#cb97-36" aria-hidden="true" tabindex="-1"></a><span class="va">skyline</span><span class="op">=</span>NO <span class="co">#needs mig-histogram=ALL:...</span></span>
-<span id="cb97-37"><a href="#cb97-37" aria-hidden="true" tabindex="-1"></a><span class="va">theta</span><span class="op">=</span>PRIOR:50</span>
-<span id="cb97-38"><a href="#cb97-38" aria-hidden="true" tabindex="-1"></a><span class="va">migration</span><span class="op">=</span>PRIOR:10</span>
-<span id="cb97-39"><a href="#cb97-39" aria-hidden="true" tabindex="-1"></a><span class="va">rate</span><span class="op">=</span>PRIOR:50</span>
-<span id="cb97-40"><a href="#cb97-40" aria-hidden="true" tabindex="-1"></a><span class="va">split</span><span class="op">=</span>PRIOR:10</span>
-<span id="cb97-41"><a href="#cb97-41" aria-hidden="true" tabindex="-1"></a><span class="va">splitstd</span><span class="op">=</span>PRIOR:10</span>
-<span id="cb97-42"><a href="#cb97-42" aria-hidden="true" tabindex="-1"></a><span class="va">mutation</span><span class="op">=</span>CONSTANT</span>
-<span id="cb97-43"><a href="#cb97-43" aria-hidden="true" tabindex="-1"></a><span class="ex">analyze-loci=A</span></span>
-<span id="cb97-44"><a href="#cb97-44" aria-hidden="true" tabindex="-1"></a><span class="ex">divergence-distrib=E</span></span>
-<span id="cb97-45"><a href="#cb97-45" aria-hidden="true" tabindex="-1"></a><span class="ex">custom-migration={</span></span>
-<span id="cb97-46"><a href="#cb97-46" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span>   0   0   0</span>
-<span id="cb97-47"><a href="#cb97-47" aria-hidden="true" tabindex="-1"></a><span class="ex">d</span>   <span class="pp">*</span>   0   0</span>
-<span id="cb97-48"><a href="#cb97-48" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span>   d   <span class="pp">*</span>   0</span>
-<span id="cb97-49"><a href="#cb97-49" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span> 0 d <span class="pp">*</span></span>
-<span id="cb97-50"><a href="#cb97-50" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
-<span id="cb97-51"><a href="#cb97-51" aria-hidden="true" tabindex="-1"></a><span class="va">geo</span><span class="op">=</span>NO</span>
-<span id="cb97-52"><a href="#cb97-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb97-53"><a href="#cb97-53" aria-hidden="true" tabindex="-1"></a><span class="va">updatefreq</span><span class="op">=</span>0.200000 <span class="ex">0.200000</span> 0.200000 0.200000 <span class="co">#tree, parameter haplotype, timeparam updates</span></span>
-<span id="cb97-54"><a href="#cb97-54" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-posteriorbins=</span> 2000 2000</span>
-<span id="cb97-55"><a href="#cb97-55" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-posteriormaxtype=TOTAL</span></span>
-<span id="cb97-56"><a href="#cb97-56" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-file=YES:bayesfile</span></span>
-<span id="cb97-57"><a href="#cb97-57" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-allfile=YES:bayesallfile</span></span>
-<span id="cb97-58"><a href="#cb97-58" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-all-posteriors=YES:bayesallposterior</span></span>
-<span id="cb97-59"><a href="#cb97-59" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-proposals=</span> THETA METROPOLIS-HASTINGS Sampler</span>
-<span id="cb97-60"><a href="#cb97-60" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-proposals=</span> MIG SLICE Sampler</span>
-<span id="cb97-61"><a href="#cb97-61" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-proposals=</span> DIVERGENCE METROPOLIS-HASTINGS Sampler</span>
-<span id="cb97-62"><a href="#cb97-62" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-proposals=</span> DIVERGENCESTD METROPOLIS-HASTINGS Sampler</span>
-<span id="cb97-63"><a href="#cb97-63" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-priors=</span> THETA WEXPPRIOR: 0.0 0.001 0.1000000 0.01000 </span>
-<span id="cb97-64"><a href="#cb97-64" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-priors=</span> MIG WEXPPRIOR: 0.0100 10000.000000 100000000 10000</span>
-<span id="cb97-65"><a href="#cb97-65" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-priors=</span> SPLIT <span class="pp">*</span> <span class="pp">*</span>  WEXPPRIOR: 0.0 0.001 0.1000000 0.01000</span>
-<span id="cb97-66"><a href="#cb97-66" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-priors=</span> SPLITSTD <span class="pp">*</span> <span class="pp">*</span>  WEXPPRIOR: 0.0 0.001 0.1000000 0.01000</span>
-<span id="cb97-67"><a href="#cb97-67" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-hyperpriors=NO</span></span>
-<span id="cb97-68"><a href="#cb97-68" aria-hidden="true" tabindex="-1"></a><span class="ex">long-chains=1</span></span>
-<span id="cb97-69"><a href="#cb97-69" aria-hidden="true" tabindex="-1"></a><span class="ex">long-inc=100</span></span>
-<span id="cb97-70"><a href="#cb97-70" aria-hidden="true" tabindex="-1"></a><span class="ex">long-sample=10000</span></span>
-<span id="cb97-71"><a href="#cb97-71" aria-hidden="true" tabindex="-1"></a><span class="ex">burn-in=2000</span>  </span>
-<span id="cb97-72"><a href="#cb97-72" aria-hidden="true" tabindex="-1"></a><span class="ex">auto-tune=YES:0.440000</span></span>
-<span id="cb97-73"><a href="#cb97-73" aria-hidden="true" tabindex="-1"></a><span class="va">assign</span><span class="op">=</span>NO</span>
-<span id="cb97-74"><a href="#cb97-74" aria-hidden="true" tabindex="-1"></a><span class="va">heating</span><span class="op">=</span>YES:1:<span class="dt">{1.000000</span><span class="op">,</span><span class="dt">1.500000</span><span class="op">,</span><span class="dt">3.000000</span><span class="op">,</span><span class="dt">1000000.000000}</span></span>
-<span id="cb97-75"><a href="#cb97-75" aria-hidden="true" tabindex="-1"></a><span class="ex">heated-swap=YES</span></span>
-<span id="cb97-76"><a href="#cb97-76" aria-hidden="true" tabindex="-1"></a><span class="ex">moving-steps=NO</span></span>
-<span id="cb97-77"><a href="#cb97-77" aria-hidden="true" tabindex="-1"></a><span class="ex">gelman-convergence=No</span></span>
-<span id="cb97-78"><a href="#cb97-78" aria-hidden="true" tabindex="-1"></a><span class="va">replicate</span><span class="op">=</span>YES:3</span>
-<span id="cb97-79"><a href="#cb97-79" aria-hidden="true" tabindex="-1"></a><span class="ex">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="co">################################################################################</span></span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Parmfile for Migrate 4.4.4(git:v4-series-26-ge85c6ff)-June-1-2019 [do not remove these first TWO lines]</span></span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a><span class="co"># generated automatically on</span></span>
+<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fri Feb 4 2022</span></span>
+<span id="cb98-5"><a href="#cb98-5" aria-hidden="true" tabindex="-1"></a><span class="va">menu</span><span class="op">=</span>NO</span>
+<span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a><span class="va">nmlength</span><span class="op">=</span>10</span>
+<span id="cb98-7"><a href="#cb98-7" aria-hidden="true" tabindex="-1"></a><span class="va">datatype</span><span class="op">=</span>SequenceData</span>
+<span id="cb98-8"><a href="#cb98-8" aria-hidden="true" tabindex="-1"></a><span class="va">datamodel</span><span class="op">=</span>HKY</span>
+<span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a><span class="va">ttratio</span><span class="op">=</span>1.000000</span>
+<span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-11"><a href="#cb98-11" aria-hidden="true" tabindex="-1"></a><span class="ex">freqs-from-data=YES</span> </span>
+<span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-13"><a href="#cb98-13" aria-hidden="true" tabindex="-1"></a><span class="ex">seqerror-rate=</span><span class="dt">{0.0001</span><span class="op">,</span><span class="dt">0.0001</span><span class="op">,</span><span class="dt">0.0001</span><span class="op">,</span><span class="dt">0.0001}</span></span>
+<span id="cb98-14"><a href="#cb98-14" aria-hidden="true" tabindex="-1"></a><span class="va">categories</span><span class="op">=</span>1 <span class="co">#no categories file specified</span></span>
+<span id="cb98-15"><a href="#cb98-15" aria-hidden="true" tabindex="-1"></a><span class="va">rates</span><span class="op">=</span>1: <span class="ex">1.000000</span> </span>
+<span id="cb98-16"><a href="#cb98-16" aria-hidden="true" tabindex="-1"></a><span class="ex">prob-rates=1:</span> 1.000000 </span>
+<span id="cb98-17"><a href="#cb98-17" aria-hidden="true" tabindex="-1"></a><span class="va">autocorrelation</span><span class="op">=</span>NO</span>
+<span id="cb98-18"><a href="#cb98-18" aria-hidden="true" tabindex="-1"></a><span class="va">weights</span><span class="op">=</span>NO</span>
+<span id="cb98-19"><a href="#cb98-19" aria-hidden="true" tabindex="-1"></a><span class="va">recover</span><span class="op">=</span>NO</span>
+<span id="cb98-20"><a href="#cb98-20" aria-hidden="true" tabindex="-1"></a><span class="ex">fast-likelihood=NO</span></span>
+<span id="cb98-21"><a href="#cb98-21" aria-hidden="true" tabindex="-1"></a><span class="ex">inheritance-scalars={1.00000000000000000000}</span></span>
+<span id="cb98-22"><a href="#cb98-22" aria-hidden="true" tabindex="-1"></a><span class="va">haplotyping</span><span class="op">=</span>YES:no-report</span>
+<span id="cb98-23"><a href="#cb98-23" aria-hidden="true" tabindex="-1"></a><span class="ex">population-relabel={1</span> 2 3 4}</span>
+<span id="cb98-24"><a href="#cb98-24" aria-hidden="true" tabindex="-1"></a><span class="va">infile</span><span class="op">=</span>../../Ecarbunculus.mig</span>
+<span id="cb98-25"><a href="#cb98-25" aria-hidden="true" tabindex="-1"></a><span class="ex">random-seed=AUTO</span> <span class="co">#OWN:410568459</span></span>
+<span id="cb98-26"><a href="#cb98-26" aria-hidden="true" tabindex="-1"></a><span class="va">title</span><span class="op">=</span> <span class="ex">Etelis</span> coruscans</span>
+<span id="cb98-27"><a href="#cb98-27" aria-hidden="true" tabindex="-1"></a><span class="va">progress</span><span class="op">=</span>YES</span>
+<span id="cb98-28"><a href="#cb98-28" aria-hidden="true" tabindex="-1"></a><span class="va">logfile</span><span class="op">=</span>YES:logfile.txt</span>
+<span id="cb98-29"><a href="#cb98-29" aria-hidden="true" tabindex="-1"></a><span class="ex">print-data=NO</span></span>
+<span id="cb98-30"><a href="#cb98-30" aria-hidden="true" tabindex="-1"></a><span class="va">outfile</span><span class="op">=</span>outfile.txt</span>
+<span id="cb98-31"><a href="#cb98-31" aria-hidden="true" tabindex="-1"></a><span class="ex">pdf-outfile=outfile.pdf</span></span>
+<span id="cb98-32"><a href="#cb98-32" aria-hidden="true" tabindex="-1"></a><span class="ex">pdf-terse=YES</span></span>
+<span id="cb98-33"><a href="#cb98-33" aria-hidden="true" tabindex="-1"></a><span class="ex">use-M=YES</span></span>
+<span id="cb98-34"><a href="#cb98-34" aria-hidden="true" tabindex="-1"></a><span class="ex">print-tree=NONE</span></span>
+<span id="cb98-35"><a href="#cb98-35" aria-hidden="true" tabindex="-1"></a><span class="ex">mig-histogram=MIGRATIONEVENTSONLY</span></span>
+<span id="cb98-36"><a href="#cb98-36" aria-hidden="true" tabindex="-1"></a><span class="va">skyline</span><span class="op">=</span>NO <span class="co">#needs mig-histogram=ALL:...</span></span>
+<span id="cb98-37"><a href="#cb98-37" aria-hidden="true" tabindex="-1"></a><span class="va">theta</span><span class="op">=</span>PRIOR:50</span>
+<span id="cb98-38"><a href="#cb98-38" aria-hidden="true" tabindex="-1"></a><span class="va">migration</span><span class="op">=</span>PRIOR:10</span>
+<span id="cb98-39"><a href="#cb98-39" aria-hidden="true" tabindex="-1"></a><span class="va">rate</span><span class="op">=</span>PRIOR:50</span>
+<span id="cb98-40"><a href="#cb98-40" aria-hidden="true" tabindex="-1"></a><span class="va">split</span><span class="op">=</span>PRIOR:10</span>
+<span id="cb98-41"><a href="#cb98-41" aria-hidden="true" tabindex="-1"></a><span class="va">splitstd</span><span class="op">=</span>PRIOR:10</span>
+<span id="cb98-42"><a href="#cb98-42" aria-hidden="true" tabindex="-1"></a><span class="va">mutation</span><span class="op">=</span>CONSTANT</span>
+<span id="cb98-43"><a href="#cb98-43" aria-hidden="true" tabindex="-1"></a><span class="ex">analyze-loci=A</span></span>
+<span id="cb98-44"><a href="#cb98-44" aria-hidden="true" tabindex="-1"></a><span class="ex">divergence-distrib=E</span></span>
+<span id="cb98-45"><a href="#cb98-45" aria-hidden="true" tabindex="-1"></a><span class="ex">custom-migration={</span></span>
+<span id="cb98-46"><a href="#cb98-46" aria-hidden="true" tabindex="-1"></a><span class="ex">*</span>   0   0   0</span>
+<span id="cb98-47"><a href="#cb98-47" aria-hidden="true" tabindex="-1"></a><span class="ex">d</span>   <span class="pp">*</span>   0   0</span>
+<span id="cb98-48"><a href="#cb98-48" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span>   d   <span class="pp">*</span>   0</span>
+<span id="cb98-49"><a href="#cb98-49" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span> 0 d <span class="pp">*</span></span>
+<span id="cb98-50"><a href="#cb98-50" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb98-51"><a href="#cb98-51" aria-hidden="true" tabindex="-1"></a><span class="va">geo</span><span class="op">=</span>NO</span>
+<span id="cb98-52"><a href="#cb98-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-53"><a href="#cb98-53" aria-hidden="true" tabindex="-1"></a><span class="va">updatefreq</span><span class="op">=</span>0.200000 <span class="ex">0.200000</span> 0.200000 0.200000 <span class="co">#tree, parameter haplotype, timeparam updates</span></span>
+<span id="cb98-54"><a href="#cb98-54" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-posteriorbins=</span> 2000 2000</span>
+<span id="cb98-55"><a href="#cb98-55" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-posteriormaxtype=TOTAL</span></span>
+<span id="cb98-56"><a href="#cb98-56" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-file=YES:bayesfile</span></span>
+<span id="cb98-57"><a href="#cb98-57" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-allfile=YES:bayesallfile</span></span>
+<span id="cb98-58"><a href="#cb98-58" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-all-posteriors=YES:bayesallposterior</span></span>
+<span id="cb98-59"><a href="#cb98-59" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-proposals=</span> THETA METROPOLIS-HASTINGS Sampler</span>
+<span id="cb98-60"><a href="#cb98-60" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-proposals=</span> MIG SLICE Sampler</span>
+<span id="cb98-61"><a href="#cb98-61" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-proposals=</span> DIVERGENCE METROPOLIS-HASTINGS Sampler</span>
+<span id="cb98-62"><a href="#cb98-62" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-proposals=</span> DIVERGENCESTD METROPOLIS-HASTINGS Sampler</span>
+<span id="cb98-63"><a href="#cb98-63" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-priors=</span> THETA WEXPPRIOR: 0.0 0.001 0.1000000 0.01000 </span>
+<span id="cb98-64"><a href="#cb98-64" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-priors=</span> MIG WEXPPRIOR: 0.0100 10000.000000 100000000 10000</span>
+<span id="cb98-65"><a href="#cb98-65" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-priors=</span> SPLIT <span class="pp">*</span> <span class="pp">*</span>  WEXPPRIOR: 0.0 0.001 0.1000000 0.01000</span>
+<span id="cb98-66"><a href="#cb98-66" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-priors=</span> SPLITSTD <span class="pp">*</span> <span class="pp">*</span>  WEXPPRIOR: 0.0 0.001 0.1000000 0.01000</span>
+<span id="cb98-67"><a href="#cb98-67" aria-hidden="true" tabindex="-1"></a><span class="ex">bayes-hyperpriors=NO</span></span>
+<span id="cb98-68"><a href="#cb98-68" aria-hidden="true" tabindex="-1"></a><span class="ex">long-chains=1</span></span>
+<span id="cb98-69"><a href="#cb98-69" aria-hidden="true" tabindex="-1"></a><span class="ex">long-inc=100</span></span>
+<span id="cb98-70"><a href="#cb98-70" aria-hidden="true" tabindex="-1"></a><span class="ex">long-sample=10000</span></span>
+<span id="cb98-71"><a href="#cb98-71" aria-hidden="true" tabindex="-1"></a><span class="ex">burn-in=2000</span>  </span>
+<span id="cb98-72"><a href="#cb98-72" aria-hidden="true" tabindex="-1"></a><span class="ex">auto-tune=YES:0.440000</span></span>
+<span id="cb98-73"><a href="#cb98-73" aria-hidden="true" tabindex="-1"></a><span class="va">assign</span><span class="op">=</span>NO</span>
+<span id="cb98-74"><a href="#cb98-74" aria-hidden="true" tabindex="-1"></a><span class="va">heating</span><span class="op">=</span>YES:1:<span class="dt">{1.000000</span><span class="op">,</span><span class="dt">1.500000</span><span class="op">,</span><span class="dt">3.000000</span><span class="op">,</span><span class="dt">1000000.000000}</span></span>
+<span id="cb98-75"><a href="#cb98-75" aria-hidden="true" tabindex="-1"></a><span class="ex">heated-swap=YES</span></span>
+<span id="cb98-76"><a href="#cb98-76" aria-hidden="true" tabindex="-1"></a><span class="ex">moving-steps=NO</span></span>
+<span id="cb98-77"><a href="#cb98-77" aria-hidden="true" tabindex="-1"></a><span class="ex">gelman-convergence=No</span></span>
+<span id="cb98-78"><a href="#cb98-78" aria-hidden="true" tabindex="-1"></a><span class="va">replicate</span><span class="op">=</span>YES:3</span>
+<span id="cb98-79"><a href="#cb98-79" aria-hidden="true" tabindex="-1"></a><span class="ex">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="copy-it-up" class="level3">
 <h3 class="anchored" data-anchor-id="copy-it-up">Copy It Up</h3>
 <p>Copy it up, and then make a total of 10 replicate copies of the folder.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> ./migrate eric@moneta.tobolab.org:./Etelis/coruscans/migrate/rep1</span>
-<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a><span class="co">#once on server, copy it 9 times</span></span>
-<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> 2 10<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span> <span class="fu">cp</span> <span class="at">-r</span> rep1 rep<span class="va">$a</span><span class="kw">;</span> <span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> ./migrate eric@moneta.tobolab.org:./Etelis/coruscans/migrate/rep1</span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a><span class="co">#once on server, copy it 9 times</span></span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> 2 10<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span> <span class="fu">cp</span> <span class="at">-r</span> rep1 rep<span class="va">$a</span><span class="kw">;</span> <span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-</section>
-<section id="metapopulation-models" class="level2">
-<h2 class="anchored" data-anchor-id="metapopulation-models">Metapopulation Models</h2>
-<p>To be added.</p>
 </section>
 <section id="bash-script" class="level2">
 <h2 class="anchored" data-anchor-id="bash-script">Bash Script</h2>
 <p>So we will do 10 replicates of 3 replicates. This will start at r1, and run all models for that before moving on. Pretty sure this will finish one whole model before moving on to the next one (since all threads are being used for different loci)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="co">### Bash Script</span></span>
-<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="co">#!</span></span>
-<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> r <span class="kw">in</span> <span class="pp">*</span>/</span>
-<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">do</span></span>
-<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">cd</span> <span class="va">$r</span></span>
-<span id="cb99-6"><a href="#cb99-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> <span class="va">$r</span></span>
-<span id="cb99-7"><a href="#cb99-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">date</span></span>
-<span id="cb99-8"><a href="#cb99-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">date</span> <span class="op">&gt;</span> date.txt</span>
-<span id="cb99-9"><a href="#cb99-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> m <span class="kw">in</span> <span class="pp">*</span>/</span>
-<span id="cb99-10"><a href="#cb99-10" aria-hidden="true" tabindex="-1"></a>              <span class="cf">do</span></span>
-<span id="cb99-11"><a href="#cb99-11" aria-hidden="true" tabindex="-1"></a>                <span class="bu">cd</span> <span class="va">$m</span></span>
-<span id="cb99-12"><a href="#cb99-12" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">date</span> <span class="op">&gt;</span> date.txt</span>
-<span id="cb99-13"><a href="#cb99-13" aria-hidden="true" tabindex="-1"></a>                  <span class="bu">echo</span> <span class="va">$m</span></span>
-<span id="cb99-14"><a href="#cb99-14" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">date</span></span>
-<span id="cb99-15"><a href="#cb99-15" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">mpirun</span> <span class="at">-np</span> 32 ~/migrate-5.0.4/src/migrate-n-mpi parmfile</span>
-<span id="cb99-16"><a href="#cb99-16" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">sleep</span> 1</span>
-<span id="cb99-17"><a href="#cb99-17" aria-hidden="true" tabindex="-1"></a>                <span class="bu">cd</span> ..</span>
-<span id="cb99-18"><a href="#cb99-18" aria-hidden="true" tabindex="-1"></a>              <span class="cf">done</span></span>
-<span id="cb99-19"><a href="#cb99-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">cd</span> ..</span>
-<span id="cb99-20"><a href="#cb99-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="co">### Bash Script</span></span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="co">#!</span></span>
+<span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> r <span class="kw">in</span> <span class="pp">*</span>/</span>
+<span id="cb100-4"><a href="#cb100-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">do</span></span>
+<span id="cb100-5"><a href="#cb100-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">cd</span> <span class="va">$r</span></span>
+<span id="cb100-6"><a href="#cb100-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> <span class="va">$r</span></span>
+<span id="cb100-7"><a href="#cb100-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">date</span></span>
+<span id="cb100-8"><a href="#cb100-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">date</span> <span class="op">&gt;</span> date.txt</span>
+<span id="cb100-9"><a href="#cb100-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> m <span class="kw">in</span> <span class="pp">*</span>/</span>
+<span id="cb100-10"><a href="#cb100-10" aria-hidden="true" tabindex="-1"></a>              <span class="cf">do</span></span>
+<span id="cb100-11"><a href="#cb100-11" aria-hidden="true" tabindex="-1"></a>                <span class="bu">cd</span> <span class="va">$m</span></span>
+<span id="cb100-12"><a href="#cb100-12" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">date</span> <span class="op">&gt;</span> date.txt</span>
+<span id="cb100-13"><a href="#cb100-13" aria-hidden="true" tabindex="-1"></a>                  <span class="bu">echo</span> <span class="va">$m</span></span>
+<span id="cb100-14"><a href="#cb100-14" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">date</span></span>
+<span id="cb100-15"><a href="#cb100-15" aria-hidden="true" tabindex="-1"></a>                  <span class="ex">mpirun</span> <span class="at">-np</span> 32 ~/migrate-5.0.4/src/migrate-n-mpi parmfile</span>
+<span id="cb100-16"><a href="#cb100-16" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">sleep</span> 1</span>
+<span id="cb100-17"><a href="#cb100-17" aria-hidden="true" tabindex="-1"></a>                <span class="bu">cd</span> ..</span>
+<span id="cb100-18"><a href="#cb100-18" aria-hidden="true" tabindex="-1"></a>              <span class="cf">done</span></span>
+<span id="cb100-19"><a href="#cb100-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">cd</span> ..</span>
+<span id="cb100-20"><a href="#cb100-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
