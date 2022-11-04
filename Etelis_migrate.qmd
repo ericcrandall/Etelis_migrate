@@ -1262,6 +1262,7 @@ So we will do 10 replicates of 3 replicates.  This will start at r1, and run all
 
 ```{bash}
 #| eval: false
+
 ### Bash Script
 #!
 for r in */
@@ -1290,12 +1291,13 @@ for r in */
 And ten replicates finished in about 10 days! Found [this guide](https://www.cyberciti.biz/faq/scp-exclude-files-when-using-command-recursively-on-unix-linux/) to download everything except the massive bayesallfiles and pdfs
 
 ```{bash}
-#|eval: false
+#| eval: false
+
 rsync -av -e ssh --exclude='bayes*' --exclude="*.pdf" --exclude="*.mig" eric@threadripper.tobolab.org:~/Etelis/coruscans ./coruscans/migrate/output
 
 rsync -av -e ssh --exclude='bayes*' --exclude="*.pdf" --exclude="*.mig" eric@moneta.tobolab.org:~/Etelis/coruscans ./coruscans/migrate/output
 
-rsync -av -e ssh --exclude='bayes*'  ecrandall@nautilus.psu.edu:~/Ptuberculosa/run4/rep1/stepping.stone.all ./stepping.stone.KO.all
+rsync -av -e ssh --exclude='bayes*' --exclude="*.pdf" --exclude="*.mig" eric@threadripper.tobolab.org:~/Etelis/carbunculus ./carbunculus/migrate/output
 
 ```
 
@@ -1305,8 +1307,10 @@ rsync -av -e ssh --exclude='bayes*'  ecrandall@nautilus.psu.edu:~/Ptuberculosa/r
 
 #### Model Marginal Likelihoods
 
-```{r likelihoods, message=F, results='hide'}
-runDir <- "coruscans/migrate/output"
+```{r}
+#| message: false
+#| results: hide
+runDir <- "carbunculus/migrate/output"
 
 likelist <- list()
 for(r in 1:10){
@@ -1335,7 +1339,7 @@ final_model
 
 Difference between panmixia and the second-place full model is very significant.
 
-```{r eval = F}
+```{r}
 top.choice <- final_model$model[which(final_model$choice ==1)]
 second.choice <- final_model$model[which(final_model$choice ==2)]
 
@@ -1368,7 +1372,82 @@ Zoom in on the top two models
 
 ```{r}
 
-likesPlot_zoom <- likesPlot + ylim(-69400, -69100) + geom_point()
+likesPlot_zoom <- likesPlot + ylim(-229000, -228000) + geom_point()
+
+likesPlot_zoom
+
+```
+
+### E. carbunculus
+
+#### Model Marginal Likelihoods
+
+```{r}
+#| message: false
+#| results: hide
+runDir <- "carbunculus/migrate/output"
+
+likelist <- list()
+for(r in 1:10){
+  rep = paste0("rep",r)
+  print(rep)
+  likelist[[rep]] <- harvest.model.likelihoods(workingDir=file.path(runDir,rep))
+}
+
+# Model selection for each replicate...
+likelist %>% map(bfcalcs)
+```
+The final model marginal likelihood estimates based on the mean of 10 replicates:
+
+```{r}
+like.df <-  likelist %>% bind_rows() %>% group_by(model)
+
+means <- like.df %>% summarize(bezier.corrected = mean(bezier.corrected))
+  
+
+final_model <- bfcalcs(means)
+
+final_model
+```
+
+#### T-Test
+
+Difference between panmixia and the second-place full model is very significant.
+
+```{r}
+top.choice <- final_model$model[which(final_model$choice ==1)]
+second.choice <- final_model$model[which(final_model$choice ==2)]
+
+permTS(like.df$bezier.corrected[which(like.df$model == top.choice)],
+       like.df$bezier.corrected[which(like.df$model == second.choice)],
+       alternative = "greater", method = "exact.ce")
+```
+
+#### Figures
+
+And a figure summarizing all this
+
+```{r}
+
+models <- c("Divergence With Gene Flow 1","Divergence With Gene Flow 2",
+            "Divergence Only 1", "Divergence Only 2",
+            "Gene Flow Only 1", "Gene Flow Only 2",
+            "n-island", "panmixia")
+
+likesPlot <- likelist %>% bind_rows() %>% group_by(model) %>% 
+              ggplot(mapping = aes(x=model, y = bezier.corrected)) +
+              geom_violin(draw_quantiles = 0.5) +
+              theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+              scale_x_discrete(labels = models) +
+              labs(x = "Metapopulation Model", y = "Bezier Corrected Marginal Likelihood")
+likesPlot
+```
+
+Zoom in on the top three models
+
+```{r}
+
+likesPlot_zoom <- likesPlot + ylim(-204000, -202000) + geom_point()
 
 likesPlot_zoom
 
