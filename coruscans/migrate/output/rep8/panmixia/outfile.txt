@@ -1,0 +1,3658 @@
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Etelis coruscans                                                 
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ +                                                                +
+ +   POPULATION SIZE, MIGRATION, DIVERGENCE, ASSIGNMENT, HISTORY  +
+ +   Bayesian inference using the structured coalescent           +
+ +                                                                +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  Compiled for a PARALLEL COMPUTER ARCHITECTURE
+  One master and 79 compute nodes are available.
+  PDF output enabled [Letter-size]
+  Version 5.0.4(git:Distribution-version)   [May-09-2022]
+  Program started at   Tue Oct 25 15:42:00 2022
+         finished at Tue Oct 25 16:27:13 2022
+                          
+
+
+Options in use:
+---------------
+
+Analysis strategy is BAYESIAN INFERENCE
+    - Population size estimation: Theta [Exponential Distribution]
+
+Proposal distribution:
+Parameter group          Proposal type
+-----------------------  -------------------
+Population size (Theta)  Metropolis sampling
+Genealogy                Metropolis-Hastings
+
+
+Prior distribution (Proposal-delta will be tuned to acceptance frequency 0.440000):
+Parameter group            Prior type   Minimum    Mean(*)    Maximum    Delta      Bins   Updatefreq
+-------------------------  ------------ ---------- ---------- ---------- ---------- ------ -------
+Population size (Theta_1)   Exp window  0.000000   0.001000   0.100000   0.010000    2000  0.50000
+
+Inheritance multipliers in use for Thetas (specified # 1)
+All inheritance multipliers are the same [1.000000]
+
+Pseudo-random number generator: Mersenne-Twister                                
+Random number seed (with internal timer)           2262334398
+
+Start parameters:
+   First genealogy was started using a random tree
+   Start parameter values were generated
+Connection matrix:
+m = average (average over a group of Thetas or M,
+s = symmetric migration M, S = symmetric 4Nm,
+0 = zero, and not estimated,
+* = migration free to vary, Thetas are on diagonal
+d = row population split off column population
+D = split and then migration
+   1 Pop_Japan      * * * * 
+   1 Pop_Johnst     * * * * 
+   1 Pop_MHI        * * * * 
+   1 Pop_NWHI       * * * * 
+
+
+
+Mutation rate is constant for all loci
+
+Markov chain settings:
+   Long chains (long-chains):                              1
+      Steps sampled (inc*samples*rep):               3000000
+      Steps recorded (sample*rep):                     30000
+   Combining over replicates:                              3
+   Static heating scheme
+      4 chains with  temperatures
+       1.00, 1.50, 3.00,1000000.00
+      Swapping interval is 1
+   Burn-in per replicate (samples*inc):               200000
+
+Print options:
+   Data file:                          ../../Ecoruscans2.mig
+   Parameter file:                                  parmfile
+   Haplotyping is turned on:                              NO
+   Output file (ASCII text):                     outfile.txt
+   Output file (PDF):                            outfile.pdf
+   Posterior distribution:                         bayesfile
+   All values of Post.Dist:                     bayesallfile
+   Print data:                                            No
+   Print genealogies:                                     No
+
+Summary of data:
+Title:                                      Etelis coruscans
+Data file:                             ../../Ecoruscans2.mig
+Datatype:                                     Haplotype data
+Number of loci:                                          388
+Mutationmodel:
+ Locus  Sublocus  Mutationmodel   Mutationmodel parameter
+-----------------------------------------------------------------
+     1         1 Felsenstein 81  [Basefreq:0.23 0.18 0.23 0.36]
+     2         1 Felsenstein 81  [Basefreq:0.34 0.18 0.27 0.21]
+     3         1 Felsenstein 81  [Basefreq:0.30 0.36 0.13 0.22]
+     4         1 Jukes-Cantor    [Basefreq: =0.25]
+     5         1 Felsenstein 81  [Basefreq:0.30 0.29 0.15 0.26]
+     6         1 Jukes-Cantor    [Basefreq: =0.25]
+     7         1 Kimura          [Basefreq: =0.25, kappa=10.0425]
+     8         1 Felsenstein 81  [Basefreq:0.40 0.22 0.24 0.14]
+     9         1 Jukes-Cantor    [Basefreq: =0.25]
+    10         1 Jukes-Cantor    [Basefreq: =0.25]
+    11         1 Felsenstein 81  [Basefreq:0.26 0.35 0.20 0.19]
+    12         1 Jukes-Cantor    [Basefreq: =0.25]
+    13         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+    14         1 Jukes-Cantor    [Basefreq: =0.25]
+    15         1 Kimura          [Basefreq: =0.25, kappa=12.0276]
+    16         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+    17         1 Jukes-Cantor    [Basefreq: =0.25]
+    18         1 Felsenstein 81  [Basefreq:0.29 0.26 0.15 0.30]
+    19         1 Jukes-Cantor    [Basefreq: =0.25]
+    20         1 Jukes-Cantor    [Basefreq: =0.25]
+    21         1 HKY             [Bf:0.43 0.10 0.33 0.14, kappa=22026.466]
+    22         1 Jukes-Cantor    [Basefreq: =0.25]
+    23         1 Jukes-Cantor    [Basefreq: =0.25]
+    24         1 Jukes-Cantor    [Basefreq: =0.25]
+    25         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+    26         1 Jukes-Cantor    [Basefreq: =0.25]
+    27         1 HKY             [Bf:0.15 0.18 0.33 0.34, kappa=22026.466]
+    28         1 Jukes-Cantor    [Basefreq: =0.25]
+    29         1 Jukes-Cantor    [Basefreq: =0.25]
+    30         1 Kimura          [Basefreq: =0.25, kappa=5.5126]
+    31         1 Jukes-Cantor    [Basefreq: =0.25]
+    32         1 Jukes-Cantor    [Basefreq: =0.25]
+    33         1 Jukes-Cantor    [Basefreq: =0.25]
+    34         1 Jukes-Cantor    [Basefreq: =0.25]
+    35         1 Felsenstein 81  [Basefreq:0.30 0.23 0.14 0.34]
+    36         1 Jukes-Cantor    [Basefreq: =0.25]
+    37         1 Jukes-Cantor    [Basefreq: =0.25]
+    38         1 Jukes-Cantor    [Basefreq: =0.25]
+    39         1 Jukes-Cantor    [Basefreq: =0.25]
+    40         1 Jukes-Cantor    [Basefreq: =0.25]
+    41         1 Jukes-Cantor    [Basefreq: =0.25]
+    42         1 Jukes-Cantor    [Basefreq: =0.25]
+    43         1 HKY             [Bf:0.22 0.18 0.22 0.38, kappa=22026.466]
+    44         1 Jukes-Cantor    [Basefreq: =0.25]
+    45         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+    46         1 Jukes-Cantor    [Basefreq: =0.25]
+    47         1 Felsenstein 81  [Basefreq:0.12 0.31 0.18 0.38]
+    48         1 HKY             [Bf:0.28 0.18 0.33 0.20, kappa=22026.466]
+    49         1 HKY             [Bf:0.17 0.34 0.22 0.28, kappa=22026.466]
+    50         1 Felsenstein 81  [Basefreq:0.34 0.23 0.18 0.25]
+    51         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+    52         1 HKY             [Bf:0.29 0.17 0.22 0.32, kappa=14.924]
+    53         1 Jukes-Cantor    [Basefreq: =0.25]
+    54         1 Jukes-Cantor    [Basefreq: =0.25]
+    55         1 Jukes-Cantor    [Basefreq: =0.25]
+    56         1 Jukes-Cantor    [Basefreq: =0.25]
+    57         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+    58         1 Jukes-Cantor    [Basefreq: =0.25]
+    59         1 Kimura          [Basefreq: =0.25, kappa=7.4024]
+    60         1 HKY             [Bf:0.18 0.29 0.18 0.35, kappa=22026.466]
+    61         1 Jukes-Cantor    [Basefreq: =0.25]
+    62         1 Felsenstein 81  [Basefreq:0.23 0.20 0.18 0.39]
+    63         1 Jukes-Cantor    [Basefreq: =0.25]
+    64         1 Kimura          [Basefreq: =0.25, kappa=10.0278]
+    65         1 Jukes-Cantor    [Basefreq: =0.25]
+    66         1 Jukes-Cantor    [Basefreq: =0.25]
+    67         1 Jukes-Cantor    [Basefreq: =0.25]
+    68         1 Jukes-Cantor    [Basefreq: =0.25]
+    69         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+    70         1 Jukes-Cantor    [Basefreq: =0.25]
+    71         1 Jukes-Cantor    [Basefreq: =0.25]
+    72         1 Jukes-Cantor    [Basefreq: =0.25]
+    73         1 Felsenstein 81  [Basefreq:0.38 0.15 0.30 0.17]
+    74         1 Jukes-Cantor    [Basefreq: =0.25]
+    75         1 Jukes-Cantor    [Basefreq: =0.25]
+    76         1 Felsenstein 81  [Basefreq:0.33 0.18 0.27 0.22]
+    77         1 Jukes-Cantor    [Basefreq: =0.25]
+    78         1 Jukes-Cantor    [Basefreq: =0.25]
+    79         1 Jukes-Cantor    [Basefreq: =0.25]
+    80         1 Jukes-Cantor    [Basefreq: =0.25]
+    81         1 Jukes-Cantor    [Basefreq: =0.25]
+    82         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+    83         1 Jukes-Cantor    [Basefreq: =0.25]
+    84         1 Jukes-Cantor    [Basefreq: =0.25]
+    85         1 Jukes-Cantor    [Basefreq: =0.25]
+    86         1 Jukes-Cantor    [Basefreq: =0.25]
+    87         1 Kimura          [Basefreq: =0.25, kappa=6.0192]
+    88         1 Felsenstein 81  [Basefreq:0.38 0.19 0.24 0.19]
+    89         1 Jukes-Cantor    [Basefreq: =0.25]
+    90         1 Jukes-Cantor    [Basefreq: =0.25]
+    91         1 Jukes-Cantor    [Basefreq: =0.25]
+    92         1 Jukes-Cantor    [Basefreq: =0.25]
+    93         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+    94         1 Jukes-Cantor    [Basefreq: =0.25]
+    95         1 Jukes-Cantor    [Basefreq: =0.25]
+    96         1 HKY             [Bf:0.31 0.16 0.22 0.32, kappa=10.757]
+    97         1 Felsenstein 81  [Basefreq:0.24 0.27 0.16 0.33]
+    98         1 Jukes-Cantor    [Basefreq: =0.25]
+    99         1 Jukes-Cantor    [Basefreq: =0.25]
+   100         1 Jukes-Cantor    [Basefreq: =0.25]
+   101         1 Felsenstein 81  [Basefreq:0.30 0.17 0.20 0.33]
+   102         1 Felsenstein 81  [Basefreq:0.27 0.24 0.17 0.32]
+   103         1 Jukes-Cantor    [Basefreq: =0.25]
+   104         1 Felsenstein 81  [Basefreq:0.25 0.23 0.17 0.35]
+   105         1 Jukes-Cantor    [Basefreq: =0.25]
+   106         1 Jukes-Cantor    [Basefreq: =0.25]
+   107         1 Jukes-Cantor    [Basefreq: =0.25]
+   108         1 Jukes-Cantor    [Basefreq: =0.25]
+   109         1 Jukes-Cantor    [Basefreq: =0.25]
+   110         1 Felsenstein 81  [Basefreq:0.25 0.24 0.16 0.35]
+   111         1 Felsenstein 81  [Basefreq:0.15 0.37 0.18 0.30]
+   112         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   113         1 Jukes-Cantor    [Basefreq: =0.25]
+   114         1 Felsenstein 81  [Basefreq:0.17 0.29 0.23 0.32]
+   115         1 Jukes-Cantor    [Basefreq: =0.25]
+   116         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   117         1 Jukes-Cantor    [Basefreq: =0.25]
+   118         1 Jukes-Cantor    [Basefreq: =0.25]
+   119         1 Felsenstein 81  [Basefreq:0.16 0.33 0.21 0.31]
+   120         1 Jukes-Cantor    [Basefreq: =0.25]
+   121         1 Jukes-Cantor    [Basefreq: =0.25]
+   122         1 Jukes-Cantor    [Basefreq: =0.25]
+   123         1 Jukes-Cantor    [Basefreq: =0.25]
+   124         1 HKY             [Bf:0.33 0.29 0.21 0.17, kappa=22026.466]
+   125         1 Felsenstein 81  [Basefreq:0.17 0.33 0.25 0.25]
+   126         1 Jukes-Cantor    [Basefreq: =0.25]
+   127         1 Jukes-Cantor    [Basefreq: =0.25]
+   128         1 Felsenstein 81  [Basefreq:0.19 0.31 0.16 0.34]
+   129         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   130         1 Jukes-Cantor    [Basefreq: =0.25]
+   131         1 Jukes-Cantor    [Basefreq: =0.25]
+   132         1 Jukes-Cantor    [Basefreq: =0.25]
+   133         1 Jukes-Cantor    [Basefreq: =0.25]
+   134         1 Jukes-Cantor    [Basefreq: =0.25]
+   135         1 Jukes-Cantor    [Basefreq: =0.25]
+   136         1 Jukes-Cantor    [Basefreq: =0.25]
+   137         1 Jukes-Cantor    [Basefreq: =0.25]
+   138         1 Jukes-Cantor    [Basefreq: =0.25]
+   139         1 Jukes-Cantor    [Basefreq: =0.25]
+   140         1 Jukes-Cantor    [Basefreq: =0.25]
+   141         1 Felsenstein 81  [Basefreq:0.38 0.23 0.20 0.19]
+   142         1 Jukes-Cantor    [Basefreq: =0.25]
+   143         1 Jukes-Cantor    [Basefreq: =0.25]
+   144         1 Jukes-Cantor    [Basefreq: =0.25]
+   145         1 Jukes-Cantor    [Basefreq: =0.25]
+   146         1 Jukes-Cantor    [Basefreq: =0.25]
+   147         1 Kimura          [Basefreq: =0.25, kappa=14.0459]
+   148         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   149         1 Felsenstein 81  [Basefreq:0.18 0.38 0.13 0.31]
+   150         1 Jukes-Cantor    [Basefreq: =0.25]
+   151         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   152         1 Jukes-Cantor    [Basefreq: =0.25]
+   153         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   154         1 Jukes-Cantor    [Basefreq: =0.25]
+   155         1 Kimura          [Basefreq: =0.25, kappa=12.0364]
+   156         1 Jukes-Cantor    [Basefreq: =0.25]
+   157         1 Jukes-Cantor    [Basefreq: =0.25]
+   158         1 Felsenstein 81  [Basefreq:0.30 0.31 0.16 0.24]
+   159         1 Jukes-Cantor    [Basefreq: =0.25]
+   160         1 Felsenstein 81  [Basefreq:0.40 0.20 0.23 0.17]
+   161         1 Felsenstein 81  [Basefreq:0.19 0.35 0.27 0.19]
+   162         1 Jukes-Cantor    [Basefreq: =0.25]
+   163         1 Jukes-Cantor    [Basefreq: =0.25]
+   164         1 Jukes-Cantor    [Basefreq: =0.25]
+   165         1 Kimura          [Basefreq: =0.25, kappa=10.0285]
+   166         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   167         1 Jukes-Cantor    [Basefreq: =0.25]
+   168         1 Jukes-Cantor    [Basefreq: =0.25]
+   169         1 Jukes-Cantor    [Basefreq: =0.25]
+   170         1 Jukes-Cantor    [Basefreq: =0.25]
+   171         1 Jukes-Cantor    [Basefreq: =0.25]
+   172         1 Jukes-Cantor    [Basefreq: =0.25]
+   173         1 Jukes-Cantor    [Basefreq: =0.25]
+   174         1 Jukes-Cantor    [Basefreq: =0.25]
+   175         1 Jukes-Cantor    [Basefreq: =0.25]
+   176         1 Jukes-Cantor    [Basefreq: =0.25]
+   177         1 Jukes-Cantor    [Basefreq: =0.25]
+   178         1 Jukes-Cantor    [Basefreq: =0.25]
+   179         1 Jukes-Cantor    [Basefreq: =0.25]
+   180         1 Jukes-Cantor    [Basefreq: =0.25]
+   181         1 Jukes-Cantor    [Basefreq: =0.25]
+   182         1 Jukes-Cantor    [Basefreq: =0.25]
+   183         1 Jukes-Cantor    [Basefreq: =0.25]
+   184         1 Jukes-Cantor    [Basefreq: =0.25]
+   185         1 Kimura          [Basefreq: =0.25, kappa=10.0303]
+   186         1 Jukes-Cantor    [Basefreq: =0.25]
+   187         1 Felsenstein 81  [Basefreq:0.23 0.22 0.19 0.35]
+   188         1 Jukes-Cantor    [Basefreq: =0.25]
+   189         1 Felsenstein 81  [Basefreq:0.33 0.16 0.26 0.25]
+   190         1 Jukes-Cantor    [Basefreq: =0.25]
+   191         1 Jukes-Cantor    [Basefreq: =0.25]
+   192         1 Jukes-Cantor    [Basefreq: =0.25]
+   193         1 Jukes-Cantor    [Basefreq: =0.25]
+   194         1 HKY             [Bf:0.24 0.34 0.16 0.26, kappa=22026.466]
+   195         1 Jukes-Cantor    [Basefreq: =0.25]
+   196         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   197         1 Felsenstein 81  [Basefreq:0.26 0.32 0.14 0.28]
+   198         1 Tamura-Nei      [Bf:0.30 0.18 0.23 0.29, k1=1.000, k2=22026.466]
+   199         1 Jukes-Cantor    [Basefreq: =0.25]
+   200         1 Felsenstein 81  [Basefreq:0.24 0.21 0.20 0.35]
+   201         1 Jukes-Cantor    [Basefreq: =0.25]
+   202         1 HKY             [Bf:0.17 0.30 0.22 0.31, kappa=22026.466]
+   203         1 Felsenstein 81  [Basefreq:0.34 0.27 0.18 0.21]
+   204         1 Jukes-Cantor    [Basefreq: =0.25]
+   205         1 Jukes-Cantor    [Basefreq: =0.25]
+   206         1 Jukes-Cantor    [Basefreq: =0.25]
+   207         1 Jukes-Cantor    [Basefreq: =0.25]
+   208         1 Jukes-Cantor    [Basefreq: =0.25]
+   209         1 Felsenstein 81  [Basefreq:0.32 0.18 0.16 0.33]
+   210         1 Jukes-Cantor    [Basefreq: =0.25]
+   211         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   212         1 HKY             [Bf:0.20 0.23 0.22 0.34, kappa=22026.466]
+   213         1 Jukes-Cantor    [Basefreq: =0.25]
+   214         1 Felsenstein 81  [Basefreq:0.22 0.23 0.17 0.37]
+   215         1 Jukes-Cantor    [Basefreq: =0.25]
+   216         1 Jukes-Cantor    [Basefreq: =0.25]
+   217         1 HKY             [Bf:0.21 0.25 0.19 0.35, kappa=22026.466]
+   218         1 Jukes-Cantor    [Basefreq: =0.25]
+   219         1 Jukes-Cantor    [Basefreq: =0.25]
+   220         1 Kimura          [Basefreq: =0.25, kappa=12.0501]
+   221         1 Jukes-Cantor    [Basefreq: =0.25]
+   222         1 Jukes-Cantor    [Basefreq: =0.25]
+   223         1 Jukes-Cantor    [Basefreq: =0.25]
+   224         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   225         1 Felsenstein 81  [Basefreq:0.19 0.23 0.22 0.36]
+   226         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   227         1 Jukes-Cantor    [Basefreq: =0.25]
+   228         1 Jukes-Cantor    [Basefreq: =0.25]
+   229         1 Jukes-Cantor    [Basefreq: =0.25]
+   230         1 Jukes-Cantor    [Basefreq: =0.25]
+   231         1 Jukes-Cantor    [Basefreq: =0.25]
+   232         1 Jukes-Cantor    [Basefreq: =0.25]
+   233         1 Felsenstein 81  [Basefreq:0.27 0.18 0.21 0.34]
+   234         1 Jukes-Cantor    [Basefreq: =0.25]
+   235         1 Jukes-Cantor    [Basefreq: =0.25]
+   236         1 Jukes-Cantor    [Basefreq: =0.25]
+   237         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   238         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   239         1 Jukes-Cantor    [Basefreq: =0.25]
+   240         1 Jukes-Cantor    [Basefreq: =0.25]
+   241         1 Jukes-Cantor    [Basefreq: =0.25]
+   242         1 Jukes-Cantor    [Basefreq: =0.25]
+   243         1 Jukes-Cantor    [Basefreq: =0.25]
+   244         1 HKY             [Bf:0.16 0.34 0.19 0.30, kappa=7.579]
+   245         1 Felsenstein 81  [Basefreq:0.25 0.24 0.17 0.35]
+   246         1 Jukes-Cantor    [Basefreq: =0.25]
+   247         1 Jukes-Cantor    [Basefreq: =0.25]
+   248         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   249         1 Jukes-Cantor    [Basefreq: =0.25]
+   250         1 Jukes-Cantor    [Basefreq: =0.25]
+   251         1 Jukes-Cantor    [Basefreq: =0.25]
+   252         1 Jukes-Cantor    [Basefreq: =0.25]
+   253         1 Jukes-Cantor    [Basefreq: =0.25]
+   254         1 Jukes-Cantor    [Basefreq: =0.25]
+   255         1 Jukes-Cantor    [Basefreq: =0.25]
+   256         1 Jukes-Cantor    [Basefreq: =0.25]
+   257         1 Jukes-Cantor    [Basefreq: =0.25]
+   258         1 Jukes-Cantor    [Basefreq: =0.25]
+   259         1 Jukes-Cantor    [Basefreq: =0.25]
+   260         1 Felsenstein 81  [Basefreq:0.33 0.29 0.19 0.19]
+   261         1 Jukes-Cantor    [Basefreq: =0.25]
+   262         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   263         1 Jukes-Cantor    [Basefreq: =0.25]
+   264         1 Jukes-Cantor    [Basefreq: =0.25]
+   265         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   266         1 Jukes-Cantor    [Basefreq: =0.25]
+   267         1 Jukes-Cantor    [Basefreq: =0.25]
+   268         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   269         1 Jukes-Cantor    [Basefreq: =0.25]
+   270         1 Jukes-Cantor    [Basefreq: =0.25]
+   271         1 Kimura          [Basefreq: =0.25, kappa=20.1034]
+   272         1 Jukes-Cantor    [Basefreq: =0.25]
+   273         1 Jukes-Cantor    [Basefreq: =0.25]
+   274         1 Kimura          [Basefreq: =0.25, kappa=12.0579]
+   275         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   276         1 Jukes-Cantor    [Basefreq: =0.25]
+   277         1 Felsenstein 81  [Basefreq:0.34 0.17 0.27 0.23]
+   278         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   279         1 HKY             [Bf:0.28 0.24 0.16 0.32, kappa=22026.466]
+   280         1 Felsenstein 81  [Basefreq:0.26 0.20 0.18 0.36]
+   281         1 Jukes-Cantor    [Basefreq: =0.25]
+   282         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   283         1 Felsenstein 81  [Basefreq:0.41 0.15 0.25 0.19]
+   284         1 Jukes-Cantor    [Basefreq: =0.25]
+   285         1 Jukes-Cantor    [Basefreq: =0.25]
+   286         1 Kimura          [Basefreq: =0.25, kappa=10.0517]
+   287         1 Jukes-Cantor    [Basefreq: =0.25]
+   288         1 Jukes-Cantor    [Basefreq: =0.25]
+   289         1 Jukes-Cantor    [Basefreq: =0.25]
+   290         1 HKY             [Bf:0.18 0.29 0.21 0.31, kappa=22026.466]
+   291         1 Felsenstein 81  [Basefreq:0.29 0.17 0.22 0.32]
+   292         1 Jukes-Cantor    [Basefreq: =0.25]
+   293         1 Felsenstein 81  [Basefreq:0.18 0.39 0.23 0.20]
+   294         1 Jukes-Cantor    [Basefreq: =0.25]
+   295         1 Felsenstein 81  [Basefreq:0.22 0.32 0.10 0.35]
+   296         1 Felsenstein 81  [Basefreq:0.17 0.28 0.23 0.33]
+   297         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   298         1 Jukes-Cantor    [Basefreq: =0.25]
+   299         1 Jukes-Cantor    [Basefreq: =0.25]
+   300         1 HKY             [Bf:0.23 0.28 0.14 0.34, kappa=22026.466]
+   301         1 Jukes-Cantor    [Basefreq: =0.25]
+   302         1 Felsenstein 81  [Basefreq:0.22 0.29 0.18 0.32]
+   303         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   304         1 Jukes-Cantor    [Basefreq: =0.25]
+   305         1 Felsenstein 81  [Basefreq:0.29 0.19 0.20 0.32]
+   306         1 Jukes-Cantor    [Basefreq: =0.25]
+   307         1 Jukes-Cantor    [Basefreq: =0.25]
+   308         1 Jukes-Cantor    [Basefreq: =0.25]
+   309         1 Jukes-Cantor    [Basefreq: =0.25]
+   310         1 Jukes-Cantor    [Basefreq: =0.25]
+   311         1 Felsenstein 81  [Basefreq:0.12 0.38 0.10 0.40]
+   312         1 Jukes-Cantor    [Basefreq: =0.25]
+   313         1 HKY             [Bf:0.19 0.25 0.21 0.36, kappa=22026.466]
+   314         1 Jukes-Cantor    [Basefreq: =0.25]
+   315         1 Jukes-Cantor    [Basefreq: =0.25]
+   316         1 Jukes-Cantor    [Basefreq: =0.25]
+   317         1 Jukes-Cantor    [Basefreq: =0.25]
+   318         1 Felsenstein 81  [Basefreq:0.27 0.27 0.15 0.31]
+   319         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   320         1 Jukes-Cantor    [Basefreq: =0.25]
+   321         1 Jukes-Cantor    [Basefreq: =0.25]
+   322         1 Felsenstein 81  [Basefreq:0.21 0.36 0.18 0.26]
+   323         1 Felsenstein 81  [Basefreq:0.29 0.18 0.20 0.33]
+   324         1 Jukes-Cantor    [Basefreq: =0.25]
+   325         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   326         1 Jukes-Cantor    [Basefreq: =0.25]
+   327         1 Jukes-Cantor    [Basefreq: =0.25]
+   328         1 Jukes-Cantor    [Basefreq: =0.25]
+   329         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   330         1 Jukes-Cantor    [Basefreq: =0.25]
+   331         1 HKY             [Bf:0.23 0.32 0.17 0.28, kappa=13.142]
+   332         1 Jukes-Cantor    [Basefreq: =0.25]
+   333         1 Felsenstein 81  [Basefreq:0.22 0.23 0.18 0.36]
+   334         1 Jukes-Cantor    [Basefreq: =0.25]
+   335         1 Jukes-Cantor    [Basefreq: =0.25]
+   336         1 Jukes-Cantor    [Basefreq: =0.25]
+   337         1 Felsenstein 81  [Basefreq:0.26 0.12 0.34 0.27]
+   338         1 Jukes-Cantor    [Basefreq: =0.25]
+   339         1 Jukes-Cantor    [Basefreq: =0.25]
+   340         1 Jukes-Cantor    [Basefreq: =0.25]
+   341         1 Kimura          [Basefreq: =0.25, kappa=12.0496]
+   342         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   343         1 HKY             [Bf:0.19 0.27 0.33 0.21, kappa=10.450]
+   344         1 Kimura          [Basefreq: =0.25, kappa=10.0386]
+   345         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   346         1 HKY             [Bf:0.26 0.25 0.16 0.33, kappa=5.950]
+   347         1 Felsenstein 81  [Basefreq:0.29 0.32 0.15 0.24]
+   348         1 Felsenstein 81  [Basefreq:0.16 0.32 0.22 0.30]
+   349         1 Felsenstein 81  [Basefreq:0.39 0.22 0.17 0.22]
+   350         1 Jukes-Cantor    [Basefreq: =0.25]
+   351         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   352         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   353         1 Jukes-Cantor    [Basefreq: =0.25]
+   354         1 Jukes-Cantor    [Basefreq: =0.25]
+   355         1 Jukes-Cantor    [Basefreq: =0.25]
+   356         1 Kimura          [Basefreq: =0.25, kappa=10.0286]
+   357         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   358         1 Jukes-Cantor    [Basefreq: =0.25]
+   359         1 Jukes-Cantor    [Basefreq: =0.25]
+   360         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   361         1 Jukes-Cantor    [Basefreq: =0.25]
+   362         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   363         1 Felsenstein 81  [Basefreq:0.22 0.31 0.14 0.32]
+   364         1 Jukes-Cantor    [Basefreq: =0.25]
+   365         1 Jukes-Cantor    [Basefreq: =0.25]
+   366         1 Jukes-Cantor    [Basefreq: =0.25]
+   367         1 Felsenstein 81  [Basefreq:0.33 0.26 0.25 0.16]
+   368         1 Jukes-Cantor    [Basefreq: =0.25]
+   369         1 Felsenstein 81  [Basefreq:0.36 0.20 0.21 0.23]
+   370         1 Jukes-Cantor    [Basefreq: =0.25]
+   371         1 Jukes-Cantor    [Basefreq: =0.25]
+   372         1 Jukes-Cantor    [Basefreq: =0.25]
+   373         1 Jukes-Cantor    [Basefreq: =0.25]
+   374         1 Jukes-Cantor    [Basefreq: =0.25]
+   375         1 Jukes-Cantor    [Basefreq: =0.25]
+   376         1 Jukes-Cantor    [Basefreq: =0.25]
+   377         1 Jukes-Cantor    [Basefreq: =0.25]
+   378         1 Jukes-Cantor    [Basefreq: =0.25]
+   379         1 Kimura          [Basefreq: =0.25, kappa=18.0859]
+   380         1 Felsenstein 81  [Basefreq:0.36 0.20 0.17 0.27]
+   381         1 Jukes-Cantor    [Basefreq: =0.25]
+   382         1 Felsenstein 81  [Basefreq:0.22 0.29 0.16 0.33]
+   383         1 Felsenstein 81  [Basefreq:0.22 0.20 0.22 0.36]
+   384         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   385         1 Jukes-Cantor    [Basefreq: =0.25]
+   386         1 Kimura          [Basefreq: =0.25, kappa=22026.4658]
+   387         1 Jukes-Cantor    [Basefreq: =0.25]
+   388         1 Jukes-Cantor    [Basefreq: =0.25]
+
+
+Sites per locus
+---------------
+Locus    Sites
+     1     313
+     2     325
+     3     319
+     4     301
+     5     305
+     6     303
+     7     300
+     8     300
+     9     303
+    10     301
+    11     276
+    12     334
+    13     338
+    14     386
+    15     381
+    16     305
+    17     300
+    18     300
+    19     300
+    20     300
+    21     284
+    22     302
+    23     341
+    24     308
+    25     406
+    26     363
+    27     316
+    28     317
+    29     305
+    30     437
+    31     275
+    32     422
+    33     301
+    34     417
+    35     307
+    36     301
+    37     304
+    38     322
+    39     391
+    40     419
+    41     305
+    42     301
+    43     307
+    44     409
+    45     343
+    46     304
+    47     232
+    48     303
+    49     489
+    50     302
+    51     369
+    52     307
+    53     301
+    54     311
+    55     323
+    56     256
+    57     305
+    58     301
+    59     303
+    60     301
+    61     308
+    62     300
+    63     301
+    64     308
+    65     308
+    66     370
+    67     312
+    68     304
+    69     301
+    70     302
+    71     400
+    72     303
+    73     301
+    74     303
+    75     301
+    76     373
+    77     378
+    78     300
+    79     303
+    80     396
+    81     380
+    82     300
+    83     350
+    84     390
+    85     302
+    86     300
+    87     252
+    88     301
+    89     395
+    90     302
+    91     304
+    92     301
+    93     301
+    94     411
+    95     304
+    96     304
+    97     301
+    98     360
+    99     274
+   100     300
+   101     304
+   102     303
+   103     300
+   104     301
+   105     325
+   106     304
+   107     301
+   108     302
+   109     310
+   110     301
+   111     386
+   112     301
+   113     301
+   114     373
+   115     305
+   116     301
+   117     305
+   118     301
+   119     329
+   120     376
+   121     307
+   122     300
+   123     300
+   124     308
+   125     388
+   126     407
+   127     342
+   128     313
+   129     367
+   130     253
+   131     145
+   132     306
+   133     303
+   134     413
+   135     376
+   136     418
+   137     304
+   138     304
+   139     303
+   140     304
+   141     324
+   142     205
+   143     397
+   144     300
+   145     305
+   146     304
+   147     375
+   148     300
+   149     226
+   150     302
+   151     363
+   152     308
+   153     306
+   154     368
+   155     358
+   156     302
+   157     305
+   158     310
+   159     467
+   160     302
+   161     308
+   162     300
+   163     301
+   164     300
+   165     301
+   166     328
+   167     306
+   168     301
+   169     282
+   170     442
+   171     300
+   172     240
+   173     307
+   174     301
+   175     307
+   176     302
+   177     305
+   178     401
+   179     273
+   180     302
+   181     305
+   182     300
+   183     304
+   184     306
+   185     274
+   186     338
+   187     301
+   188     306
+   189     332
+   190     302
+   191     407
+   192     285
+   193     306
+   194     302
+   195     333
+   196     304
+   197     302
+   198     357
+   199     399
+   200     303
+   201     306
+   202     417
+   203     301
+   204     302
+   205     387
+   206     301
+   207     265
+   208     302
+   209     301
+   210     303
+   211     308
+   212     367
+   213     300
+   214     300
+   215     462
+   216     300
+   217     303
+   218     445
+   219     303
+   220     301
+   221     300
+   222     388
+   223     318
+   224     302
+   225     264
+   226     302
+   227     304
+   228     412
+   229     304
+   230     302
+   231     300
+   232     302
+   233     307
+   234     398
+   235     302
+   236     317
+   237     249
+   238     244
+   239     342
+   240     303
+   241     306
+   242     281
+   243     311
+   244     378
+   245     302
+   246     303
+   247     300
+   248     302
+   249     312
+   250     221
+   251     392
+   252     300
+   253     300
+   254     301
+   255     287
+   256     302
+   257     328
+   258     395
+   259     304
+   260     303
+   261     305
+   262     436
+   263     303
+   264     301
+   265     303
+   266     306
+   267     385
+   268     301
+   269     304
+   270     301
+   271     302
+   272     306
+   273     303
+   274     378
+   275     301
+   276     409
+   277     304
+   278     303
+   279     300
+   280     302
+   281     302
+   282     307
+   283     300
+   284     308
+   285     364
+   286     368
+   287     304
+   288     341
+   289     306
+   290     307
+   291     305
+   292     301
+   293     366
+   294     306
+   295     304
+   296     305
+   297     301
+   298     300
+   299     384
+   300     301
+   301     310
+   302     347
+   303     265
+   304     389
+   305     305
+   306     300
+   307     470
+   308     300
+   309     303
+   310     410
+   311     252
+   312     320
+   313     307
+   314     305
+   315     435
+   316     394
+   317     235
+   318     301
+   319     303
+   320     301
+   321     405
+   322     309
+   323     303
+   324     300
+   325     405
+   326     314
+   327     302
+   328     289
+   329     302
+   330     301
+   331     415
+   332     300
+   333     301
+   334     302
+   335     303
+   336     335
+   337     303
+   338     372
+   339     306
+   340     352
+   341     304
+   342     344
+   343     459
+   344     215
+   345     305
+   346     306
+   347     237
+   348     300
+   349     304
+   350     303
+   351     300
+   352     268
+   353     406
+   354     303
+   355     291
+   356     300
+   357     304
+   358     302
+   359     322
+   360     302
+   361     477
+   362     306
+   363     301
+   364     304
+   365     320
+   366     304
+   367     313
+   368     321
+   369     302
+   370     305
+   371     388
+   372     303
+   373     300
+   374     302
+   375     302
+   376     301
+   377     301
+   378     350
+   379     300
+   380     301
+   381     317
+   382     355
+   383     314
+   384     320
+   385     326
+   386     303
+   387     304
+   388     304
+
+Population                   Locus   Gene copies    
+----------------------------------------------------
+  1 Pop_Japan                    1        28
+  1                              2        28
+  1                              3        28
+  1                              4        28
+  1                              5        28
+  1                              6        28
+  1                              7        28
+  1                              8        28
+  1                              9        28
+  1                             10        28
+  1                             11        28
+  1                             12        28
+  1                             13        28
+  1                             14        28
+  1                             15        28
+  1                             16        28
+  1                             17        28
+  1                             18        28
+  1                             19        28
+  1                             20        28
+  1                             21        28
+  1                             22        28
+  1                             23        28
+  1                             24        28
+  1                             25        28
+  1                             26        28
+  1                             27        28
+  1                             28        28
+  1                             29        28
+  1                             30        28
+  1                             31        28
+  1                             32        28
+  1                             33        28
+  1                             34        28
+  1                             35        28
+  1                             36        28
+  1                             37        28
+  1                             38        28
+  1                             39        28
+  1                             40        28
+  1                             41        28
+  1                             42        28
+  1                             43        28
+  1                             44        28
+  1                             45        28
+  1                             46        28
+  1                             47        28
+  1                             48        28
+  1                             49        28
+  1                             50        28
+  1                             51        28
+  1                             52        28
+  1                             53        28
+  1                             54        28
+  1                             55        28
+  1                             56        28
+  1                             57        28
+  1                             58        28
+  1                             59        28
+  1                             60        28
+  1                             61        28
+  1                             62        28
+  1                             63        28
+  1                             64        28
+  1                             65        28
+  1                             66        28
+  1                             67        28
+  1                             68        28
+  1                             69        28
+  1                             70        28
+  1                             71        28
+  1                             72        28
+  1                             73        28
+  1                             74        28
+  1                             75        28
+  1                             76        28
+  1                             77        28
+  1                             78        28
+  1                             79        28
+  1                             80        28
+  1                             81        28
+  1                             82        28
+  1                             83        28
+  1                             84        28
+  1                             85        28
+  1                             86        28
+  1                             87        28
+  1                             88        28
+  1                             89        28
+  1                             90        28
+  1                             91        28
+  1                             92        28
+  1                             93        28
+  1                             94        28
+  1                             95        28
+  1                             96        28
+  1                             97        28
+  1                             98        28
+  1                             99        28
+  1                            100        28
+  1                            101        28
+  1                            102        28
+  1                            103        28
+  1                            104        28
+  1                            105        28
+  1                            106        28
+  1                            107        28
+  1                            108        28
+  1                            109        28
+  1                            110        28
+  1                            111        28
+  1                            112        28
+  1                            113        28
+  1                            114        28
+  1                            115        28
+  1                            116        28
+  1                            117        28
+  1                            118        28
+  1                            119        28
+  1                            120        28
+  1                            121        28
+  1                            122        28
+  1                            123        28
+  1                            124        28
+  1                            125        28
+  1                            126        28
+  1                            127        28
+  1                            128        28
+  1                            129        28
+  1                            130        28
+  1                            131        28
+  1                            132        28
+  1                            133        28
+  1                            134        28
+  1                            135        28
+  1                            136        28
+  1                            137        28
+  1                            138        28
+  1                            139        28
+  1                            140        28
+  1                            141        28
+  1                            142        28
+  1                            143        28
+  1                            144        28
+  1                            145        28
+  1                            146        28
+  1                            147        28
+  1                            148        28
+  1                            149        28
+  1                            150        28
+  1                            151        28
+  1                            152        28
+  1                            153        28
+  1                            154        28
+  1                            155        28
+  1                            156        28
+  1                            157        28
+  1                            158        28
+  1                            159        28
+  1                            160        28
+  1                            161        28
+  1                            162        28
+  1                            163        28
+  1                            164        28
+  1                            165        28
+  1                            166        28
+  1                            167        28
+  1                            168        28
+  1                            169        28
+  1                            170        28
+  1                            171        28
+  1                            172        28
+  1                            173        28
+  1                            174        28
+  1                            175        28
+  1                            176        28
+  1                            177        28
+  1                            178        28
+  1                            179        28
+  1                            180        28
+  1                            181        28
+  1                            182        28
+  1                            183        28
+  1                            184        28
+  1                            185        28
+  1                            186        28
+  1                            187        28
+  1                            188        28
+  1                            189        28
+  1                            190        28
+  1                            191        28
+  1                            192        28
+  1                            193        28
+  1                            194        28
+  1                            195        28
+  1                            196        28
+  1                            197        28
+  1                            198        28
+  1                            199        28
+  1                            200        28
+  1                            201        28
+  1                            202        28
+  1                            203        28
+  1                            204        28
+  1                            205        28
+  1                            206        28
+  1                            207        28
+  1                            208        28
+  1                            209        28
+  1                            210        28
+  1                            211        28
+  1                            212        28
+  1                            213        28
+  1                            214        28
+  1                            215        28
+  1                            216        28
+  1                            217        28
+  1                            218        28
+  1                            219        28
+  1                            220        28
+  1                            221        28
+  1                            222        28
+  1                            223        28
+  1                            224        28
+  1                            225        28
+  1                            226        28
+  1                            227        28
+  1                            228        28
+  1                            229        28
+  1                            230        28
+  1                            231        28
+  1                            232        28
+  1                            233        28
+  1                            234        28
+  1                            235        28
+  1                            236        28
+  1                            237        28
+  1                            238        28
+  1                            239        28
+  1                            240        28
+  1                            241        28
+  1                            242        28
+  1                            243        28
+  1                            244        28
+  1                            245        28
+  1                            246        28
+  1                            247        28
+  1                            248        28
+  1                            249        28
+  1                            250        28
+  1                            251        28
+  1                            252        28
+  1                            253        28
+  1                            254        28
+  1                            255        28
+  1                            256        28
+  1                            257        28
+  1                            258        28
+  1                            259        28
+  1                            260        28
+  1                            261        28
+  1                            262        28
+  1                            263        28
+  1                            264        28
+  1                            265        28
+  1                            266        28
+  1                            267        28
+  1                            268        28
+  1                            269        28
+  1                            270        28
+  1                            271        28
+  1                            272        28
+  1                            273        28
+  1                            274        28
+  1                            275        28
+  1                            276        28
+  1                            277        28
+  1                            278        28
+  1                            279        28
+  1                            280        28
+  1                            281        28
+  1                            282        28
+  1                            283        28
+  1                            284        28
+  1                            285        28
+  1                            286        28
+  1                            287        28
+  1                            288        28
+  1                            289        28
+  1                            290        28
+  1                            291        28
+  1                            292        28
+  1                            293        28
+  1                            294        28
+  1                            295        28
+  1                            296        28
+  1                            297        28
+  1                            298        28
+  1                            299        28
+  1                            300        28
+  1                            301        28
+  1                            302        28
+  1                            303        28
+  1                            304        28
+  1                            305        28
+  1                            306        28
+  1                            307        28
+  1                            308        28
+  1                            309        28
+  1                            310        28
+  1                            311        28
+  1                            312        28
+  1                            313        28
+  1                            314        28
+  1                            315        28
+  1                            316        28
+  1                            317        28
+  1                            318        28
+  1                            319        28
+  1                            320        28
+  1                            321        28
+  1                            322        28
+  1                            323        28
+  1                            324        28
+  1                            325        28
+  1                            326        28
+  1                            327        28
+  1                            328        28
+  1                            329        28
+  1                            330        28
+  1                            331        28
+  1                            332        28
+  1                            333        28
+  1                            334        28
+  1                            335        28
+  1                            336        28
+  1                            337        28
+  1                            338        28
+  1                            339        28
+  1                            340        28
+  1                            341        28
+  1                            342        28
+  1                            343        28
+  1                            344        28
+  1                            345        28
+  1                            346        28
+  1                            347        28
+  1                            348        28
+  1                            349        28
+  1                            350        28
+  1                            351        28
+  1                            352        28
+  1                            353        28
+  1                            354        28
+  1                            355        28
+  1                            356        28
+  1                            357        28
+  1                            358        28
+  1                            359        28
+  1                            360        28
+  1                            361        28
+  1                            362        28
+  1                            363        28
+  1                            364        28
+  1                            365        28
+  1                            366        28
+  1                            367        28
+  1                            368        28
+  1                            369        28
+  1                            370        28
+  1                            371        28
+  1                            372        28
+  1                            373        28
+  1                            374        28
+  1                            375        28
+  1                            376        28
+  1                            377        28
+  1                            378        28
+  1                            379        28
+  1                            380        28
+  1                            381        28
+  1                            382        28
+  1                            383        28
+  1                            384        28
+  1                            385        28
+  1                            386        28
+  1                            387        28
+  1                            388        28
+  1 Pop_Johnston_Atoll           1         8
+  1                              2         8
+  1                              3         8
+  1                              4         8
+  1                              5         8
+  1                              6         8
+  1                              7         8
+  1                              8         8
+  1                              9         8
+  1                             10         8
+  1                             11         8
+  1                             12         8
+  1                             13         8
+  1                             14         8
+  1                             15         8
+  1                             16         8
+  1                             17         8
+  1                             18         8
+  1                             19         8
+  1                             20         8
+  1                             21         8
+  1                             22         8
+  1                             23         8
+  1                             24         8
+  1                             25         8
+  1                             26         8
+  1                             27         8
+  1                             28         8
+  1                             29         8
+  1                             30         8
+  1                             31         8
+  1                             32         8
+  1                             33         8
+  1                             34         8
+  1                             35         8
+  1                             36         8
+  1                             37         8
+  1                             38         8
+  1                             39         8
+  1                             40         8
+  1                             41         8
+  1                             42         8
+  1                             43         8
+  1                             44         8
+  1                             45         8
+  1                             46         8
+  1                             47         8
+  1                             48         8
+  1                             49         8
+  1                             50         8
+  1                             51         8
+  1                             52         8
+  1                             53         8
+  1                             54         8
+  1                             55         8
+  1                             56         8
+  1                             57         8
+  1                             58         8
+  1                             59         8
+  1                             60         8
+  1                             61         8
+  1                             62         8
+  1                             63         8
+  1                             64         8
+  1                             65         8
+  1                             66         8
+  1                             67         8
+  1                             68         8
+  1                             69         8
+  1                             70         8
+  1                             71         8
+  1                             72         8
+  1                             73         8
+  1                             74         8
+  1                             75         8
+  1                             76         8
+  1                             77         8
+  1                             78         8
+  1                             79         8
+  1                             80         8
+  1                             81         8
+  1                             82         8
+  1                             83         8
+  1                             84         8
+  1                             85         8
+  1                             86         8
+  1                             87         8
+  1                             88         8
+  1                             89         8
+  1                             90         8
+  1                             91         8
+  1                             92         8
+  1                             93         8
+  1                             94         8
+  1                             95         8
+  1                             96         8
+  1                             97         8
+  1                             98         8
+  1                             99         8
+  1                            100         8
+  1                            101         8
+  1                            102         8
+  1                            103         8
+  1                            104         8
+  1                            105         8
+  1                            106         8
+  1                            107         8
+  1                            108         8
+  1                            109         8
+  1                            110         8
+  1                            111         8
+  1                            112         8
+  1                            113         8
+  1                            114         8
+  1                            115         8
+  1                            116         8
+  1                            117         8
+  1                            118         8
+  1                            119         8
+  1                            120         8
+  1                            121         8
+  1                            122         8
+  1                            123         8
+  1                            124         8
+  1                            125         8
+  1                            126         8
+  1                            127         8
+  1                            128         8
+  1                            129         8
+  1                            130         8
+  1                            131         8
+  1                            132         8
+  1                            133         8
+  1                            134         8
+  1                            135         8
+  1                            136         8
+  1                            137         8
+  1                            138         8
+  1                            139         8
+  1                            140         8
+  1                            141         8
+  1                            142         8
+  1                            143         8
+  1                            144         8
+  1                            145         8
+  1                            146         8
+  1                            147         8
+  1                            148         8
+  1                            149         8
+  1                            150         8
+  1                            151         8
+  1                            152         8
+  1                            153         8
+  1                            154         8
+  1                            155         8
+  1                            156         8
+  1                            157         8
+  1                            158         8
+  1                            159         8
+  1                            160         8
+  1                            161         8
+  1                            162         8
+  1                            163         8
+  1                            164         8
+  1                            165         8
+  1                            166         8
+  1                            167         8
+  1                            168         8
+  1                            169         8
+  1                            170         8
+  1                            171         8
+  1                            172         8
+  1                            173         8
+  1                            174         8
+  1                            175         8
+  1                            176         8
+  1                            177         8
+  1                            178         8
+  1                            179         8
+  1                            180         8
+  1                            181         8
+  1                            182         8
+  1                            183         8
+  1                            184         8
+  1                            185         8
+  1                            186         8
+  1                            187         8
+  1                            188         8
+  1                            189         8
+  1                            190         8
+  1                            191         8
+  1                            192         8
+  1                            193         8
+  1                            194         8
+  1                            195         8
+  1                            196         8
+  1                            197         8
+  1                            198         8
+  1                            199         8
+  1                            200         8
+  1                            201         8
+  1                            202         8
+  1                            203         8
+  1                            204         8
+  1                            205         8
+  1                            206         8
+  1                            207         8
+  1                            208         8
+  1                            209         8
+  1                            210         8
+  1                            211         8
+  1                            212         8
+  1                            213         8
+  1                            214         8
+  1                            215         8
+  1                            216         8
+  1                            217         8
+  1                            218         8
+  1                            219         8
+  1                            220         8
+  1                            221         8
+  1                            222         8
+  1                            223         8
+  1                            224         8
+  1                            225         8
+  1                            226         8
+  1                            227         8
+  1                            228         8
+  1                            229         8
+  1                            230         8
+  1                            231         8
+  1                            232         8
+  1                            233         8
+  1                            234         8
+  1                            235         8
+  1                            236         8
+  1                            237         8
+  1                            238         8
+  1                            239         8
+  1                            240         8
+  1                            241         8
+  1                            242         8
+  1                            243         8
+  1                            244         8
+  1                            245         8
+  1                            246         8
+  1                            247         8
+  1                            248         8
+  1                            249         8
+  1                            250         8
+  1                            251         8
+  1                            252         8
+  1                            253         8
+  1                            254         8
+  1                            255         8
+  1                            256         8
+  1                            257         8
+  1                            258         8
+  1                            259         8
+  1                            260         8
+  1                            261         8
+  1                            262         8
+  1                            263         8
+  1                            264         8
+  1                            265         8
+  1                            266         8
+  1                            267         8
+  1                            268         8
+  1                            269         8
+  1                            270         8
+  1                            271         8
+  1                            272         8
+  1                            273         8
+  1                            274         8
+  1                            275         8
+  1                            276         8
+  1                            277         8
+  1                            278         8
+  1                            279         8
+  1                            280         8
+  1                            281         8
+  1                            282         8
+  1                            283         8
+  1                            284         8
+  1                            285         8
+  1                            286         8
+  1                            287         8
+  1                            288         8
+  1                            289         8
+  1                            290         8
+  1                            291         8
+  1                            292         8
+  1                            293         8
+  1                            294         8
+  1                            295         8
+  1                            296         8
+  1                            297         8
+  1                            298         8
+  1                            299         8
+  1                            300         8
+  1                            301         8
+  1                            302         8
+  1                            303         8
+  1                            304         8
+  1                            305         8
+  1                            306         8
+  1                            307         8
+  1                            308         8
+  1                            309         8
+  1                            310         8
+  1                            311         8
+  1                            312         8
+  1                            313         8
+  1                            314         8
+  1                            315         8
+  1                            316         8
+  1                            317         8
+  1                            318         8
+  1                            319         8
+  1                            320         8
+  1                            321         8
+  1                            322         8
+  1                            323         8
+  1                            324         8
+  1                            325         8
+  1                            326         8
+  1                            327         8
+  1                            328         8
+  1                            329         8
+  1                            330         8
+  1                            331         8
+  1                            332         8
+  1                            333         8
+  1                            334         8
+  1                            335         8
+  1                            336         8
+  1                            337         8
+  1                            338         8
+  1                            339         8
+  1                            340         8
+  1                            341         8
+  1                            342         8
+  1                            343         8
+  1                            344         8
+  1                            345         8
+  1                            346         8
+  1                            347         8
+  1                            348         8
+  1                            349         8
+  1                            350         8
+  1                            351         8
+  1                            352         8
+  1                            353         8
+  1                            354         8
+  1                            355         8
+  1                            356         8
+  1                            357         8
+  1                            358         8
+  1                            359         8
+  1                            360         8
+  1                            361         8
+  1                            362         8
+  1                            363         8
+  1                            364         8
+  1                            365         8
+  1                            366         8
+  1                            367         8
+  1                            368         8
+  1                            369         8
+  1                            370         8
+  1                            371         8
+  1                            372         8
+  1                            373         8
+  1                            374         8
+  1                            375         8
+  1                            376         8
+  1                            377         8
+  1                            378         8
+  1                            379         8
+  1                            380         8
+  1                            381         8
+  1                            382         8
+  1                            383         8
+  1                            384         8
+  1                            385         8
+  1                            386         8
+  1                            387         8
+  1                            388         8
+  1 Pop_MHI                      1        28
+  1                              2        28
+  1                              3        28
+  1                              4        28
+  1                              5        28
+  1                              6        28
+  1                              7        28
+  1                              8        28
+  1                              9        28
+  1                             10        28
+  1                             11        28
+  1                             12        28
+  1                             13        28
+  1                             14        28
+  1                             15        28
+  1                             16        28
+  1                             17        28
+  1                             18        28
+  1                             19        28
+  1                             20        28
+  1                             21        28
+  1                             22        28
+  1                             23        28
+  1                             24        28
+  1                             25        28
+  1                             26        28
+  1                             27        28
+  1                             28        28
+  1                             29        28
+  1                             30        28
+  1                             31        28
+  1                             32        28
+  1                             33        28
+  1                             34        28
+  1                             35        28
+  1                             36        28
+  1                             37        28
+  1                             38        28
+  1                             39        28
+  1                             40        28
+  1                             41        28
+  1                             42        28
+  1                             43        28
+  1                             44        28
+  1                             45        28
+  1                             46        28
+  1                             47        28
+  1                             48        28
+  1                             49        28
+  1                             50        28
+  1                             51        28
+  1                             52        28
+  1                             53        28
+  1                             54        28
+  1                             55        28
+  1                             56        28
+  1                             57        28
+  1                             58        28
+  1                             59        28
+  1                             60        28
+  1                             61        28
+  1                             62        28
+  1                             63        28
+  1                             64        28
+  1                             65        28
+  1                             66        28
+  1                             67        28
+  1                             68        28
+  1                             69        28
+  1                             70        28
+  1                             71        28
+  1                             72        28
+  1                             73        28
+  1                             74        28
+  1                             75        28
+  1                             76        28
+  1                             77        28
+  1                             78        28
+  1                             79        28
+  1                             80        28
+  1                             81        28
+  1                             82        28
+  1                             83        28
+  1                             84        28
+  1                             85        28
+  1                             86        28
+  1                             87        28
+  1                             88        28
+  1                             89        28
+  1                             90        28
+  1                             91        28
+  1                             92        28
+  1                             93        28
+  1                             94        28
+  1                             95        28
+  1                             96        28
+  1                             97        28
+  1                             98        28
+  1                             99        28
+  1                            100        28
+  1                            101        28
+  1                            102        28
+  1                            103        28
+  1                            104        28
+  1                            105        28
+  1                            106        28
+  1                            107        28
+  1                            108        28
+  1                            109        28
+  1                            110        28
+  1                            111        28
+  1                            112        28
+  1                            113        28
+  1                            114        28
+  1                            115        28
+  1                            116        28
+  1                            117        28
+  1                            118        28
+  1                            119        28
+  1                            120        28
+  1                            121        28
+  1                            122        28
+  1                            123        28
+  1                            124        28
+  1                            125        28
+  1                            126        28
+  1                            127        28
+  1                            128        28
+  1                            129        28
+  1                            130        28
+  1                            131        28
+  1                            132        28
+  1                            133        28
+  1                            134        28
+  1                            135        28
+  1                            136        28
+  1                            137        28
+  1                            138        28
+  1                            139        28
+  1                            140        28
+  1                            141        28
+  1                            142        28
+  1                            143        28
+  1                            144        28
+  1                            145        28
+  1                            146        28
+  1                            147        28
+  1                            148        28
+  1                            149        28
+  1                            150        28
+  1                            151        28
+  1                            152        28
+  1                            153        28
+  1                            154        28
+  1                            155        28
+  1                            156        28
+  1                            157        28
+  1                            158        28
+  1                            159        28
+  1                            160        28
+  1                            161        28
+  1                            162        28
+  1                            163        28
+  1                            164        28
+  1                            165        28
+  1                            166        28
+  1                            167        28
+  1                            168        28
+  1                            169        28
+  1                            170        28
+  1                            171        28
+  1                            172        28
+  1                            173        28
+  1                            174        28
+  1                            175        28
+  1                            176        28
+  1                            177        28
+  1                            178        28
+  1                            179        28
+  1                            180        28
+  1                            181        28
+  1                            182        28
+  1                            183        28
+  1                            184        28
+  1                            185        28
+  1                            186        28
+  1                            187        28
+  1                            188        28
+  1                            189        28
+  1                            190        28
+  1                            191        28
+  1                            192        28
+  1                            193        28
+  1                            194        28
+  1                            195        28
+  1                            196        28
+  1                            197        28
+  1                            198        28
+  1                            199        28
+  1                            200        28
+  1                            201        28
+  1                            202        28
+  1                            203        28
+  1                            204        28
+  1                            205        28
+  1                            206        28
+  1                            207        28
+  1                            208        28
+  1                            209        28
+  1                            210        28
+  1                            211        28
+  1                            212        28
+  1                            213        28
+  1                            214        28
+  1                            215        28
+  1                            216        28
+  1                            217        28
+  1                            218        28
+  1                            219        28
+  1                            220        28
+  1                            221        28
+  1                            222        28
+  1                            223        28
+  1                            224        28
+  1                            225        28
+  1                            226        28
+  1                            227        28
+  1                            228        28
+  1                            229        28
+  1                            230        28
+  1                            231        28
+  1                            232        28
+  1                            233        28
+  1                            234        28
+  1                            235        28
+  1                            236        28
+  1                            237        28
+  1                            238        28
+  1                            239        28
+  1                            240        28
+  1                            241        28
+  1                            242        28
+  1                            243        28
+  1                            244        28
+  1                            245        28
+  1                            246        28
+  1                            247        28
+  1                            248        28
+  1                            249        28
+  1                            250        28
+  1                            251        28
+  1                            252        28
+  1                            253        28
+  1                            254        28
+  1                            255        28
+  1                            256        28
+  1                            257        28
+  1                            258        28
+  1                            259        28
+  1                            260        28
+  1                            261        28
+  1                            262        28
+  1                            263        28
+  1                            264        28
+  1                            265        28
+  1                            266        28
+  1                            267        28
+  1                            268        28
+  1                            269        28
+  1                            270        28
+  1                            271        28
+  1                            272        28
+  1                            273        28
+  1                            274        28
+  1                            275        28
+  1                            276        28
+  1                            277        28
+  1                            278        28
+  1                            279        28
+  1                            280        28
+  1                            281        28
+  1                            282        28
+  1                            283        28
+  1                            284        28
+  1                            285        28
+  1                            286        28
+  1                            287        28
+  1                            288        28
+  1                            289        28
+  1                            290        28
+  1                            291        28
+  1                            292        28
+  1                            293        28
+  1                            294        28
+  1                            295        28
+  1                            296        28
+  1                            297        28
+  1                            298        28
+  1                            299        28
+  1                            300        28
+  1                            301        28
+  1                            302        28
+  1                            303        28
+  1                            304        28
+  1                            305        28
+  1                            306        28
+  1                            307        28
+  1                            308        28
+  1                            309        28
+  1                            310        28
+  1                            311        28
+  1                            312        28
+  1                            313        28
+  1                            314        28
+  1                            315        28
+  1                            316        28
+  1                            317        28
+  1                            318        28
+  1                            319        28
+  1                            320        28
+  1                            321        28
+  1                            322        28
+  1                            323        28
+  1                            324        28
+  1                            325        28
+  1                            326        28
+  1                            327        28
+  1                            328        28
+  1                            329        28
+  1                            330        28
+  1                            331        28
+  1                            332        28
+  1                            333        28
+  1                            334        28
+  1                            335        28
+  1                            336        28
+  1                            337        28
+  1                            338        28
+  1                            339        28
+  1                            340        28
+  1                            341        28
+  1                            342        28
+  1                            343        28
+  1                            344        28
+  1                            345        28
+  1                            346        28
+  1                            347        28
+  1                            348        28
+  1                            349        28
+  1                            350        28
+  1                            351        28
+  1                            352        28
+  1                            353        28
+  1                            354        28
+  1                            355        28
+  1                            356        28
+  1                            357        28
+  1                            358        28
+  1                            359        28
+  1                            360        28
+  1                            361        28
+  1                            362        28
+  1                            363        28
+  1                            364        28
+  1                            365        28
+  1                            366        28
+  1                            367        28
+  1                            368        28
+  1                            369        28
+  1                            370        28
+  1                            371        28
+  1                            372        28
+  1                            373        28
+  1                            374        28
+  1                            375        28
+  1                            376        28
+  1                            377        28
+  1                            378        28
+  1                            379        28
+  1                            380        28
+  1                            381        28
+  1                            382        28
+  1                            383        28
+  1                            384        28
+  1                            385        28
+  1                            386        28
+  1                            387        28
+  1                            388        28
+  1 Pop_NWHI                     1        54
+  1                              2        54
+  1                              3        54
+  1                              4        54
+  1                              5        54
+  1                              6        54
+  1                              7        54
+  1                              8        54
+  1                              9        54
+  1                             10        54
+  1                             11        54
+  1                             12        54
+  1                             13        54
+  1                             14        54
+  1                             15        54
+  1                             16        54
+  1                             17        54
+  1                             18        54
+  1                             19        54
+  1                             20        54
+  1                             21        54
+  1                             22        54
+  1                             23        54
+  1                             24        54
+  1                             25        54
+  1                             26        54
+  1                             27        54
+  1                             28        54
+  1                             29        54
+  1                             30        54
+  1                             31        54
+  1                             32        54
+  1                             33        54
+  1                             34        54
+  1                             35        54
+  1                             36        54
+  1                             37        54
+  1                             38        54
+  1                             39        54
+  1                             40        54
+  1                             41        54
+  1                             42        54
+  1                             43        54
+  1                             44        54
+  1                             45        54
+  1                             46        54
+  1                             47        54
+  1                             48        54
+  1                             49        54
+  1                             50        54
+  1                             51        54
+  1                             52        54
+  1                             53        54
+  1                             54        54
+  1                             55        54
+  1                             56        54
+  1                             57        54
+  1                             58        54
+  1                             59        54
+  1                             60        54
+  1                             61        54
+  1                             62        54
+  1                             63        54
+  1                             64        54
+  1                             65        54
+  1                             66        54
+  1                             67        54
+  1                             68        54
+  1                             69        54
+  1                             70        54
+  1                             71        54
+  1                             72        54
+  1                             73        54
+  1                             74        54
+  1                             75        54
+  1                             76        54
+  1                             77        54
+  1                             78        54
+  1                             79        54
+  1                             80        54
+  1                             81        54
+  1                             82        54
+  1                             83        54
+  1                             84        54
+  1                             85        54
+  1                             86        54
+  1                             87        54
+  1                             88        54
+  1                             89        54
+  1                             90        54
+  1                             91        54
+  1                             92        54
+  1                             93        54
+  1                             94        54
+  1                             95        54
+  1                             96        54
+  1                             97        54
+  1                             98        54
+  1                             99        54
+  1                            100        54
+  1                            101        54
+  1                            102        54
+  1                            103        54
+  1                            104        54
+  1                            105        54
+  1                            106        54
+  1                            107        54
+  1                            108        54
+  1                            109        54
+  1                            110        54
+  1                            111        54
+  1                            112        54
+  1                            113        54
+  1                            114        54
+  1                            115        54
+  1                            116        54
+  1                            117        54
+  1                            118        54
+  1                            119        54
+  1                            120        54
+  1                            121        54
+  1                            122        54
+  1                            123        54
+  1                            124        54
+  1                            125        54
+  1                            126        54
+  1                            127        54
+  1                            128        54
+  1                            129        54
+  1                            130        54
+  1                            131        54
+  1                            132        54
+  1                            133        54
+  1                            134        54
+  1                            135        54
+  1                            136        54
+  1                            137        54
+  1                            138        54
+  1                            139        54
+  1                            140        54
+  1                            141        54
+  1                            142        54
+  1                            143        54
+  1                            144        54
+  1                            145        54
+  1                            146        54
+  1                            147        54
+  1                            148        54
+  1                            149        54
+  1                            150        54
+  1                            151        54
+  1                            152        54
+  1                            153        54
+  1                            154        54
+  1                            155        54
+  1                            156        54
+  1                            157        54
+  1                            158        54
+  1                            159        54
+  1                            160        54
+  1                            161        54
+  1                            162        54
+  1                            163        54
+  1                            164        54
+  1                            165        54
+  1                            166        54
+  1                            167        54
+  1                            168        54
+  1                            169        54
+  1                            170        54
+  1                            171        54
+  1                            172        54
+  1                            173        54
+  1                            174        54
+  1                            175        54
+  1                            176        54
+  1                            177        54
+  1                            178        54
+  1                            179        54
+  1                            180        54
+  1                            181        54
+  1                            182        54
+  1                            183        54
+  1                            184        54
+  1                            185        54
+  1                            186        54
+  1                            187        54
+  1                            188        54
+  1                            189        54
+  1                            190        54
+  1                            191        54
+  1                            192        54
+  1                            193        54
+  1                            194        54
+  1                            195        54
+  1                            196        54
+  1                            197        54
+  1                            198        54
+  1                            199        54
+  1                            200        54
+  1                            201        54
+  1                            202        54
+  1                            203        54
+  1                            204        54
+  1                            205        54
+  1                            206        54
+  1                            207        54
+  1                            208        54
+  1                            209        54
+  1                            210        54
+  1                            211        54
+  1                            212        54
+  1                            213        54
+  1                            214        54
+  1                            215        54
+  1                            216        54
+  1                            217        54
+  1                            218        54
+  1                            219        54
+  1                            220        54
+  1                            221        54
+  1                            222        54
+  1                            223        54
+  1                            224        54
+  1                            225        54
+  1                            226        54
+  1                            227        54
+  1                            228        54
+  1                            229        54
+  1                            230        54
+  1                            231        54
+  1                            232        54
+  1                            233        54
+  1                            234        54
+  1                            235        54
+  1                            236        54
+  1                            237        54
+  1                            238        54
+  1                            239        54
+  1                            240        54
+  1                            241        54
+  1                            242        54
+  1                            243        54
+  1                            244        54
+  1                            245        54
+  1                            246        54
+  1                            247        54
+  1                            248        54
+  1                            249        54
+  1                            250        54
+  1                            251        54
+  1                            252        54
+  1                            253        54
+  1                            254        54
+  1                            255        54
+  1                            256        54
+  1                            257        54
+  1                            258        54
+  1                            259        54
+  1                            260        54
+  1                            261        54
+  1                            262        54
+  1                            263        54
+  1                            264        54
+  1                            265        54
+  1                            266        54
+  1                            267        54
+  1                            268        54
+  1                            269        54
+  1                            270        54
+  1                            271        54
+  1                            272        54
+  1                            273        54
+  1                            274        54
+  1                            275        54
+  1                            276        54
+  1                            277        54
+  1                            278        54
+  1                            279        54
+  1                            280        54
+  1                            281        54
+  1                            282        54
+  1                            283        54
+  1                            284        54
+  1                            285        54
+  1                            286        54
+  1                            287        54
+  1                            288        54
+  1                            289        54
+  1                            290        54
+  1                            291        54
+  1                            292        54
+  1                            293        54
+  1                            294        54
+  1                            295        54
+  1                            296        54
+  1                            297        54
+  1                            298        54
+  1                            299        54
+  1                            300        54
+  1                            301        54
+  1                            302        54
+  1                            303        54
+  1                            304        54
+  1                            305        54
+  1                            306        54
+  1                            307        54
+  1                            308        54
+  1                            309        54
+  1                            310        54
+  1                            311        54
+  1                            312        54
+  1                            313        54
+  1                            314        54
+  1                            315        54
+  1                            316        54
+  1                            317        54
+  1                            318        54
+  1                            319        54
+  1                            320        54
+  1                            321        54
+  1                            322        54
+  1                            323        54
+  1                            324        54
+  1                            325        54
+  1                            326        54
+  1                            327        54
+  1                            328        54
+  1                            329        54
+  1                            330        54
+  1                            331        54
+  1                            332        54
+  1                            333        54
+  1                            334        54
+  1                            335        54
+  1                            336        54
+  1                            337        54
+  1                            338        54
+  1                            339        54
+  1                            340        54
+  1                            341        54
+  1                            342        54
+  1                            343        54
+  1                            344        54
+  1                            345        54
+  1                            346        54
+  1                            347        54
+  1                            348        54
+  1                            349        54
+  1                            350        54
+  1                            351        54
+  1                            352        54
+  1                            353        54
+  1                            354        54
+  1                            355        54
+  1                            356        54
+  1                            357        54
+  1                            358        54
+  1                            359        54
+  1                            360        54
+  1                            361        54
+  1                            362        54
+  1                            363        54
+  1                            364        54
+  1                            365        54
+  1                            366        54
+  1                            367        54
+  1                            368        54
+  1                            369        54
+  1                            370        54
+  1                            371        54
+  1                            372        54
+  1                            373        54
+  1                            374        54
+  1                            375        54
+  1                            376        54
+  1                            377        54
+  1                            378        54
+  1                            379        54
+  1                            380        54
+  1                            381        54
+  1                            382        54
+  1                            383        54
+  1                            384        54
+  1                            385        54
+  1                            386        54
+  1                            387        54
+  1                            388        54
+    Total of all populations     1       118
+                                 2       118
+                                 3       118
+                                 4       118
+                                 5       118
+                                 6       118
+                                 7       118
+                                 8       118
+                                 9       118
+                                10       118
+                                11       118
+                                12       118
+                                13       118
+                                14       118
+                                15       118
+                                16       118
+                                17       118
+                                18       118
+                                19       118
+                                20       118
+                                21       118
+                                22       118
+                                23       118
+                                24       118
+                                25       118
+                                26       118
+                                27       118
+                                28       118
+                                29       118
+                                30       118
+                                31       118
+                                32       118
+                                33       118
+                                34       118
+                                35       118
+                                36       118
+                                37       118
+                                38       118
+                                39       118
+                                40       118
+                                41       118
+                                42       118
+                                43       118
+                                44       118
+                                45       118
+                                46       118
+                                47       118
+                                48       118
+                                49       118
+                                50       118
+                                51       118
+                                52       118
+                                53       118
+                                54       118
+                                55       118
+                                56       118
+                                57       118
+                                58       118
+                                59       118
+                                60       118
+                                61       118
+                                62       118
+                                63       118
+                                64       118
+                                65       118
+                                66       118
+                                67       118
+                                68       118
+                                69       118
+                                70       118
+                                71       118
+                                72       118
+                                73       118
+                                74       118
+                                75       118
+                                76       118
+                                77       118
+                                78       118
+                                79       118
+                                80       118
+                                81       118
+                                82       118
+                                83       118
+                                84       118
+                                85       118
+                                86       118
+                                87       118
+                                88       118
+                                89       118
+                                90       118
+                                91       118
+                                92       118
+                                93       118
+                                94       118
+                                95       118
+                                96       118
+                                97       118
+                                98       118
+                                99       118
+                               100       118
+                               101       118
+                               102       118
+                               103       118
+                               104       118
+                               105       118
+                               106       118
+                               107       118
+                               108       118
+                               109       118
+                               110       118
+                               111       118
+                               112       118
+                               113       118
+                               114       118
+                               115       118
+                               116       118
+                               117       118
+                               118       118
+                               119       118
+                               120       118
+                               121       118
+                               122       118
+                               123       118
+                               124       118
+                               125       118
+                               126       118
+                               127       118
+                               128       118
+                               129       118
+                               130       118
+                               131       118
+                               132       118
+                               133       118
+                               134       118
+                               135       118
+                               136       118
+                               137       118
+                               138       118
+                               139       118
+                               140       118
+                               141       118
+                               142       118
+                               143       118
+                               144       118
+                               145       118
+                               146       118
+                               147       118
+                               148       118
+                               149       118
+                               150       118
+                               151       118
+                               152       118
+                               153       118
+                               154       118
+                               155       118
+                               156       118
+                               157       118
+                               158       118
+                               159       118
+                               160       118
+                               161       118
+                               162       118
+                               163       118
+                               164       118
+                               165       118
+                               166       118
+                               167       118
+                               168       118
+                               169       118
+                               170       118
+                               171       118
+                               172       118
+                               173       118
+                               174       118
+                               175       118
+                               176       118
+                               177       118
+                               178       118
+                               179       118
+                               180       118
+                               181       118
+                               182       118
+                               183       118
+                               184       118
+                               185       118
+                               186       118
+                               187       118
+                               188       118
+                               189       118
+                               190       118
+                               191       118
+                               192       118
+                               193       118
+                               194       118
+                               195       118
+                               196       118
+                               197       118
+                               198       118
+                               199       118
+                               200       118
+                               201       118
+                               202       118
+                               203       118
+                               204       118
+                               205       118
+                               206       118
+                               207       118
+                               208       118
+                               209       118
+                               210       118
+                               211       118
+                               212       118
+                               213       118
+                               214       118
+                               215       118
+                               216       118
+                               217       118
+                               218       118
+                               219       118
+                               220       118
+                               221       118
+                               222       118
+                               223       118
+                               224       118
+                               225       118
+                               226       118
+                               227       118
+                               228       118
+                               229       118
+                               230       118
+                               231       118
+                               232       118
+                               233       118
+                               234       118
+                               235       118
+                               236       118
+                               237       118
+                               238       118
+                               239       118
+                               240       118
+                               241       118
+                               242       118
+                               243       118
+                               244       118
+                               245       118
+                               246       118
+                               247       118
+                               248       118
+                               249       118
+                               250       118
+                               251       118
+                               252       118
+                               253       118
+                               254       118
+                               255       118
+                               256       118
+                               257       118
+                               258       118
+                               259       118
+                               260       118
+                               261       118
+                               262       118
+                               263       118
+                               264       118
+                               265       118
+                               266       118
+                               267       118
+                               268       118
+                               269       118
+                               270       118
+                               271       118
+                               272       118
+                               273       118
+                               274       118
+                               275       118
+                               276       118
+                               277       118
+                               278       118
+                               279       118
+                               280       118
+                               281       118
+                               282       118
+                               283       118
+                               284       118
+                               285       118
+                               286       118
+                               287       118
+                               288       118
+                               289       118
+                               290       118
+                               291       118
+                               292       118
+                               293       118
+                               294       118
+                               295       118
+                               296       118
+                               297       118
+                               298       118
+                               299       118
+                               300       118
+                               301       118
+                               302       118
+                               303       118
+                               304       118
+                               305       118
+                               306       118
+                               307       118
+                               308       118
+                               309       118
+                               310       118
+                               311       118
+                               312       118
+                               313       118
+                               314       118
+                               315       118
+                               316       118
+                               317       118
+                               318       118
+                               319       118
+                               320       118
+                               321       118
+                               322       118
+                               323       118
+                               324       118
+                               325       118
+                               326       118
+                               327       118
+                               328       118
+                               329       118
+                               330       118
+                               331       118
+                               332       118
+                               333       118
+                               334       118
+                               335       118
+                               336       118
+                               337       118
+                               338       118
+                               339       118
+                               340       118
+                               341       118
+                               342       118
+                               343       118
+                               344       118
+                               345       118
+                               346       118
+                               347       118
+                               348       118
+                               349       118
+                               350       118
+                               351       118
+                               352       118
+                               353       118
+                               354       118
+                               355       118
+                               356       118
+                               357       118
+                               358       118
+                               359       118
+                               360       118
+                               361       118
+                               362       118
+                               363       118
+                               364       118
+                               365       118
+                               366       118
+                               367       118
+                               368       118
+                               369       118
+                               370       118
+                               371       118
+                               372       118
+                               373       118
+                               374       118
+                               375       118
+                               376       118
+                               377       118
+                               378       118
+                               379       118
+                               380       118
+                               381       118
+                               382       118
+                               383       118
+                               384       118
+                               385       118
+                               386       118
+                               387       118
+                               388       118
+
+
+
+
+Bayesian estimates
+==================
+
+Locus Parameter        2.5%      25.0%    mode     75.0%   97.5%     median   mean
+-----------------------------------------------------------------------------------
+    1  Theta_1         0.00440  0.00650  0.00763  0.00865  0.01075  0.00768  0.00762
+    2  Theta_1         0.00320  0.00515  0.00623  0.00725  0.00910  0.00628  0.00620
+    3  Theta_1         0.00720  0.00925  0.01033  0.01135  0.01300  0.01033  0.01022
+    4  Theta_1         0.00320  0.00515  0.00623  0.00725  0.00915  0.00628  0.00620
+    5  Theta_1         0.00315  0.00515  0.00633  0.00735  0.00935  0.00633  0.00628
+    6  Theta_1         0.00490  0.00685  0.00793  0.00905  0.01125  0.00808  0.00804
+    7  Theta_1         0.00550  0.00725  0.00838  0.00935  0.01130  0.00843  0.00840
+    8  Theta_1         0.00540  0.00740  0.00853  0.00965  0.01180  0.00863  0.00862
+    9  Theta_1         0.00785  0.00990  0.01093  0.01195  0.01350  0.01093  0.01078
+   10  Theta_1         0.00765  0.00990  0.01083  0.01265  0.01495  0.01128  0.01125
+   11  Theta_1         0.00465  0.00660  0.00773  0.00880  0.01095  0.00783  0.00778
+   12  Theta_1         0.00340  0.00540  0.00648  0.00755  0.00950  0.00653  0.00647
+   13  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00007
+   14  Theta_1         0.00440  0.00625  0.00733  0.00835  0.01030  0.00738  0.00733
+   15  Theta_1         0.00510  0.00690  0.00803  0.00905  0.01095  0.00808  0.00806
+   16  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00190  0.00083  0.00008
+   17  Theta_1         0.00635  0.00810  0.00923  0.01030  0.01255  0.00938  0.00939
+   18  Theta_1         0.00325  0.00520  0.00628  0.00730  0.00925  0.00633  0.00627
+   19  Theta_1         0.00245  0.00435  0.00543  0.00645  0.00830  0.00548  0.00542
+   20  Theta_1         0.00375  0.00570  0.00683  0.00785  0.00990  0.00688  0.00681
+   21  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00004
+   22  Theta_1         0.00640  0.00855  0.00978  0.01090  0.01285  0.00978  0.00972
+   23  Theta_1         0.00305  0.00505  0.00613  0.00720  0.00910  0.00618  0.00614
+   24  Theta_1         0.00635  0.00830  0.00953  0.01065  0.01310  0.00968  0.00966
+   25  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00006
+   26  Theta_1         0.00755  0.00965  0.01073  0.01190  0.01365  0.01078  0.01071
+   27  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00004
+   28  Theta_1         0.00525  0.00720  0.00833  0.00940  0.01170  0.00843  0.00845
+   29  Theta_1         0.00385  0.00575  0.00688  0.00785  0.00995  0.00693  0.00687
+   30  Theta_1         0.00665  0.00850  0.00963  0.01075  0.01270  0.00973  0.00969
+   31  Theta_1         0.00685  0.00860  0.00998  0.01120  0.01360  0.01013  0.01014
+   32  Theta_1         0.00385  0.00580  0.00693  0.00800  0.01000  0.00698  0.00693
+   33  Theta_1         0.00320  0.00525  0.00633  0.00735  0.00920  0.00633  0.00627
+   34  Theta_1         0.00535  0.00725  0.00838  0.00950  0.01165  0.00848  0.00848
+   35  Theta_1         0.00885  0.01200  0.01328  0.01475  0.01600  0.01278  0.01250
+   36  Theta_1         0.00450  0.00640  0.00753  0.00860  0.01075  0.00763  0.00762
+   37  Theta_1         0.00330  0.00525  0.00638  0.00740  0.00930  0.00643  0.00635
+   38  Theta_1         0.00955  0.01185  0.01283  0.01405  0.01550  0.01283  0.01265
+   39  Theta_1         0.00355  0.00550  0.00663  0.00760  0.00955  0.00663  0.00656
+   40  Theta_1         0.00630  0.00795  0.00903  0.01030  0.01310  0.00943  0.00950
+   41  Theta_1         0.00320  0.00515  0.00628  0.00730  0.00925  0.00633  0.00628
+   42  Theta_1         0.00590  0.00780  0.00893  0.01010  0.01270  0.00913  0.00917
+   43  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00004
+   44  Theta_1         0.00320  0.00520  0.00628  0.00735  0.00925  0.00633  0.00625
+   45  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00006
+   46  Theta_1         0.00635  0.00820  0.00948  0.01060  0.01305  0.00963  0.00963
+   47  Theta_1         0.00830  0.01045  0.01148  0.01285  0.01455  0.01163  0.01152
+   48  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00004
+   49  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00002
+   50  Theta_1         0.00745  0.00995  0.01163  0.01300  0.01455  0.01118  0.01107
+   51  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00006
+   52  Theta_1         0.00390  0.00540  0.00643  0.00730  0.00890  0.00648  0.00642
+   53  Theta_1         0.00620  0.00800  0.00918  0.01020  0.01230  0.00928  0.00923
+   54  Theta_1         0.00735  0.00920  0.01043  0.01145  0.01380  0.01053  0.01054
+   55  Theta_1         0.00650  0.00835  0.00948  0.01055  0.01250  0.00953  0.00950
+   56  Theta_1         0.00705  0.00910  0.01028  0.01145  0.01350  0.01033  0.01029
+   57  Theta_1         0.00000  0.00000  0.00013  0.00085  0.00190  0.00088  0.00009
+   58  Theta_1         0.00520  0.00710  0.00823  0.00920  0.01110  0.00823  0.00818
+   59  Theta_1         0.00630  0.00825  0.00943  0.01080  0.01300  0.00968  0.00966
+   60  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00004
+   61  Theta_1         0.00680  0.00850  0.00978  0.01085  0.01335  0.00993  0.00993
+   62  Theta_1         0.00685  0.00890  0.01013  0.01145  0.01400  0.01033  0.01035
+   63  Theta_1         0.00725  0.00960  0.01138  0.01225  0.01450  0.01093  0.01085
+   64  Theta_1         0.00565  0.00760  0.00878  0.00985  0.01190  0.00883  0.00879
+   65  Theta_1         0.00660  0.00850  0.00958  0.01090  0.01310  0.00988  0.00984
+   66  Theta_1         0.00710  0.00885  0.01048  0.01150  0.01395  0.01043  0.01042
+   67  Theta_1         0.00800  0.01030  0.01153  0.01265  0.01435  0.01138  0.01123
+   68  Theta_1         0.00690  0.00900  0.01028  0.01135  0.01340  0.01023  0.01020
+   69  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00007
+   70  Theta_1         0.00715  0.00890  0.01013  0.01160  0.01455  0.01063  0.01072
+   71  Theta_1         0.00740  0.00935  0.01038  0.01155  0.01345  0.01053  0.01050
+   72  Theta_1         0.00535  0.00735  0.00853  0.00960  0.01195  0.00863  0.00861
+   73  Theta_1         0.00350  0.00550  0.00658  0.00765  0.00960  0.00663  0.00659
+   74  Theta_1         0.00665  0.00840  0.00958  0.01070  0.01300  0.00973  0.00974
+   75  Theta_1         0.00865  0.01225  0.01313  0.01415  0.01630  0.01263  0.01246
+   76  Theta_1         0.00335  0.00530  0.00638  0.00740  0.00930  0.00638  0.00634
+   77  Theta_1         0.00640  0.00830  0.00948  0.01055  0.01260  0.00953  0.00952
+   78  Theta_1         0.00770  0.00950  0.01088  0.01205  0.01555  0.01113  0.01123
+   79  Theta_1         0.00325  0.00520  0.00628  0.00735  0.00925  0.00633  0.00628
+   80  Theta_1         0.00615  0.00800  0.00908  0.01010  0.01190  0.00913  0.00905
+   81  Theta_1         0.00715  0.00920  0.01043  0.01155  0.01355  0.01043  0.01037
+   82  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00190  0.00083  0.00008
+   83  Theta_1         0.00740  0.00920  0.01038  0.01165  0.01395  0.01063  0.01060
+   84  Theta_1         0.00675  0.00840  0.00963  0.01075  0.01335  0.00983  0.00986
+   85  Theta_1         0.00715  0.00915  0.01028  0.01155  0.01440  0.01058  0.01064
+   86  Theta_1         0.00580  0.00765  0.00873  0.00975  0.01160  0.00878  0.00872
+   87  Theta_1         0.00745  0.00930  0.01038  0.01145  0.01330  0.01043  0.01039
+   88  Theta_1         0.00730  0.00920  0.01033  0.01145  0.01330  0.01038  0.01032
+   89  Theta_1         0.00495  0.00690  0.00798  0.00905  0.01115  0.00808  0.00806
+   90  Theta_1         0.00710  0.00900  0.01018  0.01135  0.01370  0.01038  0.01035
+   91  Theta_1         0.00705  0.00925  0.01048  0.01155  0.01355  0.01043  0.01038
+   92  Theta_1         0.00670  0.00840  0.00948  0.01045  0.01235  0.00953  0.00951
+   93  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00008
+   94  Theta_1         0.00570  0.00775  0.00878  0.00990  0.01180  0.00888  0.00885
+   95  Theta_1         0.00340  0.00545  0.00653  0.00760  0.00955  0.00658  0.00651
+   96  Theta_1         0.00445  0.00610  0.00713  0.00805  0.00980  0.00718  0.00716
+   97  Theta_1         0.00345  0.00545  0.00653  0.00755  0.00945  0.00658  0.00650
+   98  Theta_1         0.00335  0.00530  0.00643  0.00745  0.00940  0.00643  0.00639
+   99  Theta_1         0.00660  0.00845  0.00968  0.01075  0.01305  0.00978  0.00974
+  100  Theta_1         0.00665  0.00855  0.00983  0.01085  0.01300  0.00983  0.00980
+  101  Theta_1         0.00745  0.00930  0.01073  0.01180  0.01390  0.01068  0.01066
+  102  Theta_1         0.00385  0.00590  0.00708  0.00810  0.01015  0.00708  0.00705
+  103  Theta_1         0.00675  0.00890  0.01038  0.01155  0.01390  0.01038  0.01037
+  104  Theta_1         0.00335  0.00530  0.00643  0.00745  0.00935  0.00643  0.00638
+  105  Theta_1         0.00780  0.00920  0.01043  0.01190  0.01490  0.01098  0.01110
+  106  Theta_1         0.00555  0.00755  0.00863  0.00975  0.01200  0.00878  0.00876
+  107  Theta_1         0.00325  0.00525  0.00633  0.00735  0.00925  0.00633  0.00630
+  108  Theta_1         0.00740  0.00950  0.01113  0.01235  0.01485  0.01118  0.01117
+  109  Theta_1         0.00650  0.00855  0.00958  0.01075  0.01255  0.00968  0.00961
+  110  Theta_1         0.00670  0.00860  0.00978  0.01080  0.01270  0.00978  0.00974
+  111  Theta_1         0.00685  0.00875  0.00993  0.01095  0.01280  0.00993  0.00984
+  112  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00008
+  113  Theta_1         0.00610  0.00795  0.00908  0.01020  0.01225  0.00923  0.00918
+  114  Theta_1         0.00695  0.00890  0.01008  0.01125  0.01385  0.01028  0.01032
+  115  Theta_1         0.00325  0.00520  0.00628  0.00730  0.00925  0.00633  0.00628
+  116  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00190  0.00083  0.00008
+  117  Theta_1         0.00715  0.00900  0.01023  0.01155  0.01395  0.01048  0.01045
+  118  Theta_1         0.00720  0.00955  0.01058  0.01195  0.01370  0.01073  0.01065
+  119  Theta_1         0.00510  0.00710  0.00818  0.00920  0.01110  0.00823  0.00817
+  120  Theta_1         0.00370  0.00575  0.00683  0.00790  0.00985  0.00688  0.00682
+  121  Theta_1         0.00720  0.00935  0.01043  0.01240  0.01540  0.01118  0.01122
+  122  Theta_1         0.00520  0.00715  0.00828  0.00935  0.01155  0.00838  0.00837
+  123  Theta_1         0.00810  0.01025  0.01148  0.01260  0.01485  0.01153  0.01146
+  124  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00004
+  125  Theta_1         0.00655  0.00875  0.00988  0.01120  0.01485  0.01018  0.01034
+  126  Theta_1         0.00655  0.00860  0.00963  0.01080  0.01275  0.00978  0.00973
+  127  Theta_1         0.00670  0.00850  0.00963  0.01075  0.01300  0.00978  0.00979
+  128  Theta_1         0.00455  0.00645  0.00758  0.00865  0.01080  0.00768  0.00765
+  129  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00006
+  130  Theta_1         0.00615  0.00835  0.00958  0.01080  0.01300  0.00968  0.00965
+  131  Theta_1         0.00735  0.00925  0.01038  0.01175  0.01470  0.01078  0.01088
+  132  Theta_1         0.00710  0.00875  0.01003  0.01130  0.01450  0.01043  0.01056
+  133  Theta_1         0.00515  0.00715  0.00828  0.00940  0.01155  0.00838  0.00833
+  134  Theta_1         0.00775  0.00960  0.01078  0.01195  0.01440  0.01098  0.01096
+  135  Theta_1         0.00715  0.00895  0.01053  0.01140  0.01370  0.01038  0.01033
+  136  Theta_1         0.00885  0.01005  0.01128  0.01255  0.01405  0.01168  0.01194
+  137  Theta_1         0.00725  0.00905  0.01018  0.01145  0.01435  0.01048  0.01054
+  138  Theta_1         0.00815  0.01000  0.01178  0.01260  0.01515  0.01153  0.01151
+  139  Theta_1         0.00375  0.00580  0.00698  0.00805  0.01015  0.00703  0.00695
+  140  Theta_1         0.00650  0.00885  0.00998  0.01125  0.01380  0.01018  0.01018
+  141  Theta_1         0.00760  0.00985  0.01133  0.01275  0.01455  0.01123  0.01115
+  142  Theta_1         0.00325  0.00540  0.00658  0.00765  0.00970  0.00658  0.00651
+  143  Theta_1         0.00625  0.00840  0.00968  0.01085  0.01365  0.00983  0.00989
+  144  Theta_1         0.00710  0.00915  0.01123  0.01210  0.01430  0.01073  0.01068
+  145  Theta_1         0.00345  0.00540  0.00653  0.00755  0.00955  0.00653  0.00649
+  146  Theta_1         0.00565  0.00760  0.00878  0.00980  0.01175  0.00878  0.00870
+  147  Theta_1         0.00475  0.00640  0.00748  0.00845  0.01025  0.00753  0.00750
+  148  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00008
+  149  Theta_1         0.00525  0.00735  0.00853  0.00960  0.01185  0.00858  0.00854
+  150  Theta_1         0.00320  0.00520  0.00633  0.00735  0.00935  0.00633  0.00630
+  151  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00007
+  152  Theta_1         0.00680  0.00875  0.01003  0.01105  0.01330  0.01008  0.01005
+  153  Theta_1         0.00000  0.00000  0.00013  0.00085  0.00190  0.00088  0.00010
+  154  Theta_1         0.00605  0.00825  0.00943  0.01060  0.01270  0.00953  0.00950
+  155  Theta_1         0.00495  0.00660  0.00768  0.00870  0.01075  0.00783  0.00781
+  156  Theta_1         0.00505  0.00705  0.00818  0.00930  0.01150  0.00828  0.00825
+  157  Theta_1         0.00670  0.00865  0.00968  0.01080  0.01270  0.00983  0.00974
+  158  Theta_1         0.00770  0.01015  0.01118  0.01240  0.01420  0.01123  0.01115
+  159  Theta_1         0.00310  0.00500  0.00608  0.00705  0.00895  0.00613  0.00606
+  160  Theta_1         0.00350  0.00555  0.00663  0.00770  0.00965  0.00668  0.00662
+  161  Theta_1         0.00470  0.00660  0.00773  0.00875  0.01075  0.00778  0.00773
+  162  Theta_1         0.00575  0.00775  0.00893  0.01000  0.01215  0.00898  0.00896
+  163  Theta_1         0.00425  0.00625  0.00733  0.00840  0.01045  0.00743  0.00736
+  164  Theta_1         0.00625  0.00805  0.00908  0.01015  0.01200  0.00918  0.00915
+  165  Theta_1         0.00410  0.00590  0.00698  0.00795  0.00975  0.00703  0.00697
+  166  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00007
+  167  Theta_1         0.00595  0.00795  0.00903  0.01010  0.01205  0.00913  0.00909
+  168  Theta_1         0.00425  0.00630  0.00738  0.00850  0.01060  0.00748  0.00744
+  169  Theta_1         0.00640  0.00870  0.00973  0.01090  0.01290  0.00988  0.00983
+  170  Theta_1         0.00565  0.00755  0.00863  0.00970  0.01165  0.00873  0.00870
+  171  Theta_1         0.00765  0.00940  0.01053  0.01205  0.01485  0.01103  0.01111
+  172  Theta_1         0.00350  0.00550  0.00658  0.00765  0.00955  0.00663  0.00654
+  173  Theta_1         0.00605  0.00810  0.00913  0.01035  0.01235  0.00928  0.00926
+  174  Theta_1         0.00520  0.00720  0.00833  0.00940  0.01180  0.00843  0.00845
+  175  Theta_1         0.00345  0.00545  0.00653  0.00760  0.00960  0.00663  0.00655
+  176  Theta_1         0.00715  0.00900  0.01023  0.01130  0.01320  0.01023  0.01015
+  177  Theta_1         0.00720  0.00935  0.01038  0.01155  0.01300  0.01038  0.01022
+  178  Theta_1         0.00625  0.00825  0.00943  0.01065  0.01285  0.00958  0.00958
+  179  Theta_1         0.00475  0.00665  0.00773  0.00875  0.01080  0.00778  0.00776
+  180  Theta_1         0.00480  0.00685  0.00803  0.00910  0.01130  0.00808  0.00804
+  181  Theta_1         0.00785  0.00980  0.01083  0.01250  0.01470  0.01128  0.01124
+  182  Theta_1         0.00620  0.00815  0.00938  0.01045  0.01265  0.00943  0.00942
+  183  Theta_1         0.00470  0.00670  0.00778  0.00885  0.01085  0.00788  0.00782
+  184  Theta_1         0.00855  0.01015  0.01118  0.01260  0.01505  0.01168  0.01165
+  185  Theta_1         0.00625  0.00825  0.00943  0.01065  0.01280  0.00958  0.00954
+  186  Theta_1         0.00525  0.00715  0.00828  0.00935  0.01150  0.00838  0.00836
+  187  Theta_1         0.00560  0.00770  0.00878  0.00990  0.01190  0.00888  0.00882
+  188  Theta_1         0.00705  0.00895  0.01033  0.01125  0.01340  0.01023  0.01017
+  189  Theta_1         0.00635  0.00820  0.00928  0.01040  0.01250  0.00943  0.00942
+  190  Theta_1         0.00760  0.00945  0.01063  0.01175  0.01420  0.01073  0.01074
+  191  Theta_1         0.00605  0.00805  0.00928  0.01035  0.01260  0.00933  0.00932
+  192  Theta_1         0.00355  0.00555  0.00668  0.00770  0.00965  0.00673  0.00665
+  193  Theta_1         0.00340  0.00545  0.00653  0.00760  0.00955  0.00658  0.00653
+  194  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00004
+  195  Theta_1         0.00645  0.00825  0.00938  0.01065  0.01350  0.00973  0.00980
+  196  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00190  0.00083  0.00009
+  197  Theta_1         0.00500  0.00700  0.00808  0.00915  0.01105  0.00818  0.00810
+  198  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00002
+  199  Theta_1         0.00660  0.00860  0.00973  0.01080  0.01275  0.00978  0.00968
+  200  Theta_1         0.00560  0.00775  0.00898  0.01020  0.01235  0.00903  0.00898
+  201  Theta_1         0.00475  0.00670  0.00788  0.00895  0.01100  0.00793  0.00787
+  202  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00003
+  203  Theta_1         0.00675  0.00905  0.01038  0.01150  0.01355  0.01033  0.01023
+  204  Theta_1         0.00350  0.00550  0.00663  0.00765  0.00960  0.00663  0.00658
+  205  Theta_1         0.00775  0.00965  0.01128  0.01230  0.01440  0.01108  0.01102
+  206  Theta_1         0.00515  0.00710  0.00823  0.00935  0.01160  0.00833  0.00832
+  207  Theta_1         0.00655  0.00825  0.00948  0.01075  0.01380  0.00983  0.00990
+  208  Theta_1         0.00375  0.00570  0.00683  0.00785  0.00990  0.00688  0.00682
+  209  Theta_1         0.00730  0.00990  0.01113  0.01255  0.01465  0.01118  0.01110
+  210  Theta_1         0.00690  0.00890  0.00993  0.01140  0.01375  0.01028  0.01028
+  211  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00007
+  212  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00003
+  213  Theta_1         0.00800  0.01010  0.01138  0.01260  0.01455  0.01138  0.01131
+  214  Theta_1         0.00335  0.00530  0.00643  0.00745  0.00935  0.00643  0.00638
+  215  Theta_1         0.00645  0.00815  0.00933  0.01055  0.01305  0.00958  0.00963
+  216  Theta_1         0.00370  0.00570  0.00678  0.00785  0.00980  0.00683  0.00677
+  217  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00004
+  218  Theta_1         0.00650  0.00865  0.00983  0.01100  0.01335  0.00998  0.00997
+  219  Theta_1         0.00750  0.00880  0.01023  0.01225  0.01605  0.01128  0.01145
+  220  Theta_1         0.00525  0.00705  0.00818  0.00920  0.01130  0.00828  0.00827
+  221  Theta_1         0.00765  0.00970  0.01098  0.01210  0.01425  0.01103  0.01098
+  222  Theta_1         0.00300  0.00495  0.00603  0.00705  0.00895  0.00608  0.00602
+  223  Theta_1         0.00640  0.00860  0.00988  0.01105  0.01365  0.01003  0.01000
+  224  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00008
+  225  Theta_1         0.00435  0.00640  0.00753  0.00860  0.01065  0.00758  0.00750
+  226  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00008
+  227  Theta_1         0.00835  0.01210  0.01323  0.01420  0.01560  0.01213  0.01198
+  228  Theta_1         0.00295  0.00490  0.00598  0.00700  0.00890  0.00603  0.00596
+  229  Theta_1         0.00510  0.00700  0.00818  0.00920  0.01120  0.00823  0.00815
+  230  Theta_1         0.00705  0.00895  0.01013  0.01150  0.01415  0.01043  0.01047
+  231  Theta_1         0.00320  0.00520  0.00628  0.00735  0.00930  0.00633  0.00629
+  232  Theta_1         0.00680  0.00860  0.00998  0.01100  0.01350  0.01003  0.01006
+  233  Theta_1         0.00325  0.00525  0.00633  0.00735  0.00925  0.00633  0.00628
+  234  Theta_1         0.00730  0.00925  0.01033  0.01160  0.01390  0.01058  0.01055
+  235  Theta_1         0.00680  0.00865  0.00978  0.01090  0.01300  0.00993  0.00986
+  236  Theta_1         0.00640  0.00820  0.00938  0.01040  0.01255  0.00943  0.00943
+  237  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00190  0.00083  0.00009
+  238  Theta_1         0.00000  0.00000  0.00013  0.00085  0.00190  0.00088  0.00010
+  239  Theta_1         0.00665  0.00860  0.00978  0.01100  0.01330  0.00998  0.00995
+  240  Theta_1         0.00405  0.00600  0.00713  0.00815  0.01015  0.00718  0.00710
+  241  Theta_1         0.00475  0.00675  0.00788  0.00895  0.01105  0.00798  0.00794
+  242  Theta_1         0.00375  0.00570  0.00683  0.00790  0.01000  0.00693  0.00687
+  243  Theta_1         0.00730  0.00905  0.01008  0.01105  0.01275  0.01013  0.01005
+  244  Theta_1         0.00470  0.00645  0.00748  0.00850  0.01035  0.00763  0.00758
+  245  Theta_1         0.00565  0.00750  0.00858  0.00955  0.01170  0.00868  0.00866
+  246  Theta_1         0.00520  0.00720  0.00833  0.00940  0.01150  0.00838  0.00837
+  247  Theta_1         0.00700  0.00885  0.00988  0.01115  0.01325  0.01013  0.01011
+  248  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00190  0.00083  0.00009
+  249  Theta_1         0.00320  0.00520  0.00628  0.00735  0.00925  0.00633  0.00625
+  250  Theta_1         0.00740  0.00940  0.01043  0.01225  0.01425  0.01093  0.01087
+  251  Theta_1         0.00730  0.00935  0.01038  0.01155  0.01330  0.01043  0.01036
+  252  Theta_1         0.00650  0.00850  0.00958  0.01080  0.01295  0.00973  0.00972
+  253  Theta_1         0.00695  0.00890  0.01023  0.01130  0.01335  0.01018  0.01013
+  254  Theta_1         0.00505  0.00710  0.00828  0.00940  0.01150  0.00833  0.00828
+  255  Theta_1         0.00325  0.00520  0.00628  0.00735  0.00930  0.00633  0.00628
+  256  Theta_1         0.00735  0.00900  0.01013  0.01145  0.01430  0.01053  0.01061
+  257  Theta_1         0.00625  0.00815  0.00933  0.01050  0.01265  0.00948  0.00943
+  258  Theta_1         0.00350  0.00550  0.00663  0.00760  0.00955  0.00663  0.00657
+  259  Theta_1         0.00730  0.00950  0.01073  0.01195  0.01370  0.01068  0.01057
+  260  Theta_1         0.00380  0.00580  0.00688  0.00795  0.00990  0.00693  0.00689
+  261  Theta_1         0.00710  0.00910  0.01023  0.01125  0.01305  0.01023  0.01017
+  262  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00005
+  263  Theta_1         0.00325  0.00525  0.00633  0.00740  0.00930  0.00638  0.00632
+  264  Theta_1         0.00725  0.00930  0.01068  0.01165  0.01370  0.01053  0.01048
+  265  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00190  0.00083  0.00008
+  266  Theta_1         0.00755  0.00950  0.01088  0.01190  0.01390  0.01078  0.01068
+  267  Theta_1         0.00515  0.00710  0.00823  0.00935  0.01150  0.00833  0.00831
+  268  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00190  0.00083  0.00008
+  269  Theta_1         0.00700  0.00920  0.01033  0.01145  0.01340  0.01038  0.01035
+  270  Theta_1         0.00710  0.00920  0.01033  0.01145  0.01330  0.01033  0.01026
+  271  Theta_1         0.00490  0.00665  0.00768  0.00865  0.01040  0.00773  0.00769
+  272  Theta_1         0.00660  0.00855  0.00968  0.01090  0.01290  0.00983  0.00979
+  273  Theta_1         0.00725  0.00890  0.01028  0.01155  0.01550  0.01068  0.01088
+  274  Theta_1         0.00440  0.00600  0.00703  0.00795  0.00970  0.00708  0.00706
+  275  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00008
+  276  Theta_1         0.00240  0.00405  0.00503  0.00600  0.00765  0.00508  0.00506
+  277  Theta_1         0.00345  0.00545  0.00658  0.00760  0.00955  0.00663  0.00656
+  278  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00008
+  279  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00004
+  280  Theta_1         0.00725  0.00920  0.01063  0.01175  0.01410  0.01063  0.01064
+  281  Theta_1         0.00325  0.00520  0.00628  0.00735  0.00925  0.00633  0.00628
+  282  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00007
+  283  Theta_1         0.00600  0.00815  0.00928  0.01060  0.01300  0.00948  0.00951
+  284  Theta_1         0.00455  0.00650  0.00768  0.00875  0.01095  0.00778  0.00772
+  285  Theta_1         0.00685  0.00885  0.01003  0.01110  0.01325  0.01008  0.01003
+  286  Theta_1         0.00500  0.00680  0.00793  0.00890  0.01090  0.00798  0.00799
+  287  Theta_1         0.00345  0.00550  0.00658  0.00765  0.00960  0.00663  0.00656
+  288  Theta_1         0.00505  0.00690  0.00803  0.00905  0.01110  0.00813  0.00808
+  289  Theta_1         0.00400  0.00595  0.00708  0.00815  0.01025  0.00718  0.00712
+  290  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00004
+  291  Theta_1         0.00795  0.00975  0.01123  0.01230  0.01425  0.01113  0.01106
+  292  Theta_1         0.00255  0.00450  0.00558  0.00660  0.00850  0.00563  0.00557
+  293  Theta_1         0.00565  0.00785  0.00903  0.01010  0.01215  0.00903  0.00902
+  294  Theta_1         0.00615  0.00805  0.00918  0.01025  0.01235  0.00928  0.00923
+  295  Theta_1         0.00605  0.00805  0.00923  0.01035  0.01245  0.00933  0.00927
+  296  Theta_1         0.00845  0.01090  0.01198  0.01320  0.01510  0.01203  0.01190
+  297  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00008
+  298  Theta_1         0.00680  0.00905  0.01038  0.01150  0.01345  0.01028  0.01019
+  299  Theta_1         0.00750  0.01000  0.01118  0.01225  0.01395  0.01108  0.01091
+  300  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00004
+  301  Theta_1         0.00350  0.00545  0.00658  0.00760  0.00960  0.00663  0.00656
+  302  Theta_1         0.00725  0.00940  0.01048  0.01175  0.01340  0.01053  0.01040
+  303  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00008
+  304  Theta_1         0.00350  0.00545  0.00658  0.00760  0.00955  0.00658  0.00654
+  305  Theta_1         0.00730  0.00940  0.01103  0.01205  0.01425  0.01083  0.01073
+  306  Theta_1         0.00355  0.00550  0.00663  0.00765  0.00965  0.00668  0.00662
+  307  Theta_1         0.00475  0.00670  0.00778  0.00880  0.01085  0.00783  0.00782
+  308  Theta_1         0.00680  0.00905  0.01018  0.01140  0.01350  0.01028  0.01022
+  309  Theta_1         0.00525  0.00715  0.00833  0.00945  0.01175  0.00848  0.00844
+  310  Theta_1         0.00615  0.00805  0.00928  0.01050  0.01325  0.00953  0.00959
+  311  Theta_1         0.00650  0.00845  0.00988  0.01110  0.01345  0.00993  0.00993
+  312  Theta_1         0.00505  0.00705  0.00818  0.00925  0.01130  0.00823  0.00818
+  313  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00004
+  314  Theta_1         0.00485  0.00670  0.00783  0.00890  0.01110  0.00793  0.00793
+  315  Theta_1         0.00310  0.00500  0.00608  0.00710  0.00895  0.00613  0.00607
+  316  Theta_1         0.00235  0.00410  0.00513  0.00610  0.00790  0.00523  0.00516
+  317  Theta_1         0.00980  0.01180  0.01288  0.01420  0.01700  0.01333  0.01334
+  318  Theta_1         0.00710  0.00935  0.01043  0.01170  0.01450  0.01068  0.01075
+  319  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00008
+  320  Theta_1         0.00665  0.00870  0.00983  0.01090  0.01345  0.00998  0.01002
+  321  Theta_1         0.00590  0.00775  0.00893  0.00995  0.01185  0.00893  0.00887
+  322  Theta_1         0.00660  0.00835  0.00933  0.01080  0.01310  0.00978  0.00978
+  323  Theta_1         0.00360  0.00555  0.00663  0.00770  0.00960  0.00668  0.00660
+  324  Theta_1         0.00330  0.00525  0.00633  0.00735  0.00925  0.00638  0.00631
+  325  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00006
+  326  Theta_1         0.00730  0.00920  0.01043  0.01165  0.01425  0.01068  0.01067
+  327  Theta_1         0.00725  0.00940  0.01063  0.01200  0.01455  0.01083  0.01082
+  328  Theta_1         0.00620  0.00845  0.00973  0.01080  0.01300  0.00973  0.00969
+  329  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00008
+  330  Theta_1         0.00460  0.00660  0.00768  0.00875  0.01080  0.00778  0.00772
+  331  Theta_1         0.00335  0.00485  0.00583  0.00670  0.00820  0.00588  0.00582
+  332  Theta_1         0.00345  0.00550  0.00658  0.00765  0.00960  0.00663  0.00656
+  333  Theta_1         0.00750  0.00935  0.01053  0.01185  0.01425  0.01078  0.01078
+  334  Theta_1         0.00720  0.00910  0.01038  0.01185  0.01435  0.01068  0.01070
+  335  Theta_1         0.00675  0.00885  0.00993  0.01105  0.01275  0.00993  0.00983
+  336  Theta_1         0.00665  0.00865  0.00973  0.01090  0.01340  0.00993  0.00995
+  337  Theta_1         0.00355  0.00555  0.00668  0.00770  0.00965  0.00668  0.00661
+  338  Theta_1         0.00770  0.00990  0.01123  0.01275  0.01490  0.01133  0.01126
+  339  Theta_1         0.00810  0.01060  0.01173  0.01310  0.01455  0.01163  0.01145
+  340  Theta_1         0.00640  0.00825  0.00938  0.01045  0.01265  0.00948  0.00949
+  341  Theta_1         0.00540  0.00720  0.00828  0.00930  0.01130  0.00838  0.00836
+  342  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00190  0.00083  0.00009
+  343  Theta_1         0.00355  0.00505  0.00603  0.00695  0.00855  0.00608  0.00606
+  344  Theta_1         0.00620  0.00795  0.00903  0.01005  0.01190  0.00908  0.00907
+  345  Theta_1         0.00000  0.00000  0.00013  0.00085  0.00190  0.00088  0.00009
+  346  Theta_1         0.00490  0.00665  0.00768  0.00870  0.01060  0.00778  0.00774
+  347  Theta_1         0.00380  0.00575  0.00693  0.00795  0.00995  0.00693  0.00686
+  348  Theta_1         0.00340  0.00540  0.00648  0.00755  0.00945  0.00653  0.00647
+  349  Theta_1         0.00785  0.01005  0.01108  0.01220  0.01420  0.01118  0.01113
+  350  Theta_1         0.00725  0.00930  0.01053  0.01165  0.01370  0.01058  0.01050
+  351  Theta_1         0.00000  0.00000  0.00013  0.00085  0.00190  0.00088  0.00009
+  352  Theta_1         0.00000  0.00000  0.00013  0.00085  0.00190  0.00088  0.00010
+  353  Theta_1         0.00670  0.00865  0.00983  0.01090  0.01320  0.00993  0.00992
+  354  Theta_1         0.00340  0.00545  0.00658  0.00760  0.00960  0.00658  0.00654
+  355  Theta_1         0.00715  0.00905  0.01038  0.01135  0.01330  0.01028  0.01020
+  356  Theta_1         0.00545  0.00730  0.00838  0.00940  0.01125  0.00843  0.00841
+  357  Theta_1         0.00000  0.00000  0.00013  0.00085  0.00190  0.00088  0.00009
+  358  Theta_1         0.00705  0.00880  0.01018  0.01140  0.01425  0.01048  0.01051
+  359  Theta_1         0.00315  0.00510  0.00623  0.00725  0.00915  0.00628  0.00620
+  360  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00190  0.00083  0.00008
+  361  Theta_1         0.00600  0.00770  0.00878  0.00985  0.01195  0.00893  0.00891
+  362  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00008
+  363  Theta_1         0.00490  0.00685  0.00793  0.00895  0.01090  0.00798  0.00791
+  364  Theta_1         0.00755  0.00970  0.01143  0.01240  0.01450  0.01108  0.01100
+  365  Theta_1         0.00340  0.00545  0.00653  0.00760  0.00955  0.00658  0.00652
+  366  Theta_1         0.00490  0.00685  0.00793  0.00900  0.01115  0.00803  0.00799
+  367  Theta_1         0.00590  0.00780  0.00913  0.01030  0.01280  0.00928  0.00932
+  368  Theta_1         0.00620  0.00815  0.00928  0.01030  0.01235  0.00933  0.00929
+  369  Theta_1         0.00700  0.00865  0.01008  0.01115  0.01380  0.01018  0.01023
+  370  Theta_1         0.00710  0.00920  0.01043  0.01150  0.01335  0.01038  0.01028
+  371  Theta_1         0.00630  0.00805  0.00918  0.01040  0.01340  0.00948  0.00959
+  372  Theta_1         0.00890  0.01155  0.01258  0.01385  0.01580  0.01273  0.01264
+  373  Theta_1         0.00475  0.00675  0.00788  0.00900  0.01125  0.00798  0.00792
+  374  Theta_1         0.00655  0.00830  0.00948  0.01065  0.01360  0.00973  0.00981
+  375  Theta_1         0.00715  0.00940  0.01083  0.01195  0.01385  0.01068  0.01057
+  376  Theta_1         0.00630  0.00805  0.00923  0.01020  0.01215  0.00923  0.00918
+  377  Theta_1         0.00665  0.00855  0.00993  0.01135  0.01400  0.01023  0.01023
+  378  Theta_1         0.00520  0.00715  0.00823  0.00935  0.01150  0.00833  0.00832
+  379  Theta_1         0.00465  0.00635  0.00738  0.00835  0.01010  0.00743  0.00740
+  380  Theta_1         0.00755  0.00960  0.01078  0.01230  0.01460  0.01108  0.01103
+  381  Theta_1         0.00315  0.00515  0.00623  0.00725  0.00915  0.00628  0.00620
+  382  Theta_1         0.00330  0.00530  0.00638  0.00745  0.00935  0.00643  0.00637
+  383  Theta_1         0.00735  0.00910  0.01023  0.01145  0.01380  0.01048  0.01048
+  384  Theta_1         0.00000  0.00000  0.00013  0.00080  0.00185  0.00083  0.00007
+  385  Theta_1         0.00565  0.00765  0.00883  0.00990  0.01190  0.00883  0.00879
+  386  Theta_1         0.00000  0.00000  0.00013  0.00085  0.00190  0.00088  0.00009
+  387  Theta_1         0.00650  0.00865  0.00983  0.01095  0.01285  0.00983  0.00974
+  388  Theta_1         0.00700  0.00855  0.00968  0.01150  0.01440  0.01043  0.01050
+  All  Theta_1         0.00610  0.00710  0.00793  0.00870  0.00975  0.00798  0.00793
+-----------------------------------------------------------------------------------
+
+
+
+Log-Probability of the data given the model (marginal likelihood = log(P(D|thisModel))
+--------------------------------------------------------------------
+[Use this value for Bayes factor calculations:
+BF = Exp[log(P(D|thisModel) - log(P(D|otherModel)]
+shows the support for thisModel]
+
+
+
+Locus          TI(1a)       BTI(1b)         HS(2)
+-------------------------------------------------
+      1       -476.59       -471.46       -467.83
+      2       -451.52       -447.03       -445.61
+      3       -531.72       -500.18       -450.52
+      4       -422.61       -418.43       -417.04
+      5       -434.78       -430.24       -428.28
+      6       -435.68       -431.31       -425.78
+      7       -508.35       -493.51       -476.64
+      8       -446.77       -441.96       -434.52
+      9       -558.82       -514.72       -451.75
+     10       -486.69       -474.93       -458.16
+     11       -402.81       -398.69       -392.86
+     12       -494.86       -489.89       -488.43
+     13      -1909.94      -1182.71       -752.74
+     14       -549.58       -544.23       -540.21
+     15       -644.92       -637.78       -599.88
+     16      -1645.88      -1050.57       -671.43
+     17       -443.66       -433.54       -431.27
+     18       -416.04       -411.91       -410.30
+     19       -436.22       -431.65       -432.70
+     20       -434.69       -430.32       -427.98
+     21      -2508.60      -1194.55       -617.40
+     22       -445.57       -439.73       -425.01
+     23       -480.57       -475.80       -474.96
+     24       -459.24       -453.99       -439.87
+     25      -2221.47      -1290.62       -835.26
+     26       -626.45       -610.66       -561.57
+     27      -2495.98      -1214.49       -685.41
+     28       -474.20       -469.35       -462.23
+     29       -443.14       -438.69       -436.61
+     30       -831.26       -808.81       -744.64
+     31       -429.12       -423.10       -407.35
+     32       -625.26       -618.79       -616.06
+     33       -423.19       -418.97       -417.54
+     34       -639.48       -632.81       -624.42
+     35       -572.98       -549.21       -490.10
+     36       -469.11       -464.04       -460.03
+     37       -426.90       -422.67       -421.05
+     38       -611.86       -599.27       -557.19
+     39       -569.32       -563.59       -562.24
+     40       -706.43       -669.78       -609.50
+     41       -429.08       -424.81       -423.37
+     42       -445.37       -439.87       -430.79
+     43      -2515.97      -1200.21       -669.32
+     44       -589.07       -583.18       -582.58
+     45      -2056.17      -1202.87       -755.09
+     46       -454.15       -448.10       -435.96
+     47       -429.55       -416.08       -366.16
+     48      -2606.39      -1218.31       -672.17
+     49      -3979.34      -1661.34       -927.20
+     50       -517.64       -477.24       -427.78
+     51      -2159.02      -1231.65       -780.36
+     52       -536.85       -531.06       -496.54
+     53       -448.85       -443.28       -430.44
+     54       -506.78       -500.22       -480.90
+     55       -479.90       -471.79       -455.31
+     56       -422.74       -417.38       -399.63
+     57      -1619.36      -1081.70       -709.62
+     58       -450.27       -445.43       -438.58
+     59       -544.91       -537.92       -497.14
+     60      -2632.04      -1265.05       -654.95
+     61       -466.20       -459.13       -441.07
+     62       -448.35       -443.19       -427.28
+     63       -521.84       -499.93       -459.68
+     64       -537.04       -527.40       -488.17
+     65       -478.66       -471.69       -454.55
+     66       -589.07       -579.25       -548.70
+     67       -517.80       -510.39       -476.55
+     68       -476.73       -470.59       -450.74
+     69      -1757.43      -1070.80       -674.83
+     70       -484.15       -476.50       -459.21
+     71       -647.16       -637.61       -598.56
+     72       -451.87       -446.98       -440.34
+     73       -416.47       -412.28       -410.10
+     74       -455.76       -450.06       -432.08
+     75       -556.32       -541.87       -507.17
+     76       -530.36       -525.06       -523.93
+     77       -563.11       -553.92       -532.43
+     78       -532.04       -512.94       -462.52
+     79       -426.94       -422.69       -421.28
+     80       -589.95       -583.88       -570.12
+     81       -572.56       -565.26       -540.41
+     82      -1644.32      -1060.86       -685.28
+     83       -568.14       -561.56       -538.56
+     84       -600.86       -593.12       -575.27
+     85       -509.21       -502.82       -482.63
+     86       -441.16       -436.14       -426.87
+     87       -504.93       -490.35       -465.08
+     88       -472.40       -461.60       -447.13
+     89       -596.35       -590.11       -583.38
+     90       -482.51       -475.28       -443.28
+     91       -485.47       -474.67       -446.71
+     92       -459.02       -453.41       -438.30
+     93      -1747.94      -1081.00       -675.58
+     94       -623.18       -616.77       -605.99
+     95       -439.64       -435.28       -433.21
+     96       -513.35       -508.03       -478.73
+     97       -419.45       -415.29       -413.60
+     98       -509.69       -504.65       -503.68
+     99       -420.97       -415.96       -401.13
+    100       -458.19       -451.48       -435.38
+    101       -475.25       -467.85       -436.39
+    102       -443.75       -439.27       -436.18
+    103       -504.28       -471.14       -428.21
+    104       -418.32       -414.17       -412.60
+    105       -550.22       -541.21       -500.95
+    106       -440.31       -435.61       -426.88
+    107       -422.60       -418.39       -416.84
+    108       -504.27       -492.42       -447.54
+    109       -459.56       -451.77       -434.95
+    110       -436.53       -429.54       -415.33
+    111       -563.70       -557.34       -538.93
+    112      -1693.14      -1053.27       -662.20
+    113       -455.07       -449.47       -439.77
+    114       -616.06       -607.70       -583.40
+    115       -432.19       -427.90       -426.54
+    116      -1609.93      -1023.62       -652.06
+    117       -478.31       -470.20       -457.73
+    118       -505.06       -482.28       -454.53
+    119       -480.47       -475.54       -469.23
+    120       -562.57       -556.77       -554.56
+    121       -505.68       -489.45       -460.86
+    122       -449.45       -444.52       -437.96
+    123       -541.86       -497.27       -449.77
+    124      -2526.16      -1187.91       -657.17
+    125       -609.71       -597.67       -585.65
+    126       -648.65       -629.86       -621.67
+    127       -522.55       -516.18       -496.62
+    128       -435.08       -430.71       -425.38
+    129      -1991.52      -1187.39       -742.71
+    130       -408.14       -403.03       -390.16
+    131       -254.31       -250.25       -232.70
+    132       -475.29       -469.48       -449.20
+    133       -450.98       -446.15       -439.65
+    134       -690.87       -680.04       -635.09
+    135       -593.83       -586.67       -564.98
+    136       -768.12       -753.73       -696.86
+    137       -479.81       -471.93       -445.00
+    138       -579.22       -548.99       -487.09
+    139       -449.58       -444.96       -442.35
+    140       -473.91       -467.62       -453.60
+    141       -535.89       -503.68       -477.33
+    142       -310.18       -306.73       -303.38
+    143       -606.75       -599.46       -581.07
+    144       -476.97       -470.33       -446.73
+    145       -443.26       -438.87       -436.73
+    146       -438.89       -434.16       -425.46
+    147       -683.02       -670.25       -602.52
+    148      -1740.52      -1080.12       -669.01
+    149       -338.73       -332.75       -329.99
+    150       -424.62       -420.44       -418.95
+    151      -1991.09      -1189.55       -777.27
+    152       -501.98       -492.07       -448.47
+    153      -1582.14      -1057.06       -703.96
+    154       -562.53       -556.55       -544.65
+    155       -604.22       -594.62       -568.93
+    156       -443.92       -439.47       -432.41
+    157       -462.34       -455.03       -440.67
+    158       -502.26       -495.24       -465.57
+    159       -662.21       -655.65       -656.05
+    160       -421.63       -417.40       -415.11
+    161       -446.61       -442.15       -436.81
+    162       -442.67       -437.95       -427.07
+    163       -466.00       -461.12       -457.40
+    164       -439.00       -433.77       -421.53
+    165       -491.02       -485.92       -477.53
+    166      -1781.54      -1098.55       -704.94
+    167       -461.49       -456.40       -444.52
+    168       -464.36       -459.45       -455.80
+    169       -459.59       -453.98       -438.11
+    170       -665.77       -658.80       -647.55
+    171       -486.28       -480.14       -457.80
+    172       -351.54       -348.09       -345.69
+    173       -459.63       -454.08       -441.52
+    174       -440.62       -436.05       -429.23
+    175       -444.06       -439.55       -437.60
+    176       -492.99       -486.01       -461.81
+    177       -467.86       -454.49       -444.97
+    178       -619.44       -611.94       -595.19
+    179       -400.55       -396.48       -391.17
+    180       -475.42       -470.09       -464.37
+    181       -549.02       -521.15       -463.19
+    182       -484.25       -478.68       -468.28
+    183       -445.68       -441.09       -434.96
+    184       -609.80       -572.99       -524.91
+    185       -487.95       -479.38       -448.10
+    186       -503.03       -497.89       -490.94
+    187       -455.30       -450.08       -443.09
+    188       -474.78       -464.55       -441.60
+    189       -488.86       -483.27       -468.26
+    190       -482.82       -475.14       -443.88
+    191       -598.57       -588.95       -570.45
+    192       -424.85       -420.61       -418.23
+    193       -441.42       -436.97       -435.00
+    194      -2604.64      -1268.30       -663.10
+    195       -511.74       -505.37       -487.50
+    196      -1684.02      -1102.04       -723.95
+    197       -431.53       -427.09       -420.91
+    198      -4562.95      -1599.06       -736.66
+    199       -611.91       -603.86       -587.47
+    200       -441.60       -432.55       -429.55
+    201       -445.41       -440.75       -435.00
+    202      -3453.51      -1486.51       -838.01
+    203       -489.34       -480.63       -471.93
+    204       -435.98       -431.61       -429.43
+    205       -644.56       -635.81       -609.44
+    206       -486.23       -480.60       -474.18
+    207       -449.26       -443.90       -429.18
+    208       -434.71       -430.36       -428.09
+    209       -480.02       -472.54       -438.78
+    210       -472.03       -464.77       -440.73
+    211      -1785.37      -1087.22       -681.50
+    212      -3064.54      -1377.60       -760.99
+    213       -524.46       -516.23       -490.71
+    214       -414.06       -409.97       -408.25
+    215       -733.56       -717.24       -678.92
+    216       -431.67       -427.35       -425.03
+    217      -2574.61      -1200.99       -667.39
+    218       -728.38       -719.72       -689.24
+    219       -523.89       -500.05       -449.41
+    220       -555.38       -529.93       -486.78
+    221       -520.95       -502.04       -456.15
+    222       -548.79       -543.32       -543.07
+    223       -503.18       -497.60       -484.37
+    224      -1736.39      -1102.20       -688.30
+    225       -410.77       -406.33       -401.18
+    226      -1688.08      -1073.21       -664.38
+    227       -586.41       -548.44       -496.12
+    228       -582.00       -576.22       -576.17
+    229       -456.94       -452.22       -445.13
+    230       -518.38       -489.08       -433.54
+    231       -419.76       -415.59       -413.99
+    232       -526.64       -480.57       -431.82
+    233       -426.20       -421.97       -420.58
+    234       -634.63       -620.42       -591.39
+    235       -505.68       -499.52       -485.08
+    236       -489.97       -484.50       -472.59
+    237      -1708.32      -1103.23       -687.71
+    238      -1405.80       -937.80       -592.38
+    239       -552.59       -533.78       -498.93
+    240       -451.17       -446.57       -443.82
+    241       -445.14       -440.79       -433.83
+    242       -426.21       -421.93       -419.56
+    243       -499.90       -490.75       -457.32
+    244       -657.43       -650.30       -620.50
+    245       -440.62       -435.58       -426.09
+    246       -453.81       -449.23       -441.87
+    247       -478.75       -464.02       -430.63
+    248      -1659.94      -1072.89       -685.24
+    249       -441.94       -437.53       -436.22
+    250       -409.86       -362.11       -322.53
+    251       -642.73       -632.17       -602.63
+    252       -452.08       -446.53       -432.35
+    253       -516.71       -470.06       -422.05
+    254       -458.95       -453.81       -446.47
+    255       -415.09       -410.98       -409.38
+    256       -534.30       -490.06       -477.14
+    257       -491.17       -486.04       -474.04
+    258       -564.93       -559.32       -558.21
+    259       -502.19       -488.57       -460.70
+    260       -434.43       -430.08       -427.78
+    261       -484.09       -475.44       -453.75
+    262      -2363.75      -1330.84       -859.02
+    263       -425.65       -421.43       -419.95
+    264       -481.02       -473.92       -459.50
+    265      -1728.86      -1091.89       -691.63
+    266       -540.84       -520.14       -466.97
+    267       -559.56       -552.44       -547.14
+    268      -1882.78      -1162.68       -723.60
+    269       -512.51       -499.49       -465.61
+    270       -547.19       -499.08       -450.07
+    271       -547.55       -541.37       -517.89
+    272       -462.53       -457.04       -441.91
+    273       -505.79       -497.81       -464.01
+    274       -589.88       -584.15       -568.81
+    275      -1762.76      -1093.30       -683.61
+    276       -582.17       -576.30       -580.50
+    277       -433.36       -428.98       -426.85
+    278      -1685.64      -1061.54       -671.74
+    279      -2543.41      -1228.33       -677.02
+    280       -496.95       -479.73       -443.69
+    281       -429.12       -424.87       -423.26
+    282      -1790.69      -1073.48       -671.57
+    283       -436.56       -431.53       -420.12
+    284       -439.09       -434.71       -429.17
+    285       -573.73       -563.66       -532.17
+    286       -600.89       -588.51       -563.41
+    287       -442.81       -438.33       -436.29
+    288       -507.87       -502.72       -496.05
+    289       -453.49       -448.87       -446.18
+    290      -2658.40      -1251.31       -691.11
+    291       -573.71       -535.58       -464.49
+    292       -458.88       -453.96       -455.05
+    293       -514.73       -508.65       -497.58
+    294       -460.44       -455.41       -443.59
+    295       -418.43       -413.41       -401.13
+    296       -495.38       -485.49       -449.88
+    297      -1819.18      -1125.37       -706.94
+    298       -521.20       -470.20       -422.34
+    299       -607.95       -598.46       -573.50
+    300      -2536.79      -1186.11       -652.88
+    301       -446.40       -441.92       -440.00
+    302       -564.44       -553.30       -505.97
+    303      -1673.76      -1044.15       -640.10
+    304       -570.62       -564.85       -563.32
+    305       -479.04       -471.02       -450.15
+    306       -435.26       -430.91       -428.60
+    307       -696.63       -689.69       -684.09
+    308       -460.56       -447.51       -429.65
+    309       -455.83       -450.85       -444.22
+    310       -638.68       -618.86       -595.30
+    311       -383.21       -378.17       -364.49
+    312       -481.40       -476.49       -469.55
+    313      -2580.22      -1190.31       -652.49
+    314       -434.58       -430.08       -424.69
+    315       -612.09       -606.02       -605.93
+    316       -557.99       -552.26       -555.35
+    317       -453.08       -440.10       -406.57
+    318       -507.92       -477.36       -436.40
+    319      -1734.89      -1091.18       -698.32
+    320       -474.07       -458.92       -431.33
+    321       -585.38       -579.02       -568.10
+    322       -469.14       -461.76       -433.43
+    323       -422.47       -418.29       -416.57
+    324       -422.93       -418.72       -417.23
+    325      -2132.42      -1274.03       -828.92
+    326       -533.80       -500.16       -485.72
+    327       -497.20       -486.14       -472.07
+    328       -444.78       -439.89       -424.96
+    329      -1696.64      -1073.44       -677.98
+    330       -426.73       -422.53       -417.05
+    331       -675.20       -668.30       -647.16
+    332       -421.01       -416.86       -415.23
+    333       -488.88       -474.21       -447.89
+    334       -507.87       -491.73       -466.77
+    335       -484.13       -478.43       -465.45
+    336       -512.65       -505.79       -485.61
+    337       -422.53       -418.29       -416.13
+    338       -670.60       -654.78       -597.86
+    339       -535.30       -523.13       -482.77
+    340       -544.42       -538.31       -527.05
+    341       -532.63       -525.96       -487.67
+    342      -1882.15      -1202.86       -811.04
+    343       -752.79       -745.52       -706.46
+    344       -427.17       -415.10       -370.40
+    345      -1572.80      -1046.32       -681.94
+    346       -495.97       -490.93       -476.53
+    347       -354.08       -350.47       -347.62
+    348       -417.26       -413.14       -411.30
+    349       -506.80       -480.40       -456.79
+    350       -635.45       -497.24       -463.92
+    351      -1624.54      -1069.16       -698.45
+    352      -1497.37       -999.92       -648.47
+    353       -672.86       -662.83       -651.43
+    354       -435.94       -431.54       -429.62
+    355       -491.66       -484.99       -459.06
+    356       -513.70       -507.16       -474.54
+    357      -1652.19      -1114.43       -741.60
+    358       -468.35       -462.14       -438.49
+    359       -454.22       -449.70       -448.58
+    360      -1672.95      -1068.80       -678.61
+    361       -745.60       -686.02       -673.50
+    362      -1756.91      -1098.71       -695.31
+    363       -419.45       -415.08       -409.52
+    364       -533.22       -524.88       -489.68
+    365       -463.55       -458.89       -457.09
+    366       -445.58       -441.14       -434.43
+    367       -448.44       -443.03       -431.12
+    368       -473.34       -468.25       -457.58
+    369       -461.70       -453.24       -424.44
+    370       -485.60       -475.04       -465.97
+    371       -602.65       -593.99       -582.16
+    372       -564.95       -556.28       -529.20
+    373       -434.75       -428.52       -426.65
+    374       -478.36       -472.91       -459.49
+    375       -502.08       -491.87       -448.51
+    376       -455.26       -450.32       -438.79
+    377       -459.06       -453.72       -437.15
+    378       -541.48       -535.59       -527.83
+    379       -552.07       -534.51       -491.32
+    380       -556.31       -513.81       -460.59
+    381       -449.08       -444.59       -443.38
+    382       -501.29       -496.29       -495.11
+    383       -509.84       -489.05       -473.59
+    384      -1869.19      -1142.37       -687.88
+    385       -505.67       -500.11       -490.61
+    386      -1719.10      -1155.04       -759.88
+    387       -453.54       -447.56       -435.10
+    388       -470.50       -457.64       -428.43
+---------------------------------------------------------------
+  All      -285397.94    -228345.91    -202699.04
+[Scaling factor = 1680.621356]
+
+
+(1a) TI: Thermodynamic integration: log(Prob(D|Model)): Good approximation with many temperatures
+(1b) BTI: Bezier-approximated Thermodynamic integration: when using few temperatures USE THIS!
+(2)  HS: Harmonic mean approximation: Overestimates the marginal likelihood, poor variance
+
+
+
+MCMC run characteristics
+========================
+
+
+
+
+Acceptance ratios for all parameters and the genealogies
+---------------------------------------------------------------------
+
+Parameter           Accepted changes               Ratio
+Theta_1                2358851/581977538          0.00405
+Genealogies           415232900/582022462           0.71343
+
+
+
+Autocorrelation for all parameters and the genealogies
+-------------------------------------------------------------------
+
+Parameter           Autocorrelation           Effective Sample size
+Theta_1                   0.887               4061789.289
+Genealogies               0.699              10873802.058
+(*) averaged over loci.
+
+
+
+Temperatures during the run using the standard heating scheme
+===========================================================================
+
+Chain Temperature               log(marginal likelihood)  log(mL_steppingstone)
+    1    1.00000          -508.53476   413.41840
+    2    1.00000          -532.09113   192.08985
+    3    1.00000          -608.84395    82.41464
+    4    1.00000          -1648.96112    20.61157

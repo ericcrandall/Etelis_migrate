@@ -67,7 +67,7 @@ harvest.model.likelihoods <- function(workingDir = workingDir,
     #scan in the outfile, separating at each newline
       outfile<-scan(file=file.path(modelDir,outfileName),what="character",sep="\n") 
     #find the line with the likelihoods on it and split on runs of spaces
-      marglikeline <- strsplit(grep("  All          ",outfile,value=T),
+      marglikeline <- strsplit(grep("  All      ",outfile,value=T),
                                "\\s+", perl = T)[[1]][3:5]
     #  if(length(marglikeline)==0){next}
       marglikes <- c(i,marglikeline)
@@ -641,6 +641,59 @@ ecor_haps2 <- ecor_haps[,loc = locNames(ecor_haps) %in% whitelist]
 # write them out
 genind_to_genepop(ecor_haps2,output = "coruscans/hwe.pcadapt.filtered.haps.txt")
 
+```
+
+#### Re-check the DAPC
+
+##### Haplotypes
+
+```{r}
+ecor_haps2 <- read.genepop("coruscans/hwe.pcadapt.filtered.haps.gen")
+levels(ecor_haps2$pop) <- c("JA","JP", "MHI","NWHI")
+
+ecor_dapc2 <- dapc(ecor_haps2,pop =  ecor_haps2$pop, scale = T, pca.select="nbEig", n.pca = 50, n.da=3)
+
+scatter(ecor_dapc2)
+
+```
+
+
+##### SNPs
+
+```{r}
+ecor_snps2.genind <- read.genepop("coruscans/hwe.pcadapt.filtered.snps.gen")
+levels(ecor_snps2.genind$pop) <- c("JP","JA","MHI","NWHI")
+
+ecor_dapc2_snps <- dapc(ecor_snps2.genind,pop =  ecor_snps2.genind$pop, scale = T,
+                       pca.select="nbEig", n.pca = 50, n.da=3)
+
+scatter(ecor_dapc2_snps)
+
+```
+
+So, in the SNPs I seem to have removed the differences between NWHI and JA with my filtering. But not in the haplotype dataset.
+
+
+```{r}
+popmap2 <- tibble(pop=c(rep("Japan",14),rep("Johnston",4),rep("MHI",14),rep("NWHI",27)))
+ecor_snps2 <- read_genepop(file = "coruscans/hwe.pcadapt.filtered.snps.genepop",sample.meta = popmap2)
+
+ecor_snps2 <- calc_ho(ecor_snps2, facets = "pop")
+ecor_snps2 <- calc_he(ecor_snps2, facets = "pop")
+ecor_snps2 <- calc_maf(ecor_snps2, facets = "pop")
+ecor_snps2 <- calc_pi(ecor_snps2, facets = "pop")
+ecor_snps2 <- calc_private(ecor_snps2, facets = "pop")
+ecor_snps2 <- calc_hwe(ecor_snps2, facets = "pop")
+ecor_snps2 <- calc_fis(ecor_snps2, facets = "pop")
+ecor_snps2 <- calc_pairwise_fst(ecor_snps2, facets = "pop")
+
+stats <- get.snpR.stats(ecor_snps2, facets = "pop", stats = c("maf", "ho","he","hwe", "fis","pi", "private"))
+stats$weighted.means
+
+# and here is Fst
+
+ecor_fst2 <- get.snpR.stats(ecor_snps2, facets = "pop", stats = c("fst"))
+ecor_fst2$fst.matrix
 ```
 
 ## E. carbunculus
@@ -1229,4 +1282,94 @@ for r in */
 			  done
 		cd ..
 	done
+```
+
+
+### And back down
+
+And ten replicates finished in about 10 days! Found [this guide](https://www.cyberciti.biz/faq/scp-exclude-files-when-using-command-recursively-on-unix-linux/) to download everything except the massive bayesallfiles and pdfs
+
+```{bash}
+#|eval: false
+rsync -av -e ssh --exclude='bayes*' --exclude="*.pdf" --exclude="*.mig" eric@threadripper.tobolab.org:~/Etelis/coruscans ./coruscans/migrate/output
+
+rsync -av -e ssh --exclude='bayes*' --exclude="*.pdf" --exclude="*.mig" eric@moneta.tobolab.org:~/Etelis/coruscans ./coruscans/migrate/output
+
+rsync -av -e ssh --exclude='bayes*'  ecrandall@nautilus.psu.edu:~/Ptuberculosa/run4/rep1/stepping.stone.all ./stepping.stone.KO.all
+
+```
+
+## Results
+
+### E. coruscans
+
+#### Model Marginal Likelihoods
+
+```{r likelihoods, message=F, results='hide'}
+runDir <- "coruscans/migrate/output"
+
+likelist <- list()
+for(r in 1:10){
+  rep = paste0("rep",r)
+  print(rep)
+  likelist[[rep]] <- harvest.model.likelihoods(workingDir=file.path(runDir,rep))
+}
+
+# Model selection for each replicate...
+likelist %>% map(bfcalcs)
+```
+The final model marginal likelihood estimates based on the mean of 10 replicates:
+
+```{r}
+like.df <-  likelist %>% bind_rows() %>% group_by(model)
+
+means <- like.df %>% summarize(bezier.corrected = mean(bezier.corrected))
+  
+
+final_model <- bfcalcs(means)
+
+final_model
+```
+
+#### T-Test
+
+Difference between panmixia and the second-place full model is very significant.
+
+```{r eval = F}
+top.choice <- final_model$model[which(final_model$choice ==1)]
+second.choice <- final_model$model[which(final_model$choice ==2)]
+
+permTS(like.df$bezier.corrected[which(like.df$model == top.choice)],
+       like.df$bezier.corrected[which(like.df$model == second.choice)],
+       alternative = "greater", method = "exact.ce")
+```
+
+#### Figures
+
+And a figure summarizing all this
+
+```{r}
+
+models <- c("Divergence With Gene Flow 1","Divergence With Gene Flow 2","Divergence With Gene Flow 3",
+            "Divergence Only 1", "Divergence Only 2","Divergence Only 3",
+            "Gene Flow Only Full", "Gene Flow Only 1", "Gene Flow Only 2", "Gene Flow Only 3",
+            "n-island", "panmixia")
+
+likesPlot <- likelist %>% bind_rows() %>% group_by(model) %>% 
+              ggplot(mapping = aes(x=model, y = bezier.corrected)) +
+              geom_violin(draw_quantiles = 0.5) +
+              theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+              scale_x_discrete(labels = models) +
+              labs(x = "Metapopulation Model", y = "Bezier Corrected Marginal Likelihood")
+likesPlot
+```
+
+Zoom in on the top two models
+
+```{r}
+
+likesPlot_zoom <- likesPlot + ylim(-69400, -69100) + geom_point()
+
+likesPlot_zoom
+
 ```
