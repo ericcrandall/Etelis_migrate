@@ -660,7 +660,7 @@ genind_to_genepop(ecor_haps2,output = "coruscans/hwe.pcadapt.filtered.haps.txt")
 #ecor_haps2 <- read.genepop("coruscans/hwe.filtered.haps.gen")
 #levels(ecor_haps2$pop) <- c("JA","JP", "MHI","NWHI")
 
-ecor_dapc2 <- dapc(ecor_haps,pop =  ecor_haps2$pop, scale = T, pca.select="nbEig", n.pca = 3, n.da=3)
+ecor_dapc2 <- dapc(ecor_haps,pop =  ecor_haps$pop, scale = T, pca.select="nbEig", n.pca = 3, n.da=3)
 
 scatter(ecor_dapc2)
 
@@ -670,7 +670,7 @@ scatter(ecor_dapc2)
 ##### SNPs
 
 ```{r}
-ecor_snps2.genind <- read.genepop("coruscans/hwe.filtered.snps.gen")
+ecor_snps2.genind <- read.genepop("coruscans/hwe.pcadapt.filtered.snps.gen")
 levels(ecor_snps2.genind$pop) <- c("JP","JA","MHI","NWHI")
 
 ecor_dapc2_snps <- dapc(ecor_snps2.genind,pop =  ecor_snps2.genind$pop, scale = T,
@@ -919,8 +919,8 @@ genind_to_genepop(ecar_haps2,output = "carbunculus/hwe.pcadapt.filtered.haps.txt
 ##### Haplotypes
 
 ```{r}
-#ecar_haps2 <- read.genepop("carbunculus/hwe.pcadapt.filtered.haps.gen")
-#levels(ecar_haps2$pop) <- c("MHI","NWHI", "JP")
+ecar_haps2 <- read.genepop("carbunculus/hwe.pcadapt.filtered.haps.gen")
+levels(ecar_haps2$pop) <- c("JP","MHI","NWHI")
 
 ecar_dapc2 <- dapc(ecar_haps2,pop =  ecar_haps2$pop, scale = T, pca.select="nbEig", n.pca = 2, n.da=2)
 
