@@ -1,0 +1,17 @@
+# Phi_st Means
+	Johnston_Atoll	MHI	NWHI	Japan
+Johnston_Atoll		-0.0013119	-0.0142864	-0.00201798
+MHI			-0.000153814	0.0038246
+NWHI				0.00147734
+
+# Fst' Means
+	Johnston_Atoll	MHI	NWHI	Japan
+Johnston_Atoll		-0.0016144	-0.00234533	-0.000925021
+MHI			-7.52422e-05	0.000530713
+NWHI				0.000529756
+
+# Dxy Means
+	Johnston_Atoll	MHI	NWHI	Japan
+Johnston_Atoll		0.000633515	0.000538463	0.000607959
+MHI			0.000516242	0.00052919
+NWHI				0.000490027

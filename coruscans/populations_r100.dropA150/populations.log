@@ -1,0 +1,89 @@
+populations v2.61, executed 2022-11-09 17:02:10 (zlib-1.2.12)
+populations -P ./ -O ./output5_r100.dropA150 -M ../popmapECO2.tsv -t 12 -p 4 -r 100 -H --hwe --fstats --p-value-cutoff 0.05 --fasta-loci --fasta-samples --vcf --genepop --structure --treemix --fasta-samples-raw
+Locus/sample distributions will be written to './output5_r100.dropA150/populations.log.distribs'.
+populations parameters selected:
+  Percent samples limit per population: 1
+  Locus Population limit: 4
+  Percent samples overall: 0
+  Minor allele frequency cutoff: 0
+  Maximum observed heterozygosity cutoff: 1
+  Applying Fst correction: none.
+  Pi/Fis kernel smoothing: off
+  F-stats kernel smoothing: off
+  Bootstrap resampling: off
+
+Parsing population map...
+The population map contained 59 samples, 4 population(s), 1 group(s).
+Working on 59 samples.
+Working on 4 population(s):
+    Johnston_Atoll: Etelis_A163, Etelis_B70, Etelis_S29, Etelis_S36
+    MHI: Etelis_ECO244, Etelis_ECO245, Etelis_ECO246, Etelis_ECO247, Etelis_ECO248, Etelis_ECO250, Etelis_ECO251, Etelis_ECO252, Etelis_ECO253, 
+         Etelis_ECO254, Etelis_ECO255, Etelis_ECO256, Etelis_ECO257, Etelis_ECO529
+    NWHI: Etelis_ECO258, Etelis_ECO259, Etelis_ECO260, Etelis_ECO261, Etelis_ECO262, Etelis_ECO263, Etelis_ECO264, Etelis_ECO265, Etelis_ECO266, 
+          Etelis_ECO267, Etelis_ECO287, Etelis_ECO289, Etelis_ECO291, Etelis_ECO292, Etelis_ECO293, Etelis_ECO313, Etelis_ECO322, Etelis_ECO324, 
+          Etelis_ECO331, Etelis_ECO335, Etelis_ECO336, Etelis_ECO343, Etelis_ECO345, Etelis_ECO347, Etelis_ECO348, Etelis_ECO350, Etelis_ECO355
+    Japan: Etelis_JAP01, Etelis_JAP02, Etelis_JAP03, Etelis_JAP04, Etelis_JAP05, Etelis_JAP06, Etelis_JAP07, Etelis_JAP08, Etelis_JAP09, 
+           Etelis_JAP10, Etelis_JAP11, Etelis_JAP12, Etelis_JAP14, Etelis_JAP15
+Working on 1 group(s) of populations:
+    defaultgrp: Johnston_Atoll, MHI, NWHI, Japan
+
+FASTA consensus sequences for each locus in the metapopulation  will be written to './output5_r100.dropA150/populations.loci.fa'
+FASTA consensus sequences for each sample will be written to './output5_r100.dropA150/populations.samples.fa'
+SNPs and calls will be written in VCF format to './output5_r100.dropA150/populations.snps.vcf'
+Haplotypes will be written in VCF format to './output5_r100.dropA150/populations.haps.vcf'
+Polymorphic sites in GenePop format will be written to './output5_r100.dropA150/populations.snps.genepop'
+Warning: Genepop: The order in which samples appear was modified (as the input population map is not sorted).Polymorphic loci in GenePop format will be written to './output5_r100.dropA150/populations.haps.genepop'
+Polymorphic sites in Structure format will be written to './output5_r100.dropA150/populations.structure'
+Per-population SNP allele counts will be written to './output5_r100.dropA150/populations.treemix'
+Raw FASTA consensus sequences for each sample will be written to './output5_r100.dropA150/populations.samples-raw.fa'
+Raw haplotypes will be written to './output5_r100.dropA150/populations.haplotypes.tsv'
+Population-level summary statistics will be written to './output5_r100.dropA150/populations.sumstats.tsv'
+Population-level haplotype summary statistics will be written to './output5_r100.dropA150/populations.hapstats.tsv'
+
+Processing data in batches:
+  * load a batch of catalog loci and apply filters
+  * compute SNP- and haplotype-wise per-population statistics
+  * compute SNP- and haplotype-wise deviation from HWE
+  * compute F-statistics
+  * write the above statistics in the output files
+  * export the genotypes/haplotypes in specified format(s)
+More details in './output5_r100.dropA150/populations.log.distribs'.
+
+Now processing...
+Batch 1 
+
+Removed 140852 loci that did not pass sample/population constraints from 141967 loci.
+Kept 1115 loci, composed of 355817 sites; 3712 of those sites were filtered, 3592 variant sites remained.
+Number of loci with PE contig: 1115.00 (100.0%);
+  Mean length of loci: 309.12bp (stderr 1.35);
+Number of loci with SE/PE overlap: 162.00 (14.5%);
+  Mean length of overlapping loci: 279.02bp (stderr 1.56); mean overlap: 25.85bp (stderr 0.33);
+Mean genotyped sites per locus: 310.72bp (stderr 1.32).
+
+Population summary statistics (more detail in populations.sumstats_summary.tsv):
+  Johnston_Atoll: 4 samples per locus; pi: 0.043022; all/variant/polymorphic sites: 346452/3592/554; private alleles: 160
+  MHI: 14 samples per locus; pi: 0.041745; all/variant/polymorphic sites: 346452/3592/1347; private alleles: 506
+  NWHI: 27 samples per locus; pi: 0.042774; all/variant/polymorphic sites: 346452/3592/2295; private alleles: 1180
+  Japan: 14 samples per locus; pi: 0.037868; all/variant/polymorphic sites: 346452/3592/1241; private alleles: 502
+
+Number of variable sites found to be significantly out of Hardy-Weinberg equilibrium (<0.05):
+  Johnston_Atoll: 0
+  MHI: 37
+  NWHI: 49
+  Japan: 21
+Number of loci found to be significantly out of Hardy-Weinberg equilibrium (<0.05):
+  Johnston_Atoll: 709
+  MHI: 446
+  NWHI: 414
+  Japan: 422
+(more detail in populations.sumstats.tsv and populations.hapstats.tsv)
+
+Population pair divergence statistics (more in populations.fst_summary.tsv and populations.phistats_summary.tsv):
+  Johnston_Atoll-MHI: mean Fst: 0.030722; mean Phi_st: -0.0013119; mean Fst': -0.0016144; mean Dxy: 0.00063351
+  Johnston_Atoll-NWHI: mean Fst: 0.015585; mean Phi_st: -0.014286; mean Fst': -0.0023453; mean Dxy: 0.00053846
+  Johnston_Atoll-Japan: mean Fst: 0.032038; mean Phi_st: -0.002018; mean Fst': -0.00092502; mean Dxy: 0.00060796
+  MHI-NWHI: mean Fst: 0.012297; mean Phi_st: -0.00015381; mean Fst': -7.5242e-05; mean Dxy: 0.00051624
+  MHI-Japan: mean Fst: 0.019801; mean Phi_st: 0.0038246; mean Fst': 0.00053071; mean Dxy: 0.00052919
+  NWHI-Japan: mean Fst: 0.012569; mean Phi_st: 0.0014773; mean Fst': 0.00052976; mean Dxy: 0.00049003
+
+Populations is done.

@@ -361,6 +361,8 @@ populations -P ./ -O ./output3_r100 -M ../popmapECO.tsv -t 12 -p 4 -r 100 -H --h
 
 # and again with single SNPs from each locus so we can test for linkage and selection
 populations -P ./ -O ./output4_r100.SNP -M ../popmapECA.tsv -t 12 -p 3 -r 100 --hwe --fstats --p-value-cutoff 0.05  --vcf --genepop  --write-random-snp
+
+populations -P ./ -O ./output5_r100.dropA150 -M ../popmapECO2.tsv -t 12 -p 4 -r 100 -H --hwe --fstats --p-value-cutoff 0.05 --fasta-loci --fasta-samples --vcf --genepop --structure --treemix --fasta-samples-raw 
 ```
 
 #### E. carbunculus

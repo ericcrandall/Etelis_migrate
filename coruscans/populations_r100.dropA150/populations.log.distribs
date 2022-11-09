@@ -1,0 +1,357 @@
+# Note: Individual distributions can be extracted using the `stacks-dist-extract` utility.
+#       e.g. `stacks-dist-extract populations.log.distribs dist_name`
+
+BEGIN batch_progress
+Batch 1: analyzed 1115 loci; filtered 140852 loci; 141967 loci seen.
+    Calculating F statistics...done.
+END batch_progress
+
+BEGIN samples_per_loc_prefilters
+# Distribution of valid samples matched to a catalog locus prior to filtering.
+n_samples	n_loci
+0	14651
+1	28027
+2	9204
+3	5454
+4	3744
+5	2952
+6	2502
+7	2059
+8	1867
+9	1798
+10	1606
+11	1412
+12	1427
+13	1279
+14	1218
+15	1257
+16	1180
+17	1180
+18	1170
+19	1128
+20	1084
+21	1114
+22	1049
+23	1084
+24	1059
+25	1077
+26	1109
+27	1145
+28	1086
+29	1110
+30	1096
+31	1115
+32	1194
+33	1142
+34	1220
+35	1129
+36	1260
+37	1231
+38	1231
+39	1235
+40	1229
+41	1302
+42	1381
+43	1342
+44	1357
+45	1422
+46	1406
+47	1506
+48	1476
+49	1468
+50	1539
+51	1597
+52	1639
+53	1753
+54	1776
+55	1941
+56	2119
+57	2593
+58	4121
+59	1115
+END samples_per_loc_prefilters
+
+BEGIN missing_samples_per_loc_prefilters
+# Distribution of missing samples for each catalog locus prior to filtering.
+# Absent samples at locus	Count
+0	1115
+1	4121
+2	2593
+3	2119
+4	1941
+5	1776
+6	1753
+7	1639
+8	1597
+9	1539
+10	1468
+11	1476
+12	1506
+13	1406
+14	1422
+15	1357
+16	1342
+17	1381
+18	1302
+19	1229
+20	1235
+21	1231
+22	1231
+23	1260
+24	1129
+25	1220
+26	1142
+27	1194
+28	1115
+29	1096
+30	1110
+31	1086
+32	1145
+33	1109
+34	1077
+35	1059
+36	1084
+37	1049
+38	1114
+39	1084
+40	1128
+41	1170
+42	1180
+43	1180
+44	1257
+45	1218
+46	1279
+47	1427
+48	1412
+49	1606
+50	1798
+51	1867
+52	2059
+53	2502
+54	2952
+55	3744
+56	5454
+57	9204
+58	28027
+59	14651
+END missing_samples_per_loc_prefilters
+
+BEGIN snps_per_loc_prefilters
+# Distribution of the number of SNPs per catalog locus prior to filtering.
+n_snps	n_loci
+0	55378
+1	13184
+2	10446
+3	9581
+4	8495
+5	7286
+6	6601
+7	5845
+8	4992
+9	4002
+10	3316
+11	2670
+12	2205
+13	1770
+14	1415
+15	1139
+16	822
+17	657
+18	489
+19	366
+20	302
+21	219
+22	174
+23	136
+24	117
+25	90
+26	60
+27	43
+28	42
+29	20
+30	18
+31	14
+32	6
+33	14
+34	9
+35	3
+36	8
+37	3
+38	5
+39	3
+40	1
+41	1
+42	1
+43	1
+44	2
+45	4
+46	1
+47	2
+48	1
+49	1
+51	2
+52	1
+53	1
+55	1
+58	1
+60	1
+END snps_per_loc_prefilters
+
+BEGIN samples_per_loc_postfilters
+# Distribution of valid samples matched to a catalog locus after filtering.
+n_samples	n_loci
+59	1115
+END samples_per_loc_postfilters
+
+BEGIN missing_samples_per_loc_postfilters
+# Distribution of missing samples for each catalog locus after filtering.
+# Absent samples at locus	Count
+0	1115
+END missing_samples_per_loc_postfilters
+
+BEGIN snps_per_loc_postfilters
+# Distribution of the number of SNPs per catalog locus (after filtering).
+n_snps	n_loci
+0	131
+1	148
+2	203
+3	191
+4	154
+5	103
+6	84
+7	43
+8	29
+9	12
+10	6
+11	5
+12	5
+14	1
+END snps_per_loc_postfilters
+
+BEGIN loci_per_sample
+# Number of loci per individual sample (after filtering).
+sample	n_loci	present_loci	missing_loci	frequency_missing
+Etelis_A163	1115	1115	0	0.0000
+Etelis_B70	1115	1115	0	0.0000
+Etelis_S29	1115	1115	0	0.0000
+Etelis_S36	1115	1115	0	0.0000
+Etelis_ECO244	1115	1115	0	0.0000
+Etelis_ECO245	1115	1115	0	0.0000
+Etelis_ECO246	1115	1115	0	0.0000
+Etelis_ECO247	1115	1115	0	0.0000
+Etelis_ECO248	1115	1115	0	0.0000
+Etelis_ECO250	1115	1115	0	0.0000
+Etelis_ECO251	1115	1115	0	0.0000
+Etelis_ECO252	1115	1115	0	0.0000
+Etelis_ECO253	1115	1115	0	0.0000
+Etelis_ECO254	1115	1115	0	0.0000
+Etelis_ECO255	1115	1115	0	0.0000
+Etelis_ECO256	1115	1115	0	0.0000
+Etelis_ECO257	1115	1115	0	0.0000
+Etelis_ECO529	1115	1115	0	0.0000
+Etelis_ECO258	1115	1115	0	0.0000
+Etelis_ECO259	1115	1115	0	0.0000
+Etelis_ECO260	1115	1115	0	0.0000
+Etelis_ECO261	1115	1115	0	0.0000
+Etelis_ECO262	1115	1115	0	0.0000
+Etelis_ECO263	1115	1115	0	0.0000
+Etelis_ECO264	1115	1115	0	0.0000
+Etelis_ECO265	1115	1115	0	0.0000
+Etelis_ECO266	1115	1115	0	0.0000
+Etelis_ECO267	1115	1115	0	0.0000
+Etelis_ECO287	1115	1115	0	0.0000
+Etelis_ECO289	1115	1115	0	0.0000
+Etelis_ECO291	1115	1115	0	0.0000
+Etelis_ECO292	1115	1115	0	0.0000
+Etelis_ECO293	1115	1115	0	0.0000
+Etelis_ECO313	1115	1115	0	0.0000
+Etelis_ECO322	1115	1115	0	0.0000
+Etelis_ECO324	1115	1115	0	0.0000
+Etelis_ECO331	1115	1115	0	0.0000
+Etelis_ECO335	1115	1115	0	0.0000
+Etelis_ECO336	1115	1115	0	0.0000
+Etelis_ECO343	1115	1115	0	0.0000
+Etelis_ECO345	1115	1115	0	0.0000
+Etelis_ECO347	1115	1115	0	0.0000
+Etelis_ECO348	1115	1115	0	0.0000
+Etelis_ECO350	1115	1115	0	0.0000
+Etelis_ECO355	1115	1115	0	0.0000
+Etelis_JAP01	1115	1115	0	0.0000
+Etelis_JAP02	1115	1115	0	0.0000
+Etelis_JAP03	1115	1115	0	0.0000
+Etelis_JAP04	1115	1115	0	0.0000
+Etelis_JAP05	1115	1115	0	0.0000
+Etelis_JAP06	1115	1115	0	0.0000
+Etelis_JAP07	1115	1115	0	0.0000
+Etelis_JAP08	1115	1115	0	0.0000
+Etelis_JAP09	1115	1115	0	0.0000
+Etelis_JAP10	1115	1115	0	0.0000
+Etelis_JAP11	1115	1115	0	0.0000
+Etelis_JAP12	1115	1115	0	0.0000
+Etelis_JAP14	1115	1115	0	0.0000
+Etelis_JAP15	1115	1115	0	0.0000
+END loci_per_sample
+
+BEGIN variant_sites_per_sample
+# Number of variant sites per individual sample (after filtering).
+sample	n_sites	present_sites	missing_sites	frequency_missing
+Etelis_A163	3592	3592	0	0.0000
+Etelis_B70	3592	3592	0	0.0000
+Etelis_S29	3592	3592	0	0.0000
+Etelis_S36	3592	3592	0	0.0000
+Etelis_ECO244	3592	3592	0	0.0000
+Etelis_ECO245	3592	3592	0	0.0000
+Etelis_ECO246	3592	3592	0	0.0000
+Etelis_ECO247	3592	3592	0	0.0000
+Etelis_ECO248	3592	3592	0	0.0000
+Etelis_ECO250	3592	3592	0	0.0000
+Etelis_ECO251	3592	3592	0	0.0000
+Etelis_ECO252	3592	3592	0	0.0000
+Etelis_ECO253	3592	3592	0	0.0000
+Etelis_ECO254	3592	3592	0	0.0000
+Etelis_ECO255	3592	3592	0	0.0000
+Etelis_ECO256	3592	3592	0	0.0000
+Etelis_ECO257	3592	3592	0	0.0000
+Etelis_ECO529	3592	3592	0	0.0000
+Etelis_ECO258	3592	3592	0	0.0000
+Etelis_ECO259	3592	3592	0	0.0000
+Etelis_ECO260	3592	3592	0	0.0000
+Etelis_ECO261	3592	3592	0	0.0000
+Etelis_ECO262	3592	3592	0	0.0000
+Etelis_ECO263	3592	3592	0	0.0000
+Etelis_ECO264	3592	3592	0	0.0000
+Etelis_ECO265	3592	3592	0	0.0000
+Etelis_ECO266	3592	3592	0	0.0000
+Etelis_ECO267	3592	3592	0	0.0000
+Etelis_ECO287	3592	3592	0	0.0000
+Etelis_ECO289	3592	3592	0	0.0000
+Etelis_ECO291	3592	3592	0	0.0000
+Etelis_ECO292	3592	3592	0	0.0000
+Etelis_ECO293	3592	3592	0	0.0000
+Etelis_ECO313	3592	3592	0	0.0000
+Etelis_ECO322	3592	3592	0	0.0000
+Etelis_ECO324	3592	3592	0	0.0000
+Etelis_ECO331	3592	3592	0	0.0000
+Etelis_ECO335	3592	3592	0	0.0000
+Etelis_ECO336	3592	3592	0	0.0000
+Etelis_ECO343	3592	3592	0	0.0000
+Etelis_ECO345	3592	3592	0	0.0000
+Etelis_ECO347	3592	3592	0	0.0000
+Etelis_ECO348	3592	3592	0	0.0000
+Etelis_ECO350	3592	3592	0	0.0000
+Etelis_ECO355	3592	3592	0	0.0000
+Etelis_JAP01	3592	3592	0	0.0000
+Etelis_JAP02	3592	3592	0	0.0000
+Etelis_JAP03	3592	3592	0	0.0000
+Etelis_JAP04	3592	3592	0	0.0000
+Etelis_JAP05	3592	3592	0	0.0000
+Etelis_JAP06	3592	3592	0	0.0000
+Etelis_JAP07	3592	3592	0	0.0000
+Etelis_JAP08	3592	3592	0	0.0000
+Etelis_JAP09	3592	3592	0	0.0000
+Etelis_JAP10	3592	3592	0	0.0000
+Etelis_JAP11	3592	3592	0	0.0000
+Etelis_JAP12	3592	3592	0	0.0000
+Etelis_JAP14	3592	3592	0	0.0000
+Etelis_JAP15	3592	3592	0	0.0000
+END variant_sites_per_sample
