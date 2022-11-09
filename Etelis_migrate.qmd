@@ -356,13 +356,18 @@ Population pair divergence statistics (more in populations.fst_summary.tsv and p
 
 ### r100
 Settings for keeping loci that occur in 100 percent of indivs per population 
-```{bash eval = F}
+```{bash}
+#| eval: false
+
 populations -P ./ -O ./output3_r100 -M ../popmapECO.tsv -t 12 -p 4 -r 100 -H --hwe --fstats --p-value-cutoff 0.05 --fasta-loci --fasta-samples --vcf --genepop --structure --treemix --fasta-samples-raw 
 
 # and again with single SNPs from each locus so we can test for linkage and selection
 populations -P ./ -O ./output4_r100.SNP -M ../popmapECA.tsv -t 12 -p 3 -r 100 --hwe --fstats --p-value-cutoff 0.05  --vcf --genepop  --write-random-snp
 
+#Rerun coruscans after dropping A150
 populations -P ./ -O ./output5_r100.dropA150 -M ../popmapECO2.tsv -t 12 -p 4 -r 100 -H --hwe --fstats --p-value-cutoff 0.05 --fasta-loci --fasta-samples --vcf --genepop --structure --treemix --fasta-samples-raw 
+
+populations -P ./ -O ./output6_r100.dropA150.SNP -M ../popmapECO2.tsv -t 12 -p 4 -r 100 --hwe --fstats --p-value-cutoff 0.05  --vcf --genepop  --write-random-snp
 ```
 
 #### E. carbunculus
@@ -432,6 +437,8 @@ Population pair divergence statistics (more in populations.fst_summary.tsv and p
   MHI-Japan: mean Fst: 0.019806; mean Phi_st: 0.0039369; mean Fst': 0.00060169; mean Dxy: 0.00050736
   NWHI-Japan: mean Fst: 0.012751; mean Phi_st: 0.0020762; mean Fst': 0.00052502; mean Dxy: 0.00047009
   ```
+##### After dropping A150
+A150 is a bad apple. I dropped it from the 
   
 ## Download the populations output
 
@@ -440,6 +447,9 @@ Population pair divergence statistics (more in populations.fst_summary.tsv and p
 
 scp -r argo:./Etelis/coruscans/pipeline/output3_r100 ./populations_r100
 scp -r argo:./Etelis/carbunculus/pipeline/output3_r100 ./populations_r100 
+#copy down files from the coruscans run with bad apples removed.
+scp -r argo:./Etelis/coruscans/pipeline/output5_r100.dropA150 ./populations_r100.dropA150
+scp -r argo:./Etelis/coruscans/pipeline/output6_r100.dropA150.SNP/populations.snps.genepop  ./populations_r100.dropA150/populations.randsnp.genepop
 ```
 
 # Evaluate the genomic data
