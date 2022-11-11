@@ -438,7 +438,44 @@ Population pair divergence statistics (more in populations.fst_summary.tsv and p
   NWHI-Japan: mean Fst: 0.012751; mean Phi_st: 0.0020762; mean Fst': 0.00052502; mean Dxy: 0.00047009
   ```
 ##### After dropping A150
-A150 is a bad apple. I dropped it from the 
+
+A150 is a bad apple. I dropped it from the popmap and re-ran
+
+```
+Removed 140852 loci that did not pass sample/population constraints from 141967 loci.
+Kept 1115 loci, composed of 355817 sites; 3712 of those sites were filtered, 3592 variant sites remained.
+Number of loci with PE contig: 1115.00 (100.0%);
+  Mean length of loci: 309.12bp (stderr 1.35);
+Number of loci with SE/PE overlap: 162.00 (14.5%);
+  Mean length of overlapping loci: 279.02bp (stderr 1.56); mean overlap: 25.85bp (stderr 0.33);
+Mean genotyped sites per locus: 310.72bp (stderr 1.32).
+
+Population summary statistics (more detail in populations.sumstats_summary.tsv):
+  Johnston_Atoll: 4 samples per locus; pi: 0.043022; all/variant/polymorphic sites: 346452/3592/554; private alleles: 160
+  MHI: 14 samples per locus; pi: 0.041745; all/variant/polymorphic sites: 346452/3592/1347; private alleles: 506
+  NWHI: 27 samples per locus; pi: 0.042774; all/variant/polymorphic sites: 346452/3592/2295; private alleles: 1180
+  Japan: 14 samples per locus; pi: 0.037868; all/variant/polymorphic sites: 346452/3592/1241; private alleles: 502
+
+Number of variable sites found to be significantly out of Hardy-Weinberg equilibrium (<0.05):
+  Johnston_Atoll: 0
+  MHI: 37
+  NWHI: 49
+  Japan: 21
+Number of loci found to be significantly out of Hardy-Weinberg equilibrium (<0.05):
+  Johnston_Atoll: 709
+  MHI: 446
+  NWHI: 414
+  Japan: 422
+(more detail in populations.sumstats.tsv and populations.hapstats.tsv)
+
+Population pair divergence statistics (more in populations.fst_summary.tsv and populations.phistats_summary.tsv):
+  Johnston_Atoll-MHI: mean Fst: 0.030722; mean Phi_st: -0.0013119; mean Fst': -0.0016144; mean Dxy: 0.00063351
+  Johnston_Atoll-NWHI: mean Fst: 0.015585; mean Phi_st: -0.014286; mean Fst': -0.0023453; mean Dxy: 0.00053846
+  Johnston_Atoll-Japan: mean Fst: 0.032038; mean Phi_st: -0.002018; mean Fst': -0.00092502; mean Dxy: 0.00060796
+  MHI-NWHI: mean Fst: 0.012297; mean Phi_st: -0.00015381; mean Fst': -7.5242e-05; mean Dxy: 0.00051624
+  MHI-Japan: mean Fst: 0.019801; mean Phi_st: 0.0038246; mean Fst': 0.00053071; mean Dxy: 0.00052919
+  NWHI-Japan: mean Fst: 0.012569; mean Phi_st: 0.0014773; mean Fst': 0.00052976; mean Dxy: 0.00049003
+```
   
 ## Download the populations output
 
@@ -541,6 +578,77 @@ p2$plots$pca
 
 ```
 
+### Re-running after dropping the Bad Apple
+
+I went back to re-run `populations` from the stacks pipeline with the "Bad Apple" (sample A150 from Johnston) removed from the popmap (see above). This removal is as suggested by [@cercaRemovingBadApples2021] Now to re-do everything.
+
+### Adegenet
+
+I am testing differences among 4 *a priori* defined populations. Thus, following recommendations in [@thiaGuidelinesStandardizingApplication], I will only use k-1 or 3 PCA axes.
+
+```{r}
+ecor_haps <- read.genepop("coruscans/populations_r100.dropA150/populations.haps.gen")
+levels(ecor_haps$pop) <- c("JA","MHI","NWHI","JP")
+
+ecor_dapc_haps <- dapc(ecor_haps,pop =  ecor_haps$pop, scale = T, pca.select="nbEig", n.pca = 3, n.da=3)
+
+scatter(ecor_dapc_haps)
+
+ecor_hwe <- hw.test(ecor_haps, B = 1000)
+
+# playing with cross-validation
+#xvalDapc(ecor_haps, grp = ecor_haps$pop, result = "overall", n.pca.max = 10, training.set = 0.75)
+
+```
+
+Let's take a look with the randomly selected SNPs
+
+```{r}
+ecor_snps.genind <- read.genepop("coruscans/populations_r100/populations.randsnp.gen")
+levels(ecor_snps.genind$pop) <- c("JA","MHI","NWHI","JP")
+
+ecor_dapc_snps <- dapc(ecor_snps.genind,pop =  ecor_snps.genind$pop, scale = T,
+                       pca.select="nbEig", n.pca = 3, n.da=3)
+
+scatter(ecor_dapc_snps)
+
+```
+
+### SNPr
+
+```{r}
+popmap_cor <- read_tsv("coruscans/popmapECO.dropA150.tsv",col_names = c("sampID","pop"))
+ecor_snps <- read_vcf(file = "coruscans/populations_r100.dropA150/populations.randsnp.vcf",
+                      sample.meta = popmap_cor)
+```
+
+#### Filtering
+
+I've already implemented stringent filters in Stacks to only include individuals with all loci and loci found in all individuals. Now going to implement a strict HWE filter - if a locus is out of HWE in any population (`hwe_facets = "pop"`) after a Bonferroni correction, then it will be removed. Also going to remove non-variant loci, and loci with only a single minor allele ("singletons").
+
+```{r}
+ecor_snps <- filter_snps(ecor_snps, min_ind = 0.9999, min_loci = 0.9999, re_run = "full", 
+                         hwe = 0.05, fwe_method = "BY", hwe_facets = "pop", singletons = T,
+                         verbose = T)
+
+```
+
+
+#### Individual Stats
+
+snpR uses facets to subset data on either sample metadata (such as sample ID, or population) or SNP metadata. Here we will look at per-individual stats. Also, note that the calculations are just attached to the data object, so we don't lose track of them. Nice.
+
+```{r}
+ecor_snps <- calc_hs(ecor_snps, facets = "sampID")
+ecor_snps <- calc_he(ecor_snps, facets = "sampID")
+ecor_snps <- calc_ho(ecor_snps, facets = "sampID")
+
+# and dang, just like that we can get a PCA
+p <- plot_clusters(ecor_snps, facets = "pop")
+p$plots$pca
+
+```
+
 #### Population Stats
 
 And here are some summary stats about each population
@@ -605,24 +713,24 @@ plot(pca20, option = "screeplot")
 
 ```
 
-Based on the scree plot I think we'll use 5 PCs.
+Based on the scree plot I think we'll use 6 PCs.
 
 #### PCA
 
 ```{r}
-pca5 <- pcadapt(ecor_plink, K = 5)
-plot(pca5, option = "scores", pop = popmap_cor$pop[-1])
+pca6 <- pcadapt(ecor_plink, K = 6)
+plot(pca6, option = "scores", pop = popmap_cor$pop)
 
 ```
 
 
 ```{r}
-plot(pca5, option = "manhattan")
+plot(pca6, option = "manhattan")
 
 #qqplot
-plot(pca5, option = "qqplot")
+plot(pca6, option = "qqplot")
 #histogram
-hist(pca5$pvalues, xlab = "p-values", main = NULL, breaks = 50, col = "orange")
+hist(pca6$pvalues, xlab = "p-values", main = NULL, breaks = 50, col = "orange")
 ```
 
 #### Outliers
@@ -632,9 +740,9 @@ So the p-values (even uncorrected) are all fairly large here. There aren't reall
 
 ```{r}
  
-padj <- p.adjust(pca5$pvalues, method = "BY")
+padj <- p.adjust(pca6$pvalues, method = "BY")
 alpha <- 0.001
-pca5_outliers <- which(padj < alpha)
+pca6_outliers <- which(padj < alpha)
 
 #remove outliers
 #ecor_snps2 <- ecor_snps[-pca5_outliers,]
@@ -666,13 +774,15 @@ genind_to_genepop(ecor_haps2,output = "coruscans/hwe.pcadapt.filtered.haps.txt")
 
 #### Re-check the DAPC
 
+We didn't remove any outlier loci, so no need to re-calculate Fst.
+
 ##### Haplotypes
 
 ```{r}
-#ecor_haps2 <- read.genepop("coruscans/hwe.filtered.haps.gen")
-#levels(ecor_haps2$pop) <- c("JA","JP", "MHI","NWHI")
+ecor_haps2 <- read.genepop("coruscans/hwe.pcadapt.filtered.haps.gen")
+levels(ecor_haps2$pop) <- c("JA","JP", "MHI","NWHI")
 
-ecor_dapc2 <- dapc(ecor_haps,pop =  ecor_haps$pop, scale = T, pca.select="nbEig", n.pca = 3, n.da=3)
+ecor_dapc2 <- dapc(ecor_haps2,pop =  ecor_haps2$pop, scale = T, pca.select="nbEig", n.pca = 3, n.da=3)
 
 scatter(ecor_dapc2)
 
@@ -690,36 +800,6 @@ ecor_dapc2_snps <- dapc(ecor_snps2.genind,pop =  ecor_snps2.genind$pop, scale = 
 
 scatter(ecor_dapc2_snps)
 
-```
-
-So, in the SNPs I seem to have removed the differences between NWHI and JA with my filtering. But not in the haplotype dataset.
-
-
-```{r}
-popmap2 <- tibble(pop=c(rep("Japan",14),rep("Johnston",4),rep("MHI",14),rep("NWHI",27)))
-ecor_snps2 <- read_genepop(file = "coruscans/hwe.pcadapt.filtered.snps.genepop",sample.meta = popmap2)
-
-ecor_snps2 <- calc_ho(ecor_snps2, facets = "pop")
-ecor_snps2 <- calc_he(ecor_snps2, facets = "pop")
-ecor_snps2 <- calc_maf(ecor_snps2, facets = "pop")
-ecor_snps2 <- calc_pi(ecor_snps2, facets = "pop")
-ecor_snps2 <- calc_private(ecor_snps2, facets = "pop")
-ecor_snps2 <- calc_hwe(ecor_snps2, facets = "pop")
-ecor_snps2 <- calc_fis(ecor_snps2, facets = "pop")
-ecor_snps2 <- calc_pairwise_fst(ecor_snps2, facets = "pop")
-
-stats_ecor <- get.snpR.stats(ecor_snps2, facets = "pop", stats = c("maf", "ho","he","hwe", "fis","pi", "private"))
-stats_ecor$weighted.means
-
-# and here is Fst
-
-ecor_fst2 <- get.snpR.stats(ecor_snps2, facets = "pop", stats = c("fst"))
-ecor_fst2$fst.matrix
-```
-Compare this to what we had before
-
-```{r}
-ecor_fst$fst.matrix
 ```
 
 ## E. carbunculus
@@ -895,7 +975,7 @@ pca2_outliers <- which(padj < alpha)
 #remove outliers
 ecar_snps2 <- ecar_snps[-pca2_outliers,]
 
-# pick 388
+
 ```
 
 #### Write out filtered SNPs and haplotypes
@@ -915,14 +995,19 @@ format_snps(ecar_snps2, output = "genepop", facets = "pop",
             position = "position" )
 
 write.csv(pca2_outliers, "carbunculus/pcadapt.outliers.csv")
-#grab the locus names, pick a random subset of 388, and write them to a whitelist to be included in the migrate data file.
-whitelist <- ecar_snps2@snp.meta$CHROM[sample(1:nsnps(ecar_snps2),401)]
+#grab the locus names, pick a random subset of 1000, and write them to a whitelist to be included in the migrate data file.
+whitelist <- ecar_snps2@snp.meta$CHROM[sample(1:nsnps(ecar_snps2),1000)]
 write.table(sort(as.numeric(whitelist)), 
             "carbunculus/ecar_whitelist.txt", quote=F, row.names = F,col.names =F )
 
 ecar_haps2 <- ecar_haps[,loc = locNames(ecar_haps) %in% whitelist]
 # write them out
 genind_to_genepop(ecar_haps2,output = "carbunculus/hwe.pcadapt.filtered.haps.txt")
+
+ecar_snps3 <- ecar_snps2[ecar_snps2@snp.meta$CHROM %in% whitelist,]
+format_snps(ecar_snps3, output = "genepop", facets = "pop", 
+            outfile = "carbunculus/hwe.pcadapt.filtered.snps1000.genepop",chr = "CHROM", 
+            position = "position" )
 
 ```
 
@@ -944,7 +1029,7 @@ scatter(ecar_dapc2)
 ##### SNPs
 
 ```{r}
-ecar_snps2.genind <- read.genepop("carbunculus/hwe.pcadapt.filtered.haps.gen")
+ecar_snps2.genind <- read.genepop("carbunculus/hwe.pcadapt.filtered.snps1000.gen")
 levels(ecar_snps2.genind$pop) <- c("JP","MHI","NWHI")
 
 ecar_dapc2_snps <- dapc(ecar_snps2.genind,pop =  ecar_snps2.genind$pop, scale = T,
@@ -958,25 +1043,25 @@ So the structure as depicted by DAPC still seems intact in this species.
 
 
 ```{r}
-#popmap2 <- tibble(pop=c(rep("Japan",14),rep("MHI",14),rep("NWHI",27)))
-#ecar_snps2 <- read_genepop(file = "carbunculus/hwe.pcadapt.filtered.snps.genepop",sample.meta = popmap2)
+popmap2 <- tibble(pop=c(rep("Japan",14),rep("MHI",14),rep("NWHI",27)))
+ecar_snps3 <- read_genepop(file = "carbunculus/hwe.pcadapt.filtered.snps.genepop",sample.meta = popmap2)
 
-ecar_snps2 <- calc_ho(ecar_snps2, facets = "pop")
-ecar_snps2 <- calc_he(ecar_snps2, facets = "pop")
-ecar_snps2 <- calc_maf(ecar_snps2, facets = "pop")
-ecar_snps2 <- calc_pi(ecar_snps2, facets = "pop")
-ecar_snps2 <- calc_private(ecar_snps2, facets = "pop")
-ecar_snps2 <- calc_hwe(ecar_snps2, facets = "pop")
-ecar_snps2 <- calc_fis(ecar_snps2, facets = "pop")
-ecar_snps2 <- calc_pairwise_fst(ecar_snps2, facets = "pop", boot= 1000, boot_par = 5)
+ecar_snps3 <- calc_ho(ecar_snps3, facets = "pop")
+ecar_snps3 <- calc_he(ecar_snps3, facets = "pop")
+ecar_snps3 <- calc_maf(ecar_snps3, facets = "pop")
+ecar_snps3 <- calc_pi(ecar_snps3, facets = "pop")
+ecar_snps3 <- calc_private(ecar_snps3, facets = "pop")
+ecar_snps3 <- calc_hwe(ecar_snps3, facets = "pop")
+ecar_snps3 <- calc_fis(ecar_snps3, facets = "pop")
+ecar_snps3 <- calc_pairwise_fst(ecar_snps3, facets = "pop", boot= 1000, boot_par = 5)
 
-stats <- get.snpR.stats(ecar_snps2, facets = "pop", stats = c("maf", "ho","he","hwe", "fis","pi", "private"))
+stats <- get.snpR.stats(ecar_snps3, facets = "pop", stats = c("maf", "ho","he","hwe", "fis","pi", "private"))
 stats$weighted.means
 
 # and here is Fst
 
-ecar_fst2 <- get.snpR.stats(ecar_snps2, facets = "pop", stats = c("fst"))
-ecar_fst2$fst.matrix
+ecar_fst3 <- get.snpR.stats(ecar_snps3, facets = "pop", stats = c("fst"))
+ecar_fst3$fst.matrix
 ```
 
 And compare that to pre-filtering. Some differences, but not as much as when I was overly stringent with selected loci.
@@ -1014,13 +1099,13 @@ pyenv shell 2.7.18 # use python 2 for this shell session
 ### Run it
 
 
-I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by `fasta2genotype.py`. Finally, I created a whitelist by editing the vcf file output above of the fully cleaned set of SNPs.
+I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by `fasta2genotype.py`. I wrote out a whitelist above of all the 440 loci that passed through the filters.
 
 ```{bash}
 #| eval: false
 
-python ../../fasta2genotype/fasta2genotype.py populations_r100/populations.samples2.fa ecor_whitelist.txt \
-popmapECO_f2g.tsv NA Ecoruscans2.mig
+python ../../fasta2genotype/fasta2genotype.py populations_r100.dropA150/populations.samples2.fa ecor_whitelist.txt \
+popmapECO_f2g.tsv NA Ecoruscans440.mig
 
 
 ###################################################################
@@ -1040,7 +1125,6 @@ popmapECO_f2g.tsv NA Ecoruscans2.mig
 Output type? [1] Migrate [2] Arlequin [3] DIYABC [4] LFMM [5] Phylip [6] G-Phocs [7] Treemix [8] Haplotype: 1
 Loci to use? [1] Whitelist [2] All: 1
 Remove restriction enzyme or adapter sequences? These may bias data. [1] Yes [2] No: 2
-Coverage Cutoff (number reads for locus)? Use '0' to ignore coverage: 0
 Remove monomorphic loci? [1] Yes [2] No: 1
 Remove loci with excess heterozygosity? This can remove paralogs. [1] Yes [2] No: 1
 Maximum heterozygosity cutoff for removing loci out of Hardy-Weinberg? 0.5
@@ -1061,9 +1145,11 @@ Identifying loci with excess heterozygosity...
      Calculating expected heterozygosity and homozygosity...
      Flagging loci with excess heterozygosity for removal...
      Removing loci...
+     Removed 1 overly heterozygous loci.
 Outputting migrate-n file...
-*** DONE! ***
 
+
+# it removed locus 60082 for excess heterozygosity, so I dropped it from the whitelist.
 
 ```
 
@@ -1073,14 +1159,43 @@ I then re-ran the script, selecting phylip output, with locus name headers, and 
 
 ### Run it
 
-I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by `fasta2genotype.py`. Finally, I created a whitelist of 388 randomly selected loci by editing the vcf file output above of the fully cleaned set of SNPs. Used the same options as E. coruscans.
+I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by `fasta2genotype.py`. I wrote out a whitelist above of 1000/1666 randomly selected loci that passed through the filters. Used the same options as E. coruscans.
 
 ```{bash}
 #| eval: false
 
-python ../../fasta2genotype/fasta2genotype.py populations_r100/populations.samples2.fa ecar_whitelist.txt \
-popmapECA_f2g.tsv NA Ecarbunculus.mig
+python ../../fasta2genotype/fasta2genotype.py populations_r100/populations.samples2.fa ecar_whitelist_1000.txt \
+popmapECA_f2g.tsv NA Ecarbunculus999.mig
 
+Output type? [1] Migrate [2] Arlequin [3] DIYABC [4] LFMM [5] Phylip [6] G-Phocs [7] Treemix [8] Haplotype: 1
+Loci to use? [1] Whitelist [2] All: 1
+Remove restriction enzyme or adapter sequences? These may bias data. [1] Yes [2] No: 2
+Remove monomorphic loci? [1] Yes [2] No: 1
+Remove loci with excess heterozygosity? This can remove paralogs. [1] Yes [2] No: 1
+Maximum heterozygosity cutoff for removing loci out of Hardy-Weinberg? 0.5
+Filter for allele frequency? False alleles might bias data. [1] Yes [2] No: 2
+Filter for missing genotypes? These might bias data. [1] Yes [2] No: 2
+ 
+**************************************************************************************************************
+***                                       ... BEGINNING CONVERSION ...                                     ***
+**************************************************************************************************************
+ 
+Cataloging loci...
+Counting locus lengths...
+Cataloging populations...
+Counting gene copies...
+Counting alleles for each locus...
+Identifying loci with excess heterozygosity...
+     Calculating observed heterozygosity and homozygosity...
+     Calculating expected heterozygosity and homozygosity...
+     Flagging loci with excess heterozygosity for removal...
+     Removing loci...
+     Removed 1 overly heterozygous loci.
+Outputting migrate-n file...
+*** DONE! ***
+
+
+It removed locus 31718 for being overly heterozygous, so I zapped it from the whitelist.
 ```
 
 I then re-ran the script, selecting phylip output, with full sequences, haploid, all loci, not separated by ! locus name headers, and all other options the same. I need the locus names in the order output by the script in order to run modeltest. This is only needed to get the locus names in the next step.
@@ -1125,14 +1240,14 @@ Now it will take these possible models:
 ```{r}
 #| eval: false
 
-fastadata <- read.FASTA("carbunculus/populations_r100/populations.samples3.fa")
+fastadata <- read.FASTA("coruscans/populations_r100.dropA150//populations.samples3.fa")
 
 #  read in the locus lengths, as optional additional way to make sure the stats
 # and the migrate infile are ordered the same
 #migrate_lengths <- read_lines("coruscans/Ecoruscans.mig", skip = 1, n_max=1) %>% 
 #  str_split("\\t", simplify = T) %>%  t(.) %>% tibble(length=.) %>% na.omit()
 
-migrate_loci <- read_lines("carbunculus/Ecarbunculus.phy", skip = 1, n_max=1) %>% 
+migrate_loci <- read_lines("coruscans/Ecoruscans439.phy", skip = 1, n_max=1) %>% 
   str_split("\\t", simplify = T) %>%  t(.) %>% tibble(locus_name=.) %>% filter(locus_name!="")
 
 stats <- tibble(locus = character(), 
@@ -1204,7 +1319,7 @@ for(l in migrate_loci$locus_name){
 
 #stats <- stats[which(stats$length %in% migrate_lengths$length),]
 #setdiff(stats$length, as.numeric(migrate_lengths$length))
-# write_csv(stats, "carbunculus/migrate_locus_statistics.csv")
+# write_csv(stats, "coruscans/migrate_locus_statistics439.csv")
 ```
 
 #### Write a model block
@@ -1213,7 +1328,7 @@ Write a space delimited textfile that can be added to the migrate data file in t
 
 ```{r}
 #| eval: false
-stats <- read_csv("./carbunculus/migrate_locus_statistics.csv")
+#stats <- read_csv("./carbunculus/migrate_locus_statistics.csv")
 #kable(stats)
 
 
@@ -1227,7 +1342,7 @@ migrate_mutation_models <- tibble(prefix = "#$",
                                  q1 = stats$Q2,
                                  q2 = stats$Q3)
 
-#write_delim(migrate_mutation_models,"./carbunculus/migrate_modelblock.txt", na="", delim = " ")
+#write_delim(migrate_mutation_models,"./coruscans/migrate_modelblock439.txt", na="", delim = " ")
 ```
 Read them back in so we don't have to recalculate them every time I knit.
 
@@ -1236,11 +1351,205 @@ So we have a `r length(which(stats$segSites == 0))` invariant loci, and the mean
 
 ## Metapopulation Models
 
-To be added.
+Columns = departure pop, Rows = arrival pop  
+* = equilibrium gene flow/drift OR theta ($N_e\mu$) parameter (on diagonal)  
+d = divergence without gene flow  
+D = divergence with gene flow  
+0 = parameter not included in model  
 
 ### E. coruscans
 
+#### divergence_geneflow_1
+
+```
+JA    *	0	0	0
+JO    D	*	0	0
+MHI   0	D	*	0
+NWHI  0	0	D	*
+
+```
+
+#### divergence_geneflow_2
+
+```
+*	0	0	0
+D	*	0	0
+0	0	*	D
+0	D	0	*
+```
+
+
+#### divergence_geneflow_3
+
+```
+*	0	0	0
+0	*	0	D
+0	0	*	D
+D	0	0	*
+```
+
+#### divergence_only_1
+
+```
+*	0	0	0
+d	*	0	0
+0	d	*	0
+0	0	d	*
+```
+
+#### divergence_only_2
+
+```
+*	0	0	0
+d	*	0	0
+0	0	*	d
+0	d	0	*
+```
+
+#### divergence_only_3
+
+```
+*	0	0	0
+0	*	0	d
+0	0	*	d
+d	0	0	*
+```
+
+#### geneflow_only_full
+
+```
+*	*	*	*
+*	*	*	*
+*	*	*	*
+*	*	*	*
+```
+
+#### geneflow_only_1
+
+```
+*	0	0	0
+*	*	0	0
+0	*	*	0
+0	0	*	*
+```
+
+#### geneflow_only_2
+
+```
+*	0	0	0
+*	*	0	0
+0	0	*	*
+0	*	0	*
+```
+
+#### geneflow_only_3
+
+```
+*	0	0	0
+0	*	0	*
+0	0	*	*
+*	0	0	*
+```
+
+#### n-island
+
+```
+m	m	m	m
+m	m	m	m
+m	m	m	m
+m	m	m	m
+```
+
+#### panmixia
+
+```
+*
+
+
+population-relabel={1 1 1 1}
+```
+
+
 ### E. carbunculus
+
+#### divergence_geneflow_1
+
+```
+JA    *	0	0
+MHI   D	*	0
+NWHI  0	D	*
+
+```
+
+#### divergence_geneflow_2
+
+```
+*	0	0
+0	*	D
+D	0	*
+```
+
+
+
+#### divergence_only_1
+
+```
+*	0	0
+d	*	0
+0	d	*
+```
+
+#### divergence_only_2
+
+```
+*	0	0
+0	*	d
+d	0	*
+```
+
+
+#### geneflow_only_full
+
+```
+*	0	0
+*	*	0
+0	*	*
+```
+
+#### geneflow_only_1
+
+```
+*	0	0
+0	*	*
+*	0	*
+```
+
+#### geneflow_only_2
+
+```
+*	*	*
+*	*	*
+*	*	*
+```
+
+
+
+#### n-island
+
+```
+m	m	m
+m	m	m
+m	m	m
+```
+
+#### panmixia
+
+```
+*
+
+
+population-relabel={1 1 1 1}
+```
 
 
 ## Parmfile
@@ -1337,6 +1646,9 @@ Copy it up, and then make a total of 10 replicate copies of the folder.
 
 ```{bash}
 #| eval: false
+scp -r coruscans/migrate/rep_template eric@threadripper.tobolab.org:./Etelis/coruscans/rep1
+scp -r coruscans/Ecoruscans439.mig eric@threadripper.tobolab.org:./Etelis/coruscans/Ecoruscans2.mig
+
 scp -r carbunculus/migrate/rep_template eric@threadripper.tobolab.org:./Etelis/carbunculus/rep1
 scp -r carbunculus/Ecarbunculus401.mig eric@threadripper.tobolab.org:./Etelis/carbunculus/Ecarbunculus.mig
 
@@ -1349,7 +1661,7 @@ for a in $(seq 2 10); do cp -r rep1 rep$a; done
 
 ## Bash Script
 
-So we will do 10 replicates of 3 replicates.  This will start at r1, and run all models for that before moving on. Pretty sure this will finish one whole model before moving on to the next one (since all threads are being used for different loci)
+So we will do 10 replicates of 3 replicates.  This will start at r1, and run all models for that before moving on. Pretty sure this will finish one whole model before moving on to the next one (since all threads are being used for different loci). This uses two threads per core as well with the --use-hwthread-cpus flag.
 
 ```{bash}
 #| eval: false
@@ -1357,23 +1669,24 @@ So we will do 10 replicates of 3 replicates.  This will start at r1, and run all
 ### Bash Script
 #!
 for r in */
-	do
-		cd $r
-		echo $r
-		date
-		date > date.txt
-			for m in */
-			  do
-				cd $m
-				  date > date.txt
-				  echo $m
-				  date
-				  mpirun -np 32 ~/migrate-5.0.4/src/migrate-n-mpi parmfile
-				  sleep 1
-				cd ..
-			  done
-		cd ..
-	done
+        do
+                cd $r
+                echo $r
+                date
+                date > date.txt
+                        for m in */
+                          do
+                                cd $m
+                                  date > date.txt
+                                  echo $m
+                                  date
+                                  mpirun --use-hwthread-cpus -np 120 ~/migrate-5.0.4/src/migrate-n-mpi parmfile
+                                  sleep 1
+                                cd ..
+                          done
+                cd ..
+        done
+
 ```
 
 
