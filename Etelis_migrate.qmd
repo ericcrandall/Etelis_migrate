@@ -495,7 +495,7 @@ scp -r argo:./Etelis/coruscans/pipeline/output6_r100.dropA150.SNP/populations.sn
 
 ### Adegenet
 
-I am testing differences among 4 *a priori* defined populations. Thus, following recommendations in [@thiaGuidelinesStandardizingApplication], I will only use k-1 or 3 PCA axes.
+I am testing differences among 4 *a priori* defined populations. Thus, following recommendations in [@thiaGuidelinesStandardizingApplication2022], I will only use k-1 or 3 PCA axes.
 
 ```{r}
 ecor_haps <- read.genepop("coruscans/populations_r100/populations.haps.gen")
