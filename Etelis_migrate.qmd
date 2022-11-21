@@ -1697,7 +1697,7 @@ And ten replicates finished in about 10 days! Found [this guide](https://www.cyb
 ```{bash}
 #| eval: false
 
-rsync -av -e ssh --exclude='bayes*' --exclude="*.pdf" --exclude="*.mig" eric@threadripper.tobolab.org:~/Etelis/coruscans ./coruscans/migrate/output
+rsync -av -e ssh --exclude='bayes*' --exclude="*.pdf" --exclude="*.mig" eric@threadripper.tobolab.org:~/Etelis/coruscans ./coruscans/migrate/output2
 
 rsync -av -e ssh --exclude='bayes*' --exclude="*.pdf" --exclude="*.mig" eric@moneta.tobolab.org:~/Etelis/coruscans ./coruscans/migrate/output
 
@@ -1714,7 +1714,7 @@ rsync -av -e ssh --exclude='bayes*' --exclude="*.pdf" --exclude="*.mig" eric@thr
 ```{r}
 #| message: false
 #| results: hide
-runDir_cor <- "carbunculus/migrate/output"
+runDir_cor <- "coruscans/migrate/output2"
 
 likelist_cor <- list()
 for(r in 1:10){
