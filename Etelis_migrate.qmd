@@ -1776,7 +1776,7 @@ Zoom in on the top two models
 
 ```{r}
 
-likesPlot_zoom_cor <- likesPlot_cor + ylim(-229000, -228000) + geom_point()
+likesPlot_zoom_cor <- likesPlot_cor + ylim(-270000, -265000) + geom_point()
 
 likesPlot_zoom_cor
 

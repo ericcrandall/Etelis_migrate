@@ -729,7 +729,7 @@ Population pair divergence statistics (more in populations.fst_summary.tsv and p
 <h2 class="anchored" data-anchor-id="e.-coruscans-2">E. coruscans</h2>
 <section id="adegenet" class="level3">
 <h3 class="anchored" data-anchor-id="adegenet">Adegenet</h3>
-<p>I am testing differences among 4 <em>a priori</em> defined populations. Thus, following recommendations in <span class="citation" data-cites="thiaGuidelinesStandardizingApplication">(<a href="#ref-thiaGuidelinesStandardizingApplication" role="doc-biblioref"><strong>thiaGuidelinesStandardizingApplication?</strong></a>)</span>, I will only use k-1 or 3 PCA axes.</p>
+<p>I am testing differences among 4 <em>a priori</em> defined populations. Thus, following recommendations in <span class="citation" data-cites="thiaGuidelinesStandardizingApplication2022">(<a href="#ref-thiaGuidelinesStandardizingApplication2022" role="doc-biblioref">Thia 2022</a>)</span>, I will only use k-1 or 3 PCA axes.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ecor_haps <span class="ot">&lt;-</span> <span class="fu">read.genepop</span>(<span class="st">"coruscans/populations_r100/populations.haps.gen"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1065,9 +1065,9 @@ $pop$fst
 
 $pop$p
                p1 Johnston_Atoll       MHI      NWHI
-1:          Japan      0.3506494 0.1358641 0.1698302
-2: Johnston_Atoll             NA 0.6093906 0.7872128
-3:            MHI             NA        NA 0.5324675</code></pre>
+1:          Japan      0.3636364 0.1548452 0.1668332
+2: Johnston_Atoll             NA 0.6523477 0.8171828
+3:            MHI             NA        NA 0.5104895</code></pre>
 </div>
 </div>
 </section>
@@ -1411,7 +1411,7 @@ $pop$fst
 $pop$p
       p1         MHI        NWHI
 1: Japan 0.002997003 0.000999001
-2:   MHI          NA 0.311688312</code></pre>
+2:   MHI          NA 0.335664336</code></pre>
 </div>
 </div>
 </section>
@@ -1619,8 +1619,8 @@ $pop$fst
 
 $pop$p
       p1        MHI        NWHI
-1: Japan 0.01098901 0.000999001
-2:   MHI         NA 0.388611389</code></pre>
+1: Japan 0.01298701 0.000999001
+2:   MHI         NA 0.398601399</code></pre>
 </div>
 </div>
 <p>And compare that to pre-filtering. Some differences, but not as much as when I was overly stringent with selected loci.</p>
@@ -1636,7 +1636,7 @@ $pop$fst
 $pop$p
       p1         MHI        NWHI
 1: Japan 0.002997003 0.000999001
-2:   MHI          NA 0.311688312</code></pre>
+2:   MHI          NA 0.335664336</code></pre>
 </div>
 </div>
 </section>
@@ -2170,7 +2170,7 @@ population-relabel={1 1 1 1}</code></pre>
 <h3 class="anchored" data-anchor-id="and-back-down">And back down</h3>
 <p>And ten replicates finished in about 10 days! Found <a href="https://www.cyberciti.biz/faq/scp-exclude-files-when-using-command-recursively-on-unix-linux/">this guide</a> to download everything except the massive bayesallfiles and pdfs</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb163"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb163-1"><a href="#cb163-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-av</span> <span class="at">-e</span> ssh <span class="at">--exclude</span><span class="op">=</span><span class="st">'bayes*'</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">"*.pdf"</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">"*.mig"</span> eric@threadripper.tobolab.org:~/Etelis/coruscans ./coruscans/migrate/output</span>
+<div class="sourceCode cell-code" id="cb163"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb163-1"><a href="#cb163-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-av</span> <span class="at">-e</span> ssh <span class="at">--exclude</span><span class="op">=</span><span class="st">'bayes*'</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">"*.pdf"</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">"*.mig"</span> eric@threadripper.tobolab.org:~/Etelis/coruscans ./coruscans/migrate/output2</span>
 <span id="cb163-2"><a href="#cb163-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb163-3"><a href="#cb163-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-av</span> <span class="at">-e</span> ssh <span class="at">--exclude</span><span class="op">=</span><span class="st">'bayes*'</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">"*.pdf"</span> <span class="at">--exclude</span><span class="op">=</span><span class="st">"*.mig"</span> eric@moneta.tobolab.org:~/Etelis/coruscans ./coruscans/migrate/output</span>
 <span id="cb163-4"><a href="#cb163-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -2185,7 +2185,7 @@ population-relabel={1 1 1 1}</code></pre>
 <section id="model-marginal-likelihoods" class="level4">
 <h4 class="anchored" data-anchor-id="model-marginal-likelihoods">Model Marginal Likelihoods</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb164"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a>runDir_cor <span class="ot">&lt;-</span> <span class="st">"carbunculus/migrate/output"</span></span>
+<div class="sourceCode cell-code" id="cb164"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a>runDir_cor <span class="ot">&lt;-</span> <span class="st">"coruscans/migrate/output2"</span></span>
 <span id="cb164-2"><a href="#cb164-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb164-3"><a href="#cb164-3" aria-hidden="true" tabindex="-1"></a>likelist_cor <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
 <span id="cb164-4"><a href="#cb164-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
@@ -2211,7 +2211,7 @@ population-relabel={1 1 1 1}</code></pre>
 
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":["model"],"name":[1],"type":["chr"],"align":["left"]},{"label":["bezier.corrected"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lbf"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["choice"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["modelprob"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"divergence_geneflow_1","2":"-203696.0","3":"-3056.036","4":"3","5":"0"},{"1":"divergence_geneflow_2","2":"-203414.9","3":"-2493.850","4":"2","5":"0"},{"1":"divergence_only_1","2":"-205898.4","3":"-7460.750","4":"7","5":"0"},{"1":"divergence_only_2","2":"-205603.7","3":"-6871.472","4":"6","5":"0"},{"1":"geneflow_only_1","2":"-204636.0","3":"-4935.974","4":"5","5":"0"},{"1":"geneflow_only_2","2":"-204328.1","3":"-4320.170","4":"4","5":"0"},{"1":"n-island","2":"-209007.4","3":"-13678.902","4":"8","5":"0"},{"1":"panmixia","2":"-202168.0","3":"0.000","4":"1","5":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["model"],"name":[1],"type":["chr"],"align":["left"]},{"label":["bezier.corrected"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lbf"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["choice"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["modelprob"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"divergence_geneflow_1","2":"-276833.2","3":"-17689.624","4":"6","5":"0"},{"1":"divergence_geneflow_2","2":"-276590.2","3":"-17203.492","4":"5","5":"0"},{"1":"divergence_geneflow_3","2":"-273066.6","3":"-10156.304","4":"3","5":"0"},{"1":"divergence_only_1","2":"-283277.7","3":"-30578.460","4":"12","5":"0"},{"1":"divergence_only_2","2":"-282996.4","3":"-30015.984","4":"11","5":"0"},{"1":"divergence_only_3","2":"-280567.1","3":"-25157.378","4":"9","5":"0"},{"1":"full","2":"-267988.4","3":"0.000","4":"1","5":"1"},{"1":"geneflow_only_1","2":"-277466.4","3":"-18955.892","4":"8","5":"0"},{"1":"geneflow_only_2","2":"-277325.4","3":"-18673.954","4":"7","5":"0"},{"1":"geneflow_only_3","2":"-274059.8","3":"-12142.666","4":"4","5":"0"},{"1":"n-island","2":"-282650.8","3":"-29324.732","4":"10","5":"0"},{"1":"panmixia","2":"-269004.4","3":"-2031.868","4":"2","5":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -2236,7 +2236,7 @@ p-value = 5.413e-06
 alternative hypothesis: true mean GROUP 1 - mean GROUP 2 is greater than 0
 sample estimates:
 mean GROUP 1 - mean GROUP 2 
-                   1246.925 </code></pre>
+                   1015.934 </code></pre>
 </div>
 </div>
 </section>
@@ -2256,31 +2256,20 @@ mean GROUP 1 - mean GROUP 2
 <span id="cb168-10"><a href="#cb168-10" aria-hidden="true" tabindex="-1"></a>              <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> models_cor) <span class="sc">+</span></span>
 <span id="cb168-11"><a href="#cb168-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Metapopulation Model"</span>, <span class="at">y =</span> <span class="st">"Bezier Corrected Marginal Likelihood"</span>)</span>
 <span id="cb168-12"><a href="#cb168-12" aria-hidden="true" tabindex="-1"></a>likesPlot_cor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):
-collapsing to unique 'x' values</code></pre>
-</div>
 <div class="cell-output-display">
 <p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-124-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Zoom in on the top two models</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb170"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a>likesPlot_zoom_cor <span class="ot">&lt;-</span> likesPlot_cor <span class="sc">+</span> <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">229000</span>, <span class="sc">-</span><span class="dv">228000</span>) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
-<span id="cb170-2"><a href="#cb170-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb170-3"><a href="#cb170-3" aria-hidden="true" tabindex="-1"></a>likesPlot_zoom_cor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb169"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb169-1"><a href="#cb169-1" aria-hidden="true" tabindex="-1"></a>likesPlot_zoom_cor <span class="ot">&lt;-</span> likesPlot_cor <span class="sc">+</span> <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">270000</span>, <span class="sc">-</span><span class="dv">265000</span>) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb169-2"><a href="#cb169-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb169-3"><a href="#cb169-3" aria-hidden="true" tabindex="-1"></a>likesPlot_zoom_cor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 80 rows containing non-finite values (stat_ydensity).</code></pre>
+<pre><code>Warning: Removed 100 rows containing non-finite values (stat_ydensity).</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in max(data$density): no non-missing arguments to max; returning -Inf</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Computation failed in `stat_ydensity()`:
-replacement has 1 row, data has 0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 80 rows containing missing values (geom_point).</code></pre>
+<pre><code>Warning: Removed 100 rows containing missing values (geom_point).</code></pre>
 </div>
 <div class="cell-output-display">
 <p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-126-1.png" class="img-fluid" width="672"></p>
@@ -2293,28 +2282,28 @@ replacement has 1 row, data has 0</code></pre>
 <section id="model-marginal-likelihoods-1" class="level4">
 <h4 class="anchored" data-anchor-id="model-marginal-likelihoods-1">Model Marginal Likelihoods</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb175"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a>runDir_car <span class="ot">&lt;-</span> <span class="st">"carbunculus/migrate/output"</span></span>
-<span id="cb175-2"><a href="#cb175-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb175-3"><a href="#cb175-3" aria-hidden="true" tabindex="-1"></a>likelist_car <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb175-4"><a href="#cb175-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
-<span id="cb175-5"><a href="#cb175-5" aria-hidden="true" tabindex="-1"></a>  rep <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"rep"</span>,r)</span>
-<span id="cb175-6"><a href="#cb175-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(rep)</span>
-<span id="cb175-7"><a href="#cb175-7" aria-hidden="true" tabindex="-1"></a>  likelist_car[[rep]] <span class="ot">&lt;-</span> <span class="fu">harvest.model.likelihoods</span>(<span class="at">workingDir=</span><span class="fu">file.path</span>(runDir_car,rep))</span>
-<span id="cb175-8"><a href="#cb175-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb175-9"><a href="#cb175-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb175-10"><a href="#cb175-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Model selection for each replicate...</span></span>
-<span id="cb175-11"><a href="#cb175-11" aria-hidden="true" tabindex="-1"></a>likelist_car <span class="sc">%&gt;%</span> <span class="fu">map</span>(bfcalcs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb172"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a>runDir_car <span class="ot">&lt;-</span> <span class="st">"carbunculus/migrate/output"</span></span>
+<span id="cb172-2"><a href="#cb172-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-3"><a href="#cb172-3" aria-hidden="true" tabindex="-1"></a>likelist_car <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb172-4"><a href="#cb172-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
+<span id="cb172-5"><a href="#cb172-5" aria-hidden="true" tabindex="-1"></a>  rep <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"rep"</span>,r)</span>
+<span id="cb172-6"><a href="#cb172-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(rep)</span>
+<span id="cb172-7"><a href="#cb172-7" aria-hidden="true" tabindex="-1"></a>  likelist_car[[rep]] <span class="ot">&lt;-</span> <span class="fu">harvest.model.likelihoods</span>(<span class="at">workingDir=</span><span class="fu">file.path</span>(runDir_car,rep))</span>
+<span id="cb172-8"><a href="#cb172-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb172-9"><a href="#cb172-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-10"><a href="#cb172-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Model selection for each replicate...</span></span>
+<span id="cb172-11"><a href="#cb172-11" aria-hidden="true" tabindex="-1"></a>likelist_car <span class="sc">%&gt;%</span> <span class="fu">map</span>(bfcalcs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The final model marginal likelihood estimates based on the mean of 10 replicates:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb176"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a>like.df_car <span class="ot">&lt;-</span>  likelist_car <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>() <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(model)</span>
-<span id="cb176-2"><a href="#cb176-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb176-3"><a href="#cb176-3" aria-hidden="true" tabindex="-1"></a>means_car <span class="ot">&lt;-</span> like.df_car <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">bezier.corrected =</span> <span class="fu">mean</span>(bezier.corrected))</span>
-<span id="cb176-4"><a href="#cb176-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb176-5"><a href="#cb176-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb176-6"><a href="#cb176-6" aria-hidden="true" tabindex="-1"></a>final_model_car <span class="ot">&lt;-</span> <span class="fu">bfcalcs</span>(means_car)</span>
-<span id="cb176-7"><a href="#cb176-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb176-8"><a href="#cb176-8" aria-hidden="true" tabindex="-1"></a>final_model_car</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb173"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb173-1"><a href="#cb173-1" aria-hidden="true" tabindex="-1"></a>like.df_car <span class="ot">&lt;-</span>  likelist_car <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>() <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(model)</span>
+<span id="cb173-2"><a href="#cb173-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb173-3"><a href="#cb173-3" aria-hidden="true" tabindex="-1"></a>means_car <span class="ot">&lt;-</span> like.df_car <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">bezier.corrected =</span> <span class="fu">mean</span>(bezier.corrected))</span>
+<span id="cb173-4"><a href="#cb173-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb173-5"><a href="#cb173-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb173-6"><a href="#cb173-6" aria-hidden="true" tabindex="-1"></a>final_model_car <span class="ot">&lt;-</span> <span class="fu">bfcalcs</span>(means_car)</span>
+<span id="cb173-7"><a href="#cb173-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb173-8"><a href="#cb173-8" aria-hidden="true" tabindex="-1"></a>final_model_car</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
@@ -2329,12 +2318,12 @@ replacement has 1 row, data has 0</code></pre>
 <h4 class="anchored" data-anchor-id="t-test-1">T-Test</h4>
 <p>Difference between panmixia and the second-place full model is very significant.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb177"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a>top.choice <span class="ot">&lt;-</span> final_model_car<span class="sc">$</span>model[<span class="fu">which</span>(final_model_car<span class="sc">$</span>choice <span class="sc">==</span><span class="dv">1</span>)]</span>
-<span id="cb177-2"><a href="#cb177-2" aria-hidden="true" tabindex="-1"></a>second.choice <span class="ot">&lt;-</span> final_model_car<span class="sc">$</span>model[<span class="fu">which</span>(final_model_car<span class="sc">$</span>choice <span class="sc">==</span><span class="dv">2</span>)]</span>
-<span id="cb177-3"><a href="#cb177-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-4"><a href="#cb177-4" aria-hidden="true" tabindex="-1"></a><span class="fu">permTS</span>(like.df_car<span class="sc">$</span>bezier.corrected[<span class="fu">which</span>(like.df_car<span class="sc">$</span>model <span class="sc">==</span> top.choice)],</span>
-<span id="cb177-5"><a href="#cb177-5" aria-hidden="true" tabindex="-1"></a>       like.df_car<span class="sc">$</span>bezier.corrected[<span class="fu">which</span>(like.df_car<span class="sc">$</span>model <span class="sc">==</span> second.choice)],</span>
-<span id="cb177-6"><a href="#cb177-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">alternative =</span> <span class="st">"greater"</span>, <span class="at">method =</span> <span class="st">"exact.ce"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb174"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a>top.choice <span class="ot">&lt;-</span> final_model_car<span class="sc">$</span>model[<span class="fu">which</span>(final_model_car<span class="sc">$</span>choice <span class="sc">==</span><span class="dv">1</span>)]</span>
+<span id="cb174-2"><a href="#cb174-2" aria-hidden="true" tabindex="-1"></a>second.choice <span class="ot">&lt;-</span> final_model_car<span class="sc">$</span>model[<span class="fu">which</span>(final_model_car<span class="sc">$</span>choice <span class="sc">==</span><span class="dv">2</span>)]</span>
+<span id="cb174-3"><a href="#cb174-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb174-4"><a href="#cb174-4" aria-hidden="true" tabindex="-1"></a><span class="fu">permTS</span>(like.df_car<span class="sc">$</span>bezier.corrected[<span class="fu">which</span>(like.df_car<span class="sc">$</span>model <span class="sc">==</span> top.choice)],</span>
+<span id="cb174-5"><a href="#cb174-5" aria-hidden="true" tabindex="-1"></a>       like.df_car<span class="sc">$</span>bezier.corrected[<span class="fu">which</span>(like.df_car<span class="sc">$</span>model <span class="sc">==</span> second.choice)],</span>
+<span id="cb174-6"><a href="#cb174-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">alternative =</span> <span class="st">"greater"</span>, <span class="at">method =</span> <span class="st">"exact.ce"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Exact Permutation Test (complete enumeration)
@@ -2352,18 +2341,18 @@ mean GROUP 1 - mean GROUP 2
 <h4 class="anchored" data-anchor-id="figures-1">Figures</h4>
 <p>And a figure summarizing all this</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb179"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb179-1"><a href="#cb179-1" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Divergence With Gene Flow 1"</span>,<span class="st">"Divergence With Gene Flow 2"</span>,</span>
-<span id="cb179-2"><a href="#cb179-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Divergence Only 1"</span>, <span class="st">"Divergence Only 2"</span>,</span>
-<span id="cb179-3"><a href="#cb179-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Gene Flow Only 1"</span>, <span class="st">"Gene Flow Only 2"</span>,</span>
-<span id="cb179-4"><a href="#cb179-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"n-island"</span>, <span class="st">"panmixia"</span>)</span>
-<span id="cb179-5"><a href="#cb179-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb179-6"><a href="#cb179-6" aria-hidden="true" tabindex="-1"></a>likesPlot_car <span class="ot">&lt;-</span> likelist_car <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>() <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(model) <span class="sc">%&gt;%</span> </span>
-<span id="cb179-7"><a href="#cb179-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>model, <span class="at">y =</span> bezier.corrected)) <span class="sc">+</span></span>
-<span id="cb179-8"><a href="#cb179-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">geom_violin</span>(<span class="at">draw_quantiles =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb179-9"><a href="#cb179-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb179-10"><a href="#cb179-10" aria-hidden="true" tabindex="-1"></a>              <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> models) <span class="sc">+</span></span>
-<span id="cb179-11"><a href="#cb179-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Metapopulation Model"</span>, <span class="at">y =</span> <span class="st">"Bezier Corrected Marginal Likelihood"</span>)</span>
-<span id="cb179-12"><a href="#cb179-12" aria-hidden="true" tabindex="-1"></a>likesPlot_car</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb176"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Divergence With Gene Flow 1"</span>,<span class="st">"Divergence With Gene Flow 2"</span>,</span>
+<span id="cb176-2"><a href="#cb176-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Divergence Only 1"</span>, <span class="st">"Divergence Only 2"</span>,</span>
+<span id="cb176-3"><a href="#cb176-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Gene Flow Only 1"</span>, <span class="st">"Gene Flow Only 2"</span>,</span>
+<span id="cb176-4"><a href="#cb176-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"n-island"</span>, <span class="st">"panmixia"</span>)</span>
+<span id="cb176-5"><a href="#cb176-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-6"><a href="#cb176-6" aria-hidden="true" tabindex="-1"></a>likesPlot_car <span class="ot">&lt;-</span> likelist_car <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>() <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb176-7"><a href="#cb176-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>model, <span class="at">y =</span> bezier.corrected)) <span class="sc">+</span></span>
+<span id="cb176-8"><a href="#cb176-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">geom_violin</span>(<span class="at">draw_quantiles =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb176-9"><a href="#cb176-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb176-10"><a href="#cb176-10" aria-hidden="true" tabindex="-1"></a>              <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> models) <span class="sc">+</span></span>
+<span id="cb176-11"><a href="#cb176-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Metapopulation Model"</span>, <span class="at">y =</span> <span class="st">"Bezier Corrected Marginal Likelihood"</span>)</span>
+<span id="cb176-12"><a href="#cb176-12" aria-hidden="true" tabindex="-1"></a>likesPlot_car</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):
 collapsing to unique 'x' values</code></pre>
@@ -2374,9 +2363,9 @@ collapsing to unique 'x' values</code></pre>
 </div>
 <p>Zoom in on the top three models</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb181"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb181-1"><a href="#cb181-1" aria-hidden="true" tabindex="-1"></a>likesPlot_zoom_car <span class="ot">&lt;-</span> likesPlot_car <span class="sc">+</span> <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">204000</span>, <span class="sc">-</span><span class="dv">202000</span>) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
-<span id="cb181-2"><a href="#cb181-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb181-3"><a href="#cb181-3" aria-hidden="true" tabindex="-1"></a>likesPlot_zoom_car</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb178"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a>likesPlot_zoom_car <span class="ot">&lt;-</span> likesPlot_car <span class="sc">+</span> <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">204000</span>, <span class="sc">-</span><span class="dv">202000</span>) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb178-2"><a href="#cb178-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb178-3"><a href="#cb178-3" aria-hidden="true" tabindex="-1"></a>likesPlot_zoom_car</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Removed 52 rows containing non-finite values (stat_ydensity).</code></pre>
 </div>
@@ -2398,6 +2387,9 @@ collapsing to unique 'x' values</code></pre>
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
 <div id="ref-cercaRemovingBadApples2021" class="csl-entry" role="doc-biblioentry">
 Cerca, José, Marius F. Maurstad, Nicolas C. Rochette, Angel G. Rivera-Colón, Niraj Rayamajhi, Julian M. Catchen, and Torsten H. Struck. 2021. <span>“Removing the Bad Apples: <span>A</span> Simple Bioinformatic Method to Improve Loci-Recovery in de Novo <span>RADseq</span> Data for Non-Model Organisms.”</span> <em>Methods in Ecology and Evolution</em> 12 (5): 805–17. <a href="https://doi.org/10.1111/2041-210x.13562">https://doi.org/10.1111/2041-210x.13562</a>.
+</div>
+<div id="ref-thiaGuidelinesStandardizingApplication2022" class="csl-entry" role="doc-biblioentry">
+Thia, Joshua A. 2022. <span>“Guidelines for Standardizing the Application of Discriminant Analysis of Principal Components to Genotype Data.”</span> <em>Molecular Ecology Resources</em> n/a (n/a). <a href="https://doi.org/10.1111/1755-0998.13706">https://doi.org/10.1111/1755-0998.13706</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
