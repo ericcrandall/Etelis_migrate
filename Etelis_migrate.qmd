@@ -1757,7 +1757,7 @@ permTS(like.df_cor$bezier.corrected[which(like.df_cor$model == top.choice)],
 And a figure summarizing all this
 
 ```{r}
-
+#| fig-width: 10
 models_cor <- c("Divergence With Gene Flow 1","Divergence With Gene Flow 2","Divergence With Gene Flow 3",
             "Divergence Only 1", "Divergence Only 2","Divergence Only 3",
             "Gene Flow Only Full", "Gene Flow Only 1", "Gene Flow Only 2", "Gene Flow Only 3",
