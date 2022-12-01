@@ -1835,7 +1835,7 @@ And a figure summarizing all this
 
 models <- c("Divergence With Gene Flow 1","Divergence With Gene Flow 2",
             "Divergence Only 1", "Divergence Only 2",
-            "Gene Flow Only 1", "Gene Flow Only 2",
+            "Gene Flow Only 1", "Gene Flow Only 2", "Gene Flow Only Full",
             "n-island", "panmixia")
 
 likesPlot_car <- likelist_car %>% bind_rows() %>% group_by(model) %>% 
@@ -1850,9 +1850,12 @@ likesPlot_car
 Zoom in on the top three models
 
 ```{r}
+#| warning: false
 
-likesPlot_zoom_car <- likesPlot_car + ylim(-204000, -202000) + geom_point()
+likesPlot_zoom_car <- likesPlot_car + ylim(-525000, -520000) + geom_point()
 
 likesPlot_zoom_car
 
 ```
+
+Hmmm.... so despite there being significant $F_{st}$ between Japan and Hawaii, Migrate finds a model of panmixia `r emoji("thinking")`

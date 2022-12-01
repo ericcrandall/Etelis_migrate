@@ -1,0 +1,10 @@
+Mon Nov 21 10:25:31 AM HST 2022
+starting divergence_geneflow_1/ at Mon Nov 21 10:25:31 AM HST 2022
+starting divergence_geneflow_2/ at Mon Nov 21 02:03:12 PM HST 2022
+starting divergence_only_1/ at Mon Nov 21 05:36:55 PM HST 2022
+starting divergence_only_2/ at Mon Nov 21 05:42:42 PM HST 2022
+starting geneflow_only_1/ at Mon Nov 21 08:32:43 PM HST 2022
+starting geneflow_only_2/ at Mon Nov 21 11:20:04 PM HST 2022
+starting geneflow_only_full/ at Tue Nov 22 02:04:25 AM HST 2022
+starting n-island/ at Tue Nov 22 06:01:55 AM HST 2022
+starting panmixia/ at Tue Nov 22 09:05:53 AM HST 2022
