@@ -1817,7 +1817,18 @@ nm_prior <- tibble(x = theta_prior$x * mmu_prior$x,
                    prior = (theta_prior$prior * mmu_prior$prior)/
                      sum(theta_prior$prior * mmu_prior$prior))
 
-# need to remake these priors as densities.
+mmud <- mmu_prior %>% select(x,prior) %>% as.list(bw = 6.33e-05)
+  names(p) <- c("x", "y")
+  p$bw <- 6.33e-5
+  attr(p, "class") <- "density"
+  
+thetad <- theta_prior %>% select(x,prior) %>% as.list(bw = 6.33e-05)
+  names(p) <- c("x", "y")
+  p$bw <- 6.33e-5
+  attr(p, "class") <- "density"
+
+# need to remake these priors as densities. Can I multiply density distributions?
+  #no. how to create prior for joint parameter
 ```
 
 ### Read in the posterior and make a labeling key
@@ -1833,7 +1844,8 @@ names(popkey$Pop) <- popkey$Index
 
 
 #read in the posterior for one replicate this may take a minute or two
-posterior <- read_delim(file.path(winningModelDir,"bayesallfile"), comment = "#") %>% 
+posterior <- read_delim(file.path(winningModelDir,"bayesallfile"), 
+                        comment = "#") %>% 
                   mutate(StepsR = paste(Replicate,Steps)) %>% select(-Replicate)
 
 #calculate migrants per generation
@@ -2025,30 +2037,46 @@ sum_over_loci <- function(df,parameter){
 
 summarize_posterior <- function(posterior, 
                   parameter_type = c("Theta","M","Nm","D"),
-                  prior){
+                  prior_params = c(min,mean,max),
+                  n=16384){
   # this function takes a Migrate-n posterior "bayesallfile" as a dataframe
   # as well as one of the parameter types, and the prior on that parameter
-  # tibble of x and `prior` densities. Currently only exponential priors supported
+  # as a vector c(min,mean,max). Currently only exponential priors supported
   # it will create densities for each parameter of the given type,
   # remove the prior from each, sum across loci, and re-add the prior (once)
   parameters <- names(posterior) %>%
                         str_subset(parameter_type)
-  
-  dens <- prior
+  # create a tibble with the x values for all density plots 
+  #  for a particular parameter type
+  getx <- posterior %>% filter(Locus == 1) %>% 
+        select(parameters[1])
+
+  # create a tibble with x values for a density plot
+  #  of the chosen number of points
+  dens <- tibble(.rows = n, x = density(getx[,1],  n=n, 
+                           from = prior_params[1], 
+                           to = prior_params[3],
+                           bw = "nrd0")$x)
   print("calculating densities")
   # calculate densities for each parameter of a given type at each locus
   dens <- posterior %>% 
-          select(starts_with(c("Steps","Locus","StepsR",
+          select(starts_with(c("StepsR","Locus",
                   paste0(parameter_type,"_")))) %>% 
           pivot_wider(names_from = "Locus", values_from = 
                   starts_with(paste0(parameter_type,"_")),
                           names_sep = "-") %>% 
           select(starts_with(paste0(parameter_type,"_"))) %>% 
-          map_dfc(function(x) density(x, n = length(prior$x), from = 
-                                    prior$x[1], 
-                                    to = prior$x[length(prior$x)], 
+          map_dfc(function(x) density(x, n = n, from = 
+                                    prior_params[1], 
+                                    to = prior_params[3], 
                                     bw = "nrd0")$y) %>%
           bind_cols(dens)
+  
+  # create, standardize, log and remove prior
+  dens$prior <- dexp(dens$x, rate = 1/prior_params[2], 
+                     log = F)
+  
+  dens$prior <- dens$prior/sum(dens$prior)
   
   dens$logPrior <- log(dens$prior)
   
