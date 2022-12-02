@@ -1795,6 +1795,30 @@ bayes-priors= THETA WEXPPRIOR: 0.0 0.001 0.1000000 0.01000
 bayes-priors= MIG WEXPPRIOR: 0.0100 10000.000000 100000000 10000
 
 ```
+```{r}
+theta_prior_params <- c(0,0.001,0.1)
+mmu_prior_params <- c(0,10000,100000000)
+n <- 2^14
+
+x.theta <- seq(theta_prior_params[1], theta_prior_params[3], 
+              length.out = n)
+
+x.mmu <- seq(mmu_prior_params[1], mmu_prior_params[3], 
+              length.out = n)
+
+theta_prior <- tibble(x = x.theta, prior = dexp(x.theta, rate =
+                1/theta_prior_params[2])/
+                sum(dexp(x.theta, rate = 1/theta_prior_params[2])))
+
+mmu_prior <- tibble(x = x.mmu, prior = dexp(x.mmu, rate = 1/mmu_prior_params[2])/
+                sum(dexp(x.mmu, rate = 1/mmu_prior_params[2])))
+
+nm_prior <- tibble(x = theta_prior$x * mmu_prior$x, 
+                   prior = (theta_prior$prior * mmu_prior$prior)/
+                     sum(theta_prior$prior * mmu_prior$prior))
+
+# need to remake these priors as densities.
+```
 
 ### Read in the posterior and make a labeling key
 
@@ -1809,7 +1833,8 @@ names(popkey$Pop) <- popkey$Index
 
 
 #read in the posterior for one replicate this may take a minute or two
-posterior <- read_delim(file.path(winningModelDir,"bayesallfile"), comment = "#") 
+posterior <- read_delim(file.path(winningModelDir,"bayesallfile"), comment = "#") %>% 
+                  mutate(StepsR = paste(Replicate,Steps)) %>% select(-Replicate)
 
 #calculate migrants per generation
 posterior <- migrants.per.gen(posterior)
@@ -1909,6 +1934,7 @@ bf %>% filter(pnumber %in% 1:4) %>% filter(Locus == 440) %>%
                                              color = "grey", linetype="dotted")
 
 ```
+
 ##### Bayesfile - M/mu
 
 ```{r}
@@ -1943,15 +1969,13 @@ These functions are for reconstructing distributions from the "raw" posterior ou
 
 ```{r}
 remove_prior <- function(densityd,prior,threshold = 1e-10){
-  # this function changes values less than a threshold 
-  # to zero removes a prior from the 
+  # this function removes a prior from the 
   # y values of a density distributions (density).
   # first it zeros values less than a threshold, then 
   # removes the prior, then renormalizes so the density
   # sums to 1
   densityd[which(densityd < threshold)] <- 0
   new <- (densityd/prior)/sum(densityd/prior)
-
   return(new)
 }
 
@@ -1961,7 +1985,7 @@ sum_over_loci <- function(df,parameter){
       # together with with a logged prior named "logPrior",
       #  as well as the name of a parameter (e.g. "Theta_1")
       # and sums the densities over loci.
-       # Rmpfr package allows quadruple precision for calcs on very small numbers.
+      # Rmpfr package allows quadruple precision for calcs on very small numbers.
     require(Rmpfr)
   
     #add a teeny-tiny amount to all values to avoid zeros
@@ -2001,46 +2025,30 @@ sum_over_loci <- function(df,parameter){
 
 summarize_posterior <- function(posterior, 
                   parameter_type = c("Theta","M","Nm","D"),
-                  prior_params = c(min,mean,max),
-                  n=16384){
+                  prior){
   # this function takes a Migrate-n posterior "bayesallfile" as a dataframe
   # as well as one of the parameter types, and the prior on that parameter
-  # as a vector c(min,mean,max). Currently only exponential priors supported
+  # tibble of x and `prior` densities. Currently only exponential priors supported
   # it will create densities for each parameter of the given type,
   # remove the prior from each, sum across loci, and re-add the prior (once)
   parameters <- names(posterior) %>%
                         str_subset(parameter_type)
-  # create a tibble with the x values for all density plots 
-  #  for a particular parameter type
-  getx <- posterior %>% filter(Locus == 1) %>% 
-        select(parameters[1])
-
-  # create a tibble with x values for a density plot
-  #  of the chosen number of points
-  dens <- tibble(.rows = n, x = density(getx[1][[1]],  n=n, 
-                           from = prior_params[1], 
-                           to = prior_params[3],
-                           bw = "nrd0")$x)
+  
+  dens <- prior
   print("calculating densities")
   # calculate densities for each parameter of a given type at each locus
   dens <- posterior %>% 
-          select(starts_with(c("Steps","Locus","Replicate",
+          select(starts_with(c("Steps","Locus","StepsR",
                   paste0(parameter_type,"_")))) %>% 
           pivot_wider(names_from = "Locus", values_from = 
                   starts_with(paste0(parameter_type,"_")),
                           names_sep = "-") %>% 
           select(starts_with(paste0(parameter_type,"_"))) %>% 
-          map_dfc(function(x) density(x, n = n, from = 
-                                    prior_params[1], 
-                                    to = prior_params[3], 
+          map_dfc(function(x) density(x, n = length(prior$x), from = 
+                                    prior$x[1], 
+                                    to = prior$x[length(prior$x)], 
                                     bw = "nrd0")$y) %>%
           bind_cols(dens)
-  
-  # create, standardize, log and remove prior
-  dens$prior <- dexp(dens$x, rate = 1/prior_params[2], 
-                     log = F)
-  
-  dens$prior <- dens$prior/sum(dens$prior)
   
   dens$logPrior <- log(dens$prior)
   
@@ -2086,6 +2094,7 @@ And here I run the code for the $\theta$ estimates
 
 ```{r}
 #| eval: false
+theta_prior_params <- c(0,)
 
 parameter_type <- "Theta"
 
@@ -2163,11 +2172,13 @@ theta_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = thetas,
                                                              parameter = .x),
                                       .id = "parameter")
 ```
+
+##### 4Nm
+
 And here I run the code for the `4Nm` estimates
 
 ```{r}
 #| eval: false
-
 parameter_type <- "Nm"
 
 parameters <- names(posterior) %>%
@@ -2177,8 +2188,8 @@ parameter_key2 <- parameters
 names(parameter_key2) <- parameter_key[names(parameter_key) %in% parameter_key2]
 
 #summarize the posterior for theta
-Nm <- summarize_posterior(posterior, parameter_type = "M", 
-                              prior_params = c(0,10,10000))
+Nm <- summarize_posterior(posterior, parameter_type = "Nm", 
+                              prior = nm_prior)
 
 #convert to long format
 Nm_long <- Nm %>% select(all_of(c("x","prior",parameters))) %>% 
@@ -2187,7 +2198,7 @@ Nm_long <- Nm %>% select(all_of(c("x","prior",parameters))) %>%
                             values_to = "Density")
                
 #plot
-  ggplot(mmu_long, aes(x = x, y = Density, 
+  ggplot(Nm_long, aes(x = x, y = Density, 
                     color = Parameter)) +
         geom_line(linewidth = 1) + 
         scale_x_log10() + 
