@@ -26,7 +26,7 @@ library(tidyverse)
 library(ape)
 library(phangorn)
 library(pegas)
-library(strataG)
+#library(strataG)
 library(coda)
 library(ggmcmc)
 library(perm)
@@ -1813,8 +1813,6 @@ theta_prior <- tibble(x = x.theta, prior = dexp(x.theta, rate =
 mmu_prior <- tibble(x = x.mmu, prior = dexp(x.mmu, rate = 1/mmu_prior_params[2])/
                 sum(dexp(x.mmu, rate = 1/mmu_prior_params[2])))
 
-nm_prior <- tibble(x = x.mmu, prior = dexp(x.mmu, rate = 1/nm_prior_params[2])/
-                sum(dexp(x.mmu, rate = 1/nm_prior_params[2])))
 
 sample_from_density <- function(density, n){
   samp <- sample(density$x, size = n, replace =T, prob = density$y)
@@ -1826,36 +1824,41 @@ sample_from_prior <- function(prior, n){
   return(samp)
 }
 
+#ok, going to make a big-assed prior here, sampling 100 million points from each prior, multiplying them, and then taking the density for 16.7 million so that I can subsample the area between 0 and 1000 migrants per generation.
 
-nm_prior_bad <- tibble(x = mmu_prior$x*theta_prior$x, prior = mmu_prior$prior*theta_prior$prior)
+nm_prior <- density(sample_from_prior(theta_prior, n=1e8) * 
+                        sample_from_prior(mmu_prior, n=1e8),
+                        from = 0,
+                        n = 2^24)
 
-nm_prior_good <- density(sample_from_prior(theta_prior, n=1e6) * 
-                                  sample_from_prior(mmu_prior, n=1e6), 
-                    from = 0, to = 1000, n = 2^14)
-tibble(x=nm_prior_good$x,prior=nm_prior_good$y) %>% ggplot(aes(x=x,y=prior)) + geom_line()
+# make a truncated prior for values between 0 and 1000.
+nm_prior_trunc <- tibble(x=nm_prior$x,prior=nm_prior$y) %>% 
+              filter(x <= 1000)
+# but even that is not big enough, so I will interpolate with approx()
+nm_prior_interpolated <- approx(x = nm_prior_trunc$x, y = nm_prior_trunc$prior, 
+                                xout = seq(from=0,to = 1000,length.out=16384),
+                                rule = 2)
 
+nm_prior_interpolated <- tibble(x = nm_prior_interpolated$x, 
+                                prior = nm_prior_interpolated$y)
+#standardize
+nm_prior_interpolated$prior <- nm_prior_interpolated$prior/
+                                      sum(nm_prior_interpolated$prior)
 
-nm_prior_params
-
-nm_prior_bad$y = nm_prior_bad$prior / sum(nm_prior_bad$prior)
-nm_prior$y = nm_prior$y / sum(nm_prior$y)
-
-
+#Theta prior
 ggplot(theta_prior, aes(x=x,y=prior)) + geom_line() + xlim(0,0.1)
+#m/mu prior
 ggplot(mmu_prior, aes(x=x,y=prior)) + geom_line() + xlim(0,100000)
-ggplot(nm_prior, aes(x=x,y=prior)) + geom_line() + xlim(0,1000)
-
-ggplot(nm_prior_bad, aes(x=x,y=prior)) + geom_line() + xlim(0,10)
-
-
-# need to remake these priors as densities. Can I multiply density distributions?
-  #no. how to create prior for joint parameter? I need to take a random sample from both, and multiply!!!
+#nm prior
+ggplot(nm_prior_trunc, aes(x=x,y=prior)) + geom_line() 
+#nm prior interpolated
+ggplot(nm_prior_interpolated, aes(x=x,y=prior)) + geom_line()
 ```
 
 ### Read in the posterior and make a labeling key
 
 ```{r}
-winningModelDir <- "/Users/eric/Library/CloudStorage/OneDrive-ThePennsylvaniaStateUniversity/Etelis/coruscans/rep1/full"
+winningModelDir <- "~/Library/CloudStorage/OneDrive-ThePennsylvaniaStateUniversity/Etelis/coruscans/rep1/full"
 
 # for some reason the bayesallfile has 39 columns, but only 31 are labelled.
 
@@ -2058,26 +2061,21 @@ sum_over_loci <- function(df,parameter){
 
 summarize_posterior <- function(posterior, 
                   parameter_type = c("Theta","M","Nm","D"),
-                  prior_params = c(min,mean,max),
+                  prior,
                   n=16384){
   # this function takes a Migrate-n posterior "bayesallfile" as a dataframe
   # as well as one of the parameter types, and the prior on that parameter
-  # as a vector c(min,mean,max). Currently only exponential priors supported
+  # as a tibble of x and y values. 
+  # Currently only exponential priors supported
   # it will create densities for each parameter of the given type,
   # remove the prior from each, sum across loci, and re-add the prior (once)
   parameters <- names(posterior) %>%
                         str_subset(parameter_type)
-  # create a tibble with the x values for all density plots 
-  #  for a particular parameter type
-  getx <- posterior %>% filter(Locus == 1) %>% 
-        select(parameters[1])
 
   # create a tibble with x values for a density plot
   #  of the chosen number of points
-  dens <- tibble(.rows = n, x = density(getx[,1],  n=n, 
-                           from = prior_params[1], 
-                           to = prior_params[3],
-                           bw = "nrd0")$x)
+  dens <- prior
+  
   print("calculating densities")
   # calculate densities for each parameter of a given type at each locus
   dens <- posterior %>% 
@@ -2087,19 +2085,15 @@ summarize_posterior <- function(posterior,
                   starts_with(paste0(parameter_type,"_")),
                           names_sep = "-") %>% 
           select(starts_with(paste0(parameter_type,"_"))) %>% 
-          map_dfc(function(x) density(x, n = n, from = 
-                                    prior_params[1], 
-                                    to = prior_params[3], 
+          map_dfc(function(x) density(x, n = n, from = 0, 
+                                    to = 1000, 
                                     bw = "nrd0")$y) %>%
           bind_cols(dens)
   
   # create, standardize, log and remove prior
-  dens$prior <- dexp(dens$x, rate = 1/prior_params[2], 
-                     log = F)
+
   
-  dens$prior <- dens$prior/sum(dens$prior)
   
-  dens$logPrior <- log(dens$prior)
   
   print("removing prior")
   dens2 <- dens %>% 
