@@ -1813,22 +1813,43 @@ theta_prior <- tibble(x = x.theta, prior = dexp(x.theta, rate =
 mmu_prior <- tibble(x = x.mmu, prior = dexp(x.mmu, rate = 1/mmu_prior_params[2])/
                 sum(dexp(x.mmu, rate = 1/mmu_prior_params[2])))
 
-nm_prior <- tibble(x = theta_prior$x * mmu_prior$x, 
-                   prior = (theta_prior$prior * mmu_prior$prior)/
-                     sum(theta_prior$prior * mmu_prior$prior))
+nm_prior <- tibble(x = x.mmu, prior = dexp(x.mmu, rate = 1/nm_prior_params[2])/
+                sum(dexp(x.mmu, rate = 1/nm_prior_params[2])))
 
-mmud <- mmu_prior %>% select(x,prior) %>% as.list(bw = 6.33e-05)
-  names(p) <- c("x", "y")
-  p$bw <- 6.33e-5
-  attr(p, "class") <- "density"
-  
-thetad <- theta_prior %>% select(x,prior) %>% as.list(bw = 6.33e-05)
-  names(p) <- c("x", "y")
-  p$bw <- 6.33e-5
-  attr(p, "class") <- "density"
+sample_from_density <- function(density, n){
+  samp <- sample(density$x, size = n, replace =T, prob = density$y)
+  return(samp)
+}
+
+sample_from_prior <- function(prior, n){
+  samp <- sample(prior$x, size = n, replace =T, prob = prior$y)
+  return(samp)
+}
+
+
+nm_prior_bad <- tibble(x = mmu_prior$x*theta_prior$x, prior = mmu_prior$prior*theta_prior$prior)
+
+nm_prior_good <- density(sample_from_prior(theta_prior, n=1e6) * 
+                                  sample_from_prior(mmu_prior, n=1e6), 
+                    from = 0, to = 1000, n = 2^14)
+tibble(x=nm_prior_good$x,prior=nm_prior_good$y) %>% ggplot(aes(x=x,y=prior)) + geom_line()
+
+
+nm_prior_params
+
+nm_prior_bad$y = nm_prior_bad$prior / sum(nm_prior_bad$prior)
+nm_prior$y = nm_prior$y / sum(nm_prior$y)
+
+
+ggplot(theta_prior, aes(x=x,y=prior)) + geom_line() + xlim(0,0.1)
+ggplot(mmu_prior, aes(x=x,y=prior)) + geom_line() + xlim(0,100000)
+ggplot(nm_prior, aes(x=x,y=prior)) + geom_line() + xlim(0,1000)
+
+ggplot(nm_prior_bad, aes(x=x,y=prior)) + geom_line() + xlim(0,10)
+
 
 # need to remake these priors as densities. Can I multiply density distributions?
-  #no. how to create prior for joint parameter
+  #no. how to create prior for joint parameter? I need to take a random sample from both, and multiply!!!
 ```
 
 ### Read in the posterior and make a labeling key
