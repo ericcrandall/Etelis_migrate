@@ -38,6 +38,8 @@ library(graph4lg)
 library(spatstat.core)
 library(Rmpfr)
 library(emoji)
+library(RColorBrewer)
+library(jags)
 ```
 
 ## Function library
@@ -1900,23 +1902,10 @@ names(parameter_key) <- posterior_parameters
 
 ```
 
-#### Locus by Locus Plot
+#### Check Convergence
 
 ```{r}
-#| eval: false
-Theta_plot <- posterior_long %>%  
-              filter(parameter == "Theta_2") %>%  
-              ggplot() + 
-              geom_density(mapping = aes(x = value, 
-                    group=Locus, color =Locus), weight = 0.5) + 
-                    scale_x_log10(limits=c(1e-6,0.01)) +
-                    facet_wrap(~parameter, 
-                    scales = "free_y",
-                    labeller = labeller(parameter= parameter_key), 
-                           dir = "h",nrow=2) +
-                    theme(axis.text.x = element_text(size = rel(0.6)))
-
-Theta_plot
+data.list.1 <- split(data.nm,data$Replicate)
 
 ```
 
@@ -2117,7 +2106,7 @@ summarize_posterior <- function(posterior,
 
 posterior_stats <- function(df,parameter){
   require(spatstat.core)
-  p <- df %>% select(x,parameter) %>% as.list(bw = 6.33e-05)
+  p <- df %>% select(all_of(c("x",parameter))) %>% as.list(bw = 1)
   names(p) <- c("x", "y")
   p$bw <- 6.33e-5
   attr(p, "class") <- "density"
@@ -2136,9 +2125,9 @@ posterior_stats <- function(df,parameter){
 And here I run the code for the $\theta$ estimates
 
 ```{r}
-#| eval: false
-theta_prior_params <- c(0,)
 
+posterior %>% filter(Locus == 1) %>% ggplot(aes(x = Steps, y = Theta_1)) + geom_path()
+#| eval: false
 parameter_type <- "Theta"
 
 parameters <- names(posterior) %>%
@@ -2149,7 +2138,7 @@ names(parameter_key2) <- parameter_key[names(parameter_key) %in% parameter_key2]
 
 #summarize the posterior for theta
 thetas <- summarize_posterior(posterior, parameter_type = "Theta", 
-                              prior_params = c(0,0.001,0.1))
+                              prior=theta_prior)
 
 #convert to long format
 thetas_long <- thetas %>% select(all_of(c("x","prior",parameters))) %>% 
@@ -2158,11 +2147,11 @@ thetas_long <- thetas %>% select(all_of(c("x","prior",parameters))) %>%
                             values_to = "Density")
                
 #plot
-  ggplot(thetas_long, aes(x = x, y = Density, 
+ggplot(thetas_long, aes(x = x, y = Density, 
                     color = Parameter)) +
         geom_line(linewidth = 1) + 
-        scale_x_log10(limits = c(5e-6,1e-2)) + 
-        scale_color_brewer(palette = "YlGnBu", labels = parameter_key) +
+        scale_x_log10() + 
+        scale_color_brewer(palette = "Spectral", labels = parameter_key) +
         geom_line(aes(x = x, y=prior), color = "grey",
                   linetype="dotted") +
         ylim(0,0.075) + xlim(0,0.015)
@@ -2192,28 +2181,27 @@ names(parameter_key2) <- parameter_key[names(parameter_key) %in% parameter_key2]
 
 #summarize the posterior for theta
 mmu <- summarize_posterior(posterior, parameter_type = "M", 
-                              prior_params =c(0.01,10000,100000000))
+                              prior_params = mmu_prior)
 
 #convert to long format
 mmu_long <- mmu %>% select(all_of(c("x","prior",parameters))) %>% 
                 pivot_longer(starts_with(c(paste0(parameter_type,"_"))), 
                             names_to = "Parameter",
                             values_to = "Density")
-               
+
+nm.palette <- colorRampPalette(brewer.pal(9,"Spectral"))                
 #plot
-  ggplot(mmu_long, aes(x = x, y = Density, 
+ggplot(mmu_long, aes(x = x, y = Density, 
                     color = Parameter)) +
-        geom_line(linewidth = 1) + 
-        scale_x_log10() + 
-        scale_color_brewer(palette = "YlGnBu", labels = parameter_key) +
-        geom_line(aes(x = x, y=prior), color = "grey",
-                  linetype="dotted") +
-        ylim(0,0.075) + xlim(0,0.015)
+        geom_line(linewidth = 0.5) + 
+        scale_x_log10()
+        scale_color_discrete(type=nm.palette(12), labels = parameter_key)
 # get stats for each summed-over-loci posterior
 
-theta_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = thetas, 
-                                                             parameter = .x),
+mmu_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = Nm, 
+                                                      parameter = .x),
                                       .id = "parameter")
+mmu_stats
 ```
 
 ##### 4Nm
@@ -2232,28 +2220,28 @@ names(parameter_key2) <- parameter_key[names(parameter_key) %in% parameter_key2]
 
 #summarize the posterior for theta
 Nm <- summarize_posterior(posterior, parameter_type = "Nm", 
-                              prior = nm_prior)
+                              prior = nm_prior_interpolated)
 
 #convert to long format
 Nm_long <- Nm %>% select(all_of(c("x","prior",parameters))) %>% 
                 pivot_longer(starts_with(c(paste0(parameter_type,"_"))), 
                             names_to = "Parameter",
                             values_to = "Density")
-               
+
+
+              
 #plot
   ggplot(Nm_long, aes(x = x, y = Density, 
                     color = Parameter)) +
-        geom_line(linewidth = 1) + 
-        scale_x_log10() + 
-        scale_color_brewer(palette = "YlGnBu", labels = parameter_key) +
-        geom_line(aes(x = x, y=prior), color = "grey",
-                  linetype="dotted") +
-        ylim(0,0.075) + xlim(0,0.015)
+        geom_line(linewidth = 0.5) + 
+        scale_color_discrete(type=nm.palette(12), labels = parameter_key) +
+        xlim(0,1)
 # get stats for each summed-over-loci posterior
 
-theta_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = thetas, 
+nm_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = Nm, 
                                                              parameter = .x),
                                       .id = "parameter")
+nm_stats
 ```
 
 ### E. carbunculus
