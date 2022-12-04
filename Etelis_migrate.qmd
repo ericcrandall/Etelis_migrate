@@ -1812,8 +1812,10 @@ theta_prior <- tibble(x = x.theta, prior = dexp(x.theta, rate =
                 1/theta_prior_params[2])/
                 sum(dexp(x.theta, rate = 1/theta_prior_params[2])))
 
-mmu_prior <- tibble(x = x.mmu, prior = dexp(x.mmu, rate = 1/mmu_prior_params[2])/
-                sum(dexp(x.mmu, rate = 1/mmu_prior_params[2])))
+# this prior gets very small very fast, so need to treat it differently. Can't use mpfr with dexp, so just going to add a little bit
+mmu_prior_y <- dexp(x.mmu, rate = 1/mmu_prior_params[2])
+mmu_prior_y[which(mmu_prior_y==0)] <- 1e-11
+mmu_prior <- tibble(x = x.mmu, prior = mmu_prior_y/sum(mmu_prior_y))
 
 
 sample_from_density <- function(density, n){
@@ -1872,7 +1874,8 @@ names(popkey$Pop) <- popkey$Index
 #read in the posterior for one replicate this may take a minute or two
 posterior <- read_delim(file.path(winningModelDir,"bayesallfile"), 
                         comment = "#") %>% 
-                  mutate(StepsR = paste(Replicate,Steps)) %>% select(-Replicate)
+                  mutate(StepsR = paste(Replicate,Steps)) %>% 
+                  filter()
 
 #calculate migrants per generation
 posterior <- migrants.per.gen(posterior)
@@ -1899,13 +1902,31 @@ names(parameter_key) <- posterior_parameters
 
 
 
+posterior_thetaf_badloci <- posterior %>% filter(Theta_1 < 1e-4 & 
+                                         Theta_2 < 1e-4  & 
+                                         Theta_3 < 1e-4 & 
+                                         Theta_4 < 1e-4)
+badloci <- posterior_thetaf_badloci %>% count(Locus)
+# these loci seem to have Q2 = 22026.46579...?
+posterior_thetaf <- posterior %>% filter(Locus %in% badloci$Locus)
 
 ```
 
 #### Check Convergence
 
 ```{r}
-data.list.1 <- split(data.nm,data$Replicate)
+posterior.grouped <- posterior %>% filter(Locus == 31) %>% 
+                      select(all_of(c("Replicate",
+                                        "Steps",
+                                        posterior_parameters))) %>% 
+                      group_by(Replicate)
+
+posterior.reps <- group_split(posterior.grouped)
+posterior.key <- group_keys(posterior.grouped)
+                        
+posterior.mcmc <- mcmc.list(lapply(posterior.reps,mcmc))
+posterior.ggs <- ggs(posterior.mcmc)
+#ggmcmc(posterior.ggs, param_page = 4)
 
 ```
 
@@ -1993,14 +2014,20 @@ bf %>% filter(pnumber %in% 1:4) %>% filter(Locus == 440) %>%
 These functions are for reconstructing distributions from the "raw" posterior output, which Peter calls a `bayesallfile`. 
 
 ```{r}
-remove_prior <- function(densityd,prior,threshold = 1e-10){
+remove_prior <- function(densityd,prior,threshold = 1e-10, quad_prec = F){
   # this function removes a prior from the 
   # y values of a density distributions (density).
   # first it zeros values less than a threshold, then 
   # removes the prior, then renormalizes so the density
-  # sums to 1
+  # sums to 1.
+  # can optionally use the mpfr package for very small density values.
+  require(Rmpfr)
   densityd[which(densityd < threshold)] <- 0
+  if(quad_prec){
+    densityd <- mpfr(densityd,precBits = 128)
+    }
   new <- (densityd/prior)/sum(densityd/prior)
+  new <- as.numeric(new)
   return(new)
 }
 
@@ -2010,7 +2037,8 @@ sum_over_loci <- function(df,parameter){
       # together with with a logged prior named "logPrior",
       #  as well as the name of a parameter (e.g. "Theta_1")
       # and sums the densities over loci.
-      # Rmpfr package allows quadruple precision for calcs on very small numbers.
+      # Rmpfr package allows quadruple precision for 
+      #calcs on very small numbers.
     require(Rmpfr)
   
     #add a teeny-tiny amount to all values to avoid zeros
@@ -2051,7 +2079,8 @@ sum_over_loci <- function(df,parameter){
 summarize_posterior <- function(posterior, 
                   parameter_type = c("Theta","M","Nm","D"),
                   prior,
-                  n=16384){
+                  n=16384,
+                  ...){
   # this function takes a Migrate-n posterior "bayesallfile" as a dataframe
   # as well as one of the parameter types, and the prior on that parameter
   # as a tibble of x and y values. 
@@ -2074,14 +2103,16 @@ summarize_posterior <- function(posterior,
                   starts_with(paste0(parameter_type,"_")),
                           names_sep = "-") %>% 
           select(starts_with(paste0(parameter_type,"_"))) %>% 
-          map_dfc(function(x) density(x, n = n, from = 0, 
-                                    to = 1000, 
+          map_dfc(function(x) density(x, n = n, from = 0,
                                     bw = "nrd0")$y) %>%
           bind_cols(dens)
   
   # create, standardize, log and remove prior
 
-  
+  #check for NA values
+  #df %>% 
+  #select_if(function(x) any(is.na(x))) %>% 
+  #summarise_each(funs(sum(is.na(.)))) -> extra_NA
   
   
   print("removing prior")
@@ -2090,7 +2121,8 @@ summarize_posterior <- function(posterior,
         mutate(across(starts_with(parameter_type), 
                   ~ remove_prior(densityd = .x,
                                   prior = dens$prior,
-                                  threshold = 1e-10) ))
+                                  threshold = 1e-10,
+                                  ...) ))
 
   dens3 <- dens2
     
@@ -2108,7 +2140,7 @@ posterior_stats <- function(df,parameter){
   require(spatstat.core)
   p <- df %>% select(all_of(c("x",parameter))) %>% as.list(bw = 1)
   names(p) <- c("x", "y")
-  p$bw <- 6.33e-5
+  p$bw <- 1
   attr(p, "class") <- "density"
   qu <- quantile.density(p, c(0.025, 0.25, 0.5, 0.75, 0.975))
   wmo <- p$x[which(p$y==max(p$y))]
@@ -2125,9 +2157,11 @@ posterior_stats <- function(df,parameter){
 And here I run the code for the $\theta$ estimates
 
 ```{r}
-
-posterior %>% filter(Locus == 1) %>% ggplot(aes(x = Steps, y = Theta_1)) + geom_path()
 #| eval: false
+#posterior_thetaf %>% filter(Locus == 1) %>% 
+#          ggplot(aes(x = Steps, y = Theta_2)) +
+#                  geom_path() + scale_y_log10()
+
 parameter_type <- "Theta"
 
 parameters <- names(posterior) %>%
@@ -2137,7 +2171,7 @@ parameter_key2 <- parameters
 names(parameter_key2) <- parameter_key[names(parameter_key) %in% parameter_key2]
 
 #summarize the posterior for theta
-thetas <- summarize_posterior(posterior, parameter_type = "Theta", 
+thetas <- summarize_posterior(posterior_thetaf, parameter_type = "Theta", 
                               prior=theta_prior)
 
 #convert to long format
@@ -2150,11 +2184,11 @@ thetas_long <- thetas %>% select(all_of(c("x","prior",parameters))) %>%
 ggplot(thetas_long, aes(x = x, y = Density, 
                     color = Parameter)) +
         geom_line(linewidth = 1) + 
-        scale_x_log10() + 
+        #scale_x_log10() + 
         scale_color_brewer(palette = "Spectral", labels = parameter_key) +
         geom_line(aes(x = x, y=prior), color = "grey",
                   linetype="dotted") +
-        ylim(0,0.075) + xlim(0,0.015)
+        xlim(0.095,0.1)
 # get stats for each summed-over-loci posterior
 
 theta_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = thetas, 
@@ -2177,11 +2211,12 @@ parameters <- names(posterior) %>%
                         str_subset(parameter_type)
 
 parameter_key2 <- parameters
-names(parameter_key2) <- parameter_key[names(parameter_key) %in% parameter_key2]
+names(parameter_key2) <- parameter_key[names(parameter_key) %in% 
+                                         parameter_key2]
 
 #summarize the posterior for theta
-mmu <- summarize_posterior(posterior, parameter_type = "M", 
-                              prior_params = mmu_prior)
+mmu <- summarize_posterior(posterior_thetaf, parameter_type = "M", 
+                              prior = mmu_prior, quad_prec = T)
 
 #convert to long format
 mmu_long <- mmu %>% select(all_of(c("x","prior",parameters))) %>% 
@@ -2219,7 +2254,7 @@ parameter_key2 <- parameters
 names(parameter_key2) <- parameter_key[names(parameter_key) %in% parameter_key2]
 
 #summarize the posterior for theta
-Nm <- summarize_posterior(posterior, parameter_type = "Nm", 
+Nm <- summarize_posterior(posterior_thetaf, parameter_type = "Nm", 
                               prior = nm_prior_interpolated)
 
 #convert to long format
@@ -2228,14 +2263,14 @@ Nm_long <- Nm %>% select(all_of(c("x","prior",parameters))) %>%
                             names_to = "Parameter",
                             values_to = "Density")
 
-
+nm.palette <- colorRampPalette(brewer.pal(9,"Spectral"))   
               
 #plot
   ggplot(Nm_long, aes(x = x, y = Density, 
                     color = Parameter)) +
         geom_line(linewidth = 0.5) + 
         scale_color_discrete(type=nm.palette(12), labels = parameter_key) +
-        xlim(0,1)
+        xlim(0,30)
 # get stats for each summed-over-loci posterior
 
 nm_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = Nm, 
