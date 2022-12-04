@@ -238,6 +238,7 @@ div.csl-indent {
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
   <ul class="collapse">
   <li><a href="#e.-coruscans-5" id="toc-e.-coruscans-5" class="nav-link" data-scroll-target="#e.-coruscans-5">E. coruscans</a></li>
+  <li><a href="#checking-the-effects-of-a-bad-titv-ratio" id="toc-checking-the-effects-of-a-bad-titv-ratio" class="nav-link" data-scroll-target="#checking-the-effects-of-a-bad-titv-ratio">Checking the effects of a bad Ti/Tv ratio</a></li>
   </ul></li>
   <li><a href="#best-model-parameter-estimates" id="toc-best-model-parameter-estimates" class="nav-link" data-scroll-target="#best-model-parameter-estimates">Best Model Parameter Estimates</a>
   <ul class="collapse">
@@ -286,7 +287,7 @@ div.csl-indent {
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ape)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phangorn)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pegas)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(strataG)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#library(strataG)</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coda)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmcmc)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(perm)</span>
@@ -297,7 +298,8 @@ div.csl-indent {
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(graph4lg)</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spatstat.core)</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rmpfr)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emoji)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emoji)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -1077,9 +1079,9 @@ $pop$fst
 
 $pop$p
                p1 Johnston_Atoll       MHI      NWHI
-1:          Japan      0.3546454 0.1338661 0.1838162
-2: Johnston_Atoll             NA 0.6113886 0.8121878
-3:            MHI             NA        NA 0.5304695</code></pre>
+1:          Japan      0.3886114 0.1488511 0.1768232
+2: Johnston_Atoll             NA 0.6163836 0.8151848
+3:            MHI             NA        NA 0.5074925</code></pre>
 </div>
 </div>
 </section>
@@ -1424,7 +1426,7 @@ $pop$fst
 $pop$p
       p1         MHI        NWHI
 1: Japan 0.003996004 0.000999001
-2:   MHI          NA 0.331668332</code></pre>
+2:   MHI          NA 0.342657343</code></pre>
 </div>
 </div>
 </section>
@@ -1625,8 +1627,8 @@ $pop$fst
 
 $pop$p
       p1         MHI        NWHI
-1: Japan 0.001998002 0.000999001
-2:   MHI          NA 0.368631369</code></pre>
+1: Japan 0.006993007 0.000999001
+2:   MHI          NA 0.386613387</code></pre>
 </div>
 </div>
 <p>And compare that to pre-filtering. Some differences, but not as much as when I was overly stringent with selected loci.</p>
@@ -1642,7 +1644,7 @@ $pop$fst
 $pop$p
       p1         MHI        NWHI
 1: Japan 0.003996004 0.000999001
-2:   MHI          NA 0.331668332</code></pre>
+2:   MHI          NA 0.342657343</code></pre>
 </div>
 </div>
 </section>
@@ -2283,6 +2285,19 @@ mean GROUP 1 - mean GROUP 2
 </div>
 </section>
 </section>
+<section id="checking-the-effects-of-a-bad-titv-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="checking-the-effects-of-a-bad-titv-ratio">Checking the effects of a bad Ti/Tv ratio</h3>
+<p>So, I was using a Ti/Tv ratio in my K80/HKY mutation models that was way out of bounds. I’ve exported the locus-by-locus marginal likelihoods out of the panmixia, full and divergence-with-gene-flow3 models to see what happens when I remove the bad loci.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb169"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb169-1"><a href="#cb169-1" aria-hidden="true" tabindex="-1"></a>mlikes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"coruscans/model_marglike_comp.csv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb169-2"><a href="#cb169-2" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(<span class="sc">!</span>Locus_Index <span class="sc">%in%</span> badloci<span class="sc">$</span>Locus) <span class="sc">%&gt;%</span></span>
+<span id="cb169-3"><a href="#cb169-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(<span class="sc">!</span>Locus_Index<span class="sc">==</span><span class="dv">440</span>) <span class="sc">%&gt;%</span>  <span class="co">#locus 440 is the migrate sum</span></span>
+<span id="cb169-4"><a href="#cb169-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="at">.fns =</span> sum))</span>
+<span id="cb169-5"><a href="#cb169-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb169-6"><a href="#cb169-6" aria-hidden="true" tabindex="-1"></a>mlikes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With this new back-of-the-envelope analysis, the full model comes 3rd, after divergence-with-gene-flow3. The scaling factor might have a big effect here.</p>
+</section>
 </section>
 <section id="best-model-parameter-estimates" class="level2">
 <h2 class="anchored" data-anchor-id="best-model-parameter-estimates">Best Model Parameter Estimates</h2>
@@ -2292,16 +2307,95 @@ mean GROUP 1 - mean GROUP 2
 <pre><code>bayes-priors= THETA WEXPPRIOR: 0.0 0.001 0.1000000 0.01000 
 bayes-priors= MIG WEXPPRIOR: 0.0100 10000.000000 100000000 10000
 </code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb171"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb171-1"><a href="#cb171-1" aria-hidden="true" tabindex="-1"></a>theta_prior_params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.001</span>,<span class="fl">0.1</span>)</span>
+<span id="cb171-2"><a href="#cb171-2" aria-hidden="true" tabindex="-1"></a>mmu_prior_params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">10000</span>,<span class="dv">100000000</span>)</span>
+<span id="cb171-3"><a href="#cb171-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">^</span><span class="dv">14</span></span>
+<span id="cb171-4"><a href="#cb171-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-5"><a href="#cb171-5" aria-hidden="true" tabindex="-1"></a>x.theta <span class="ot">&lt;-</span> <span class="fu">seq</span>(theta_prior_params[<span class="dv">1</span>], theta_prior_params[<span class="dv">3</span>], </span>
+<span id="cb171-6"><a href="#cb171-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">length.out =</span> n)</span>
+<span id="cb171-7"><a href="#cb171-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-8"><a href="#cb171-8" aria-hidden="true" tabindex="-1"></a>x.mmu <span class="ot">&lt;-</span> <span class="fu">seq</span>(mmu_prior_params[<span class="dv">1</span>], mmu_prior_params[<span class="dv">3</span>], </span>
+<span id="cb171-9"><a href="#cb171-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">length.out =</span> n)</span>
+<span id="cb171-10"><a href="#cb171-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-11"><a href="#cb171-11" aria-hidden="true" tabindex="-1"></a>theta_prior <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> x.theta, <span class="at">prior =</span> <span class="fu">dexp</span>(x.theta, <span class="at">rate =</span></span>
+<span id="cb171-12"><a href="#cb171-12" aria-hidden="true" tabindex="-1"></a>                <span class="dv">1</span><span class="sc">/</span>theta_prior_params[<span class="dv">2</span>])<span class="sc">/</span></span>
+<span id="cb171-13"><a href="#cb171-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">sum</span>(<span class="fu">dexp</span>(x.theta, <span class="at">rate =</span> <span class="dv">1</span><span class="sc">/</span>theta_prior_params[<span class="dv">2</span>])))</span>
+<span id="cb171-14"><a href="#cb171-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-15"><a href="#cb171-15" aria-hidden="true" tabindex="-1"></a><span class="co"># this prior gets very small very fast, so need to treat it differently. Can't use mpfr with dexp, so just going to add a little bit</span></span>
+<span id="cb171-16"><a href="#cb171-16" aria-hidden="true" tabindex="-1"></a>mmu_prior_y <span class="ot">&lt;-</span> <span class="fu">dexp</span>(x.mmu, <span class="at">rate =</span> <span class="dv">1</span><span class="sc">/</span>mmu_prior_params[<span class="dv">2</span>])</span>
+<span id="cb171-17"><a href="#cb171-17" aria-hidden="true" tabindex="-1"></a>mmu_prior_y[<span class="fu">which</span>(mmu_prior_y<span class="sc">==</span><span class="dv">0</span>)] <span class="ot">&lt;-</span> <span class="fl">1e-11</span></span>
+<span id="cb171-18"><a href="#cb171-18" aria-hidden="true" tabindex="-1"></a>mmu_prior <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> x.mmu, <span class="at">prior =</span> mmu_prior_y<span class="sc">/</span><span class="fu">sum</span>(mmu_prior_y))</span>
+<span id="cb171-19"><a href="#cb171-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-20"><a href="#cb171-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-21"><a href="#cb171-21" aria-hidden="true" tabindex="-1"></a>sample_from_density <span class="ot">&lt;-</span> <span class="cf">function</span>(density, n){</span>
+<span id="cb171-22"><a href="#cb171-22" aria-hidden="true" tabindex="-1"></a>  samp <span class="ot">&lt;-</span> <span class="fu">sample</span>(density<span class="sc">$</span>x, <span class="at">size =</span> n, <span class="at">replace =</span>T, <span class="at">prob =</span> density<span class="sc">$</span>y)</span>
+<span id="cb171-23"><a href="#cb171-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(samp)</span>
+<span id="cb171-24"><a href="#cb171-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb171-25"><a href="#cb171-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-26"><a href="#cb171-26" aria-hidden="true" tabindex="-1"></a>sample_from_prior <span class="ot">&lt;-</span> <span class="cf">function</span>(prior, n){</span>
+<span id="cb171-27"><a href="#cb171-27" aria-hidden="true" tabindex="-1"></a>  samp <span class="ot">&lt;-</span> <span class="fu">sample</span>(prior<span class="sc">$</span>x, <span class="at">size =</span> n, <span class="at">replace =</span>T, <span class="at">prob =</span> prior<span class="sc">$</span>y)</span>
+<span id="cb171-28"><a href="#cb171-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(samp)</span>
+<span id="cb171-29"><a href="#cb171-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb171-30"><a href="#cb171-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-31"><a href="#cb171-31" aria-hidden="true" tabindex="-1"></a><span class="co">#ok, going to make a big-assed prior here, sampling 100 million points from each prior, multiplying them, and then taking the density for 16.7 million so that I can subsample the area between 0 and 1000 migrants per generation.</span></span>
+<span id="cb171-32"><a href="#cb171-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-33"><a href="#cb171-33" aria-hidden="true" tabindex="-1"></a>nm_prior <span class="ot">&lt;-</span> <span class="fu">density</span>(<span class="fu">sample_from_prior</span>(theta_prior, <span class="at">n=</span><span class="fl">1e8</span>) <span class="sc">*</span> </span>
+<span id="cb171-34"><a href="#cb171-34" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">sample_from_prior</span>(mmu_prior, <span class="at">n=</span><span class="fl">1e8</span>),</span>
+<span id="cb171-35"><a href="#cb171-35" aria-hidden="true" tabindex="-1"></a>                        <span class="at">from =</span> <span class="dv">0</span>,</span>
+<span id="cb171-36"><a href="#cb171-36" aria-hidden="true" tabindex="-1"></a>                        <span class="at">n =</span> <span class="dv">2</span><span class="sc">^</span><span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Unknown or uninitialised column: `y`.
+Unknown or uninitialised column: `y`.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb173"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb173-1"><a href="#cb173-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make a truncated prior for values between 0 and 1000.</span></span>
+<span id="cb173-2"><a href="#cb173-2" aria-hidden="true" tabindex="-1"></a>nm_prior_trunc <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x=</span>nm_prior<span class="sc">$</span>x,<span class="at">prior=</span>nm_prior<span class="sc">$</span>y) <span class="sc">%&gt;%</span> </span>
+<span id="cb173-3"><a href="#cb173-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(x <span class="sc">&lt;=</span> <span class="dv">1000</span>)</span>
+<span id="cb173-4"><a href="#cb173-4" aria-hidden="true" tabindex="-1"></a><span class="co"># but even that is not big enough, so I will interpolate with approx()</span></span>
+<span id="cb173-5"><a href="#cb173-5" aria-hidden="true" tabindex="-1"></a>nm_prior_interpolated <span class="ot">&lt;-</span> <span class="fu">approx</span>(<span class="at">x =</span> nm_prior_trunc<span class="sc">$</span>x, <span class="at">y =</span> nm_prior_trunc<span class="sc">$</span>prior, </span>
+<span id="cb173-6"><a href="#cb173-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">xout =</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="dv">0</span>,<span class="at">to =</span> <span class="dv">1000</span>,<span class="at">length.out=</span><span class="dv">16384</span>),</span>
+<span id="cb173-7"><a href="#cb173-7" aria-hidden="true" tabindex="-1"></a>                                <span class="at">rule =</span> <span class="dv">2</span>)</span>
+<span id="cb173-8"><a href="#cb173-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb173-9"><a href="#cb173-9" aria-hidden="true" tabindex="-1"></a>nm_prior_interpolated <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> nm_prior_interpolated<span class="sc">$</span>x, </span>
+<span id="cb173-10"><a href="#cb173-10" aria-hidden="true" tabindex="-1"></a>                                <span class="at">prior =</span> nm_prior_interpolated<span class="sc">$</span>y)</span>
+<span id="cb173-11"><a href="#cb173-11" aria-hidden="true" tabindex="-1"></a><span class="co">#standardize</span></span>
+<span id="cb173-12"><a href="#cb173-12" aria-hidden="true" tabindex="-1"></a>nm_prior_interpolated<span class="sc">$</span>prior <span class="ot">&lt;-</span> nm_prior_interpolated<span class="sc">$</span>prior<span class="sc">/</span></span>
+<span id="cb173-13"><a href="#cb173-13" aria-hidden="true" tabindex="-1"></a>                                      <span class="fu">sum</span>(nm_prior_interpolated<span class="sc">$</span>prior)</span>
+<span id="cb173-14"><a href="#cb173-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb173-15"><a href="#cb173-15" aria-hidden="true" tabindex="-1"></a><span class="co">#Theta prior</span></span>
+<span id="cb173-16"><a href="#cb173-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(theta_prior, <span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>prior)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-66-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb174"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="co">#m/mu prior</span></span>
+<span id="cb174-2"><a href="#cb174-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mmu_prior, <span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>prior)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="dv">100000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 16367 rows containing missing values (`geom_line()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-66-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb176"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a><span class="co">#nm prior</span></span>
+<span id="cb176-2"><a href="#cb176-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nm_prior_trunc, <span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>prior)) <span class="sc">+</span> <span class="fu">geom_line</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-66-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb177"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a><span class="co">#nm prior interpolated</span></span>
+<span id="cb177-2"><a href="#cb177-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nm_prior_interpolated, <span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>prior)) <span class="sc">+</span> <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-66-4.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section>
 <section id="read-in-the-posterior-and-make-a-labeling-key" class="level3">
 <h3 class="anchored" data-anchor-id="read-in-the-posterior-and-make-a-labeling-key">Read in the posterior and make a labeling key</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb170"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a>winningModelDir <span class="ot">&lt;-</span> <span class="st">"/Users/eric/Library/CloudStorage/OneDrive-ThePennsylvaniaStateUniversity/Etelis/coruscans/rep1/full"</span></span>
-<span id="cb170-2"><a href="#cb170-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb170-3"><a href="#cb170-3" aria-hidden="true" tabindex="-1"></a><span class="co"># for some reason the bayesallfile has 39 columns, but only 31 are labelled.</span></span>
-<span id="cb170-4"><a href="#cb170-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb170-5"><a href="#cb170-5" aria-hidden="true" tabindex="-1"></a><span class="co"># read in a population key to translate numbers into names in figures</span></span>
-<span id="cb170-6"><a href="#cb170-6" aria-hidden="true" tabindex="-1"></a>popkey <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"coruscans/popkey.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb178"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a>winningModelDir <span class="ot">&lt;-</span> <span class="st">"~/Library/CloudStorage/OneDrive-ThePennsylvaniaStateUniversity/Etelis/coruscans/rep1/full"</span></span>
+<span id="cb178-2"><a href="#cb178-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb178-3"><a href="#cb178-3" aria-hidden="true" tabindex="-1"></a><span class="co"># for some reason the bayesallfile has 39 columns, but only 31 are labelled.</span></span>
+<span id="cb178-4"><a href="#cb178-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb178-5"><a href="#cb178-5" aria-hidden="true" tabindex="-1"></a><span class="co"># read in a population key to translate numbers into names in figures</span></span>
+<span id="cb178-6"><a href="#cb178-6" aria-hidden="true" tabindex="-1"></a>popkey <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"coruscans/popkey.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 4 Columns: 2
 ── Column specification ────────────────────────────────────────────────────────
@@ -2312,11 +2406,14 @@ dbl (1): Index
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb172"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(popkey<span class="sc">$</span>Pop) <span class="ot">&lt;-</span> popkey<span class="sc">$</span>Index</span>
-<span id="cb172-2"><a href="#cb172-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb172-3"><a href="#cb172-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb172-4"><a href="#cb172-4" aria-hidden="true" tabindex="-1"></a><span class="co">#read in the posterior for one replicate this may take a minute or two</span></span>
-<span id="cb172-5"><a href="#cb172-5" aria-hidden="true" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="fu">file.path</span>(winningModelDir,<span class="st">"bayesallfile"</span>), <span class="at">comment =</span> <span class="st">"#"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb180"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb180-1"><a href="#cb180-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(popkey<span class="sc">$</span>Pop) <span class="ot">&lt;-</span> popkey<span class="sc">$</span>Index</span>
+<span id="cb180-2"><a href="#cb180-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb180-3"><a href="#cb180-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb180-4"><a href="#cb180-4" aria-hidden="true" tabindex="-1"></a><span class="co">#read in the posterior for one replicate this may take a minute or two</span></span>
+<span id="cb180-5"><a href="#cb180-5" aria-hidden="true" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="fu">file.path</span>(winningModelDir,<span class="st">"bayesallfile"</span>), </span>
+<span id="cb180-6"><a href="#cb180-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">comment =</span> <span class="st">"#"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb180-7"><a href="#cb180-7" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(<span class="at">StepsR =</span> <span class="fu">paste</span>(Replicate,Steps)) <span class="sc">%&gt;%</span> </span>
+<span id="cb180-8"><a href="#cb180-8" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">filter</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: One or more parsing issues, call `problems()` on your data frame for details,
 e.g.:
@@ -2333,45 +2430,54 @@ dbl (30): Steps, Locus, Replicate, lnPost, lnDataL, lnPrbGParam, lnPrior, tr...
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb175"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate migrants per generation</span></span>
-<span id="cb175-2"><a href="#cb175-2" aria-hidden="true" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">migrants.per.gen</span>(posterior)</span>
-<span id="cb175-3"><a href="#cb175-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb175-4"><a href="#cb175-4" aria-hidden="true" tabindex="-1"></a><span class="co"># posterior_long &lt;- posterior %&gt;% </span></span>
-<span id="cb175-5"><a href="#cb175-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                   pivot_longer(starts_with(c("Theta_", "M_", "Nm_","D_", "d_")),</span></span>
-<span id="cb175-6"><a href="#cb175-6" aria-hidden="true" tabindex="-1"></a><span class="co">#                                names_to = "parameter", </span></span>
-<span id="cb175-7"><a href="#cb175-7" aria-hidden="true" tabindex="-1"></a><span class="co">#                                values_to = "value")</span></span>
-<span id="cb175-8"><a href="#cb175-8" aria-hidden="true" tabindex="-1"></a><span class="co">#make a new labeling key</span></span>
-<span id="cb175-9"><a href="#cb175-9" aria-hidden="true" tabindex="-1"></a>posterior_parameters <span class="ot">&lt;-</span> <span class="fu">names</span>(posterior)[<span class="fu">str_which</span>(<span class="fu">names</span>(posterior),</span>
-<span id="cb175-10"><a href="#cb175-10" aria-hidden="true" tabindex="-1"></a>                                                   <span class="fu">paste</span>(<span class="fu">c</span>(<span class="st">"Theta_"</span>, <span class="st">"M_"</span>, </span>
-<span id="cb175-11"><a href="#cb175-11" aria-hidden="true" tabindex="-1"></a>                                                           <span class="st">"Nm_"</span>,<span class="st">"D_"</span>, <span class="st">"d_"</span>), </span>
-<span id="cb175-12"><a href="#cb175-12" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">collapse =</span> <span class="st">"|"</span>))]</span>
-<span id="cb175-13"><a href="#cb175-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb175-14"><a href="#cb175-14" aria-hidden="true" tabindex="-1"></a>parameter_key <span class="ot">&lt;-</span> posterior_parameters <span class="sc">%&gt;%</span> </span>
-<span id="cb175-15"><a href="#cb175-15" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_replace</span>(<span class="st">"(</span><span class="sc">\\</span><span class="st">d)_(</span><span class="sc">\\</span><span class="st">d)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1 to </span><span class="sc">\\</span><span class="st">2"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb175-16"><a href="#cb175-16" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_replace</span>(<span class="st">"M_"</span>, <span class="st">"m/mu "</span> ) <span class="sc">%&gt;%</span> </span>
-<span id="cb175-17"><a href="#cb175-17" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_replace</span>(<span class="st">"Theta_"</span>, <span class="st">"theta "</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb175-18"><a href="#cb175-18" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_replace_all</span>(popkey<span class="sc">$</span>Pop) <span class="sc">%&gt;%</span> </span>
-<span id="cb175-19"><a href="#cb175-19" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_replace</span>(<span class="st">"Nm_"</span>, <span class="st">"4Nem "</span>) </span>
-<span id="cb175-20"><a href="#cb175-20" aria-hidden="true" tabindex="-1"></a>                                  </span>
-<span id="cb175-21"><a href="#cb175-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb175-22"><a href="#cb175-22" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(parameter_key) <span class="ot">&lt;-</span> posterior_parameters</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb183"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate migrants per generation</span></span>
+<span id="cb183-2"><a href="#cb183-2" aria-hidden="true" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">migrants.per.gen</span>(posterior)</span>
+<span id="cb183-3"><a href="#cb183-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-4"><a href="#cb183-4" aria-hidden="true" tabindex="-1"></a><span class="co"># posterior_long &lt;- posterior %&gt;% </span></span>
+<span id="cb183-5"><a href="#cb183-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                   pivot_longer(starts_with(c("Theta_", "M_", "Nm_","D_", "d_")),</span></span>
+<span id="cb183-6"><a href="#cb183-6" aria-hidden="true" tabindex="-1"></a><span class="co">#                                names_to = "parameter", </span></span>
+<span id="cb183-7"><a href="#cb183-7" aria-hidden="true" tabindex="-1"></a><span class="co">#                                values_to = "value")</span></span>
+<span id="cb183-8"><a href="#cb183-8" aria-hidden="true" tabindex="-1"></a><span class="co">#make a new labeling key</span></span>
+<span id="cb183-9"><a href="#cb183-9" aria-hidden="true" tabindex="-1"></a>posterior_parameters <span class="ot">&lt;-</span> <span class="fu">names</span>(posterior)[<span class="fu">str_which</span>(<span class="fu">names</span>(posterior),</span>
+<span id="cb183-10"><a href="#cb183-10" aria-hidden="true" tabindex="-1"></a>                                                   <span class="fu">paste</span>(<span class="fu">c</span>(<span class="st">"Theta_"</span>, <span class="st">"M_"</span>, </span>
+<span id="cb183-11"><a href="#cb183-11" aria-hidden="true" tabindex="-1"></a>                                                           <span class="st">"Nm_"</span>,<span class="st">"D_"</span>, <span class="st">"d_"</span>), </span>
+<span id="cb183-12"><a href="#cb183-12" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">collapse =</span> <span class="st">"|"</span>))]</span>
+<span id="cb183-13"><a href="#cb183-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-14"><a href="#cb183-14" aria-hidden="true" tabindex="-1"></a>parameter_key <span class="ot">&lt;-</span> posterior_parameters <span class="sc">%&gt;%</span> </span>
+<span id="cb183-15"><a href="#cb183-15" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_replace</span>(<span class="st">"(</span><span class="sc">\\</span><span class="st">d)_(</span><span class="sc">\\</span><span class="st">d)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1 to </span><span class="sc">\\</span><span class="st">2"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb183-16"><a href="#cb183-16" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_replace</span>(<span class="st">"M_"</span>, <span class="st">"m/mu "</span> ) <span class="sc">%&gt;%</span> </span>
+<span id="cb183-17"><a href="#cb183-17" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_replace</span>(<span class="st">"Theta_"</span>, <span class="st">"theta "</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb183-18"><a href="#cb183-18" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_replace_all</span>(popkey<span class="sc">$</span>Pop) <span class="sc">%&gt;%</span> </span>
+<span id="cb183-19"><a href="#cb183-19" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_replace</span>(<span class="st">"Nm_"</span>, <span class="st">"4Nem "</span>) </span>
+<span id="cb183-20"><a href="#cb183-20" aria-hidden="true" tabindex="-1"></a>                                  </span>
+<span id="cb183-21"><a href="#cb183-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-22"><a href="#cb183-22" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(parameter_key) <span class="ot">&lt;-</span> posterior_parameters</span>
+<span id="cb183-23"><a href="#cb183-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-24"><a href="#cb183-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-25"><a href="#cb183-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-26"><a href="#cb183-26" aria-hidden="true" tabindex="-1"></a>posterior_thetaf_badloci <span class="ot">&lt;-</span> posterior <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Theta_1 <span class="sc">&lt;</span> <span class="fl">1e-4</span> <span class="sc">&amp;</span> </span>
+<span id="cb183-27"><a href="#cb183-27" aria-hidden="true" tabindex="-1"></a>                                         Theta_2 <span class="sc">&lt;</span> <span class="fl">1e-4</span>  <span class="sc">&amp;</span> </span>
+<span id="cb183-28"><a href="#cb183-28" aria-hidden="true" tabindex="-1"></a>                                         Theta_3 <span class="sc">&lt;</span> <span class="fl">1e-4</span> <span class="sc">&amp;</span> </span>
+<span id="cb183-29"><a href="#cb183-29" aria-hidden="true" tabindex="-1"></a>                                         Theta_4 <span class="sc">&lt;</span> <span class="fl">1e-4</span>)</span>
+<span id="cb183-30"><a href="#cb183-30" aria-hidden="true" tabindex="-1"></a>badloci <span class="ot">&lt;-</span> posterior_thetaf_badloci <span class="sc">%&gt;%</span> <span class="fu">count</span>(Locus)</span>
+<span id="cb183-31"><a href="#cb183-31" aria-hidden="true" tabindex="-1"></a><span class="co"># these loci seem to have Q2 = 22026.46579...?</span></span>
+<span id="cb183-32"><a href="#cb183-32" aria-hidden="true" tabindex="-1"></a>posterior_thetaf <span class="ot">&lt;-</span> posterior <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Locus <span class="sc">%in%</span> badloci<span class="sc">$</span>Locus)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="locus-by-locus-plot" class="level4">
-<h4 class="anchored" data-anchor-id="locus-by-locus-plot">Locus by Locus Plot</h4>
+<section id="check-convergence" class="level4">
+<h4 class="anchored" data-anchor-id="check-convergence">Check Convergence</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb176"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a>Theta_plot <span class="ot">&lt;-</span> posterior_long <span class="sc">%&gt;%</span>  </span>
-<span id="cb176-2"><a href="#cb176-2" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(parameter <span class="sc">==</span> <span class="st">"Theta_2"</span>) <span class="sc">%&gt;%</span>  </span>
-<span id="cb176-3"><a href="#cb176-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb176-4"><a href="#cb176-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">geom_density</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> value, </span>
-<span id="cb176-5"><a href="#cb176-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">group=</span>Locus, <span class="at">color =</span>Locus), <span class="at">weight =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
-<span id="cb176-6"><a href="#cb176-6" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">scale_x_log10</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="fl">1e-6</span>,<span class="fl">0.01</span>)) <span class="sc">+</span></span>
-<span id="cb176-7"><a href="#cb176-7" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">facet_wrap</span>(<span class="sc">~</span>parameter, </span>
-<span id="cb176-8"><a href="#cb176-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">scales =</span> <span class="st">"free_y"</span>,</span>
-<span id="cb176-9"><a href="#cb176-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labeller =</span> <span class="fu">labeller</span>(<span class="at">parameter=</span> parameter_key), </span>
-<span id="cb176-10"><a href="#cb176-10" aria-hidden="true" tabindex="-1"></a>                           <span class="at">dir =</span> <span class="st">"h"</span>,<span class="at">nrow=</span><span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb176-11"><a href="#cb176-11" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="fu">rel</span>(<span class="fl">0.6</span>)))</span>
-<span id="cb176-12"><a href="#cb176-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb176-13"><a href="#cb176-13" aria-hidden="true" tabindex="-1"></a>Theta_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb184"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb184-1"><a href="#cb184-1" aria-hidden="true" tabindex="-1"></a>posterior.grouped <span class="ot">&lt;-</span> posterior <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Locus <span class="sc">==</span> <span class="dv">31</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb184-2"><a href="#cb184-2" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">select</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">"Replicate"</span>,</span>
+<span id="cb184-3"><a href="#cb184-3" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">"Steps"</span>,</span>
+<span id="cb184-4"><a href="#cb184-4" aria-hidden="true" tabindex="-1"></a>                                        posterior_parameters))) <span class="sc">%&gt;%</span> </span>
+<span id="cb184-5"><a href="#cb184-5" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">group_by</span>(Replicate)</span>
+<span id="cb184-6"><a href="#cb184-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb184-7"><a href="#cb184-7" aria-hidden="true" tabindex="-1"></a>posterior.reps <span class="ot">&lt;-</span> <span class="fu">group_split</span>(posterior.grouped)</span>
+<span id="cb184-8"><a href="#cb184-8" aria-hidden="true" tabindex="-1"></a>posterior.key <span class="ot">&lt;-</span> <span class="fu">group_keys</span>(posterior.grouped)</span>
+<span id="cb184-9"><a href="#cb184-9" aria-hidden="true" tabindex="-1"></a>                        </span>
+<span id="cb184-10"><a href="#cb184-10" aria-hidden="true" tabindex="-1"></a>posterior.mcmc <span class="ot">&lt;-</span> <span class="fu">mcmc.list</span>(<span class="fu">lapply</span>(posterior.reps,mcmc))</span>
+<span id="cb184-11"><a href="#cb184-11" aria-hidden="true" tabindex="-1"></a>posterior.ggs <span class="ot">&lt;-</span> <span class="fu">ggs</span>(posterior.mcmc)</span>
+<span id="cb184-12"><a href="#cb184-12" aria-hidden="true" tabindex="-1"></a><span class="co">#ggmcmc(posterior.ggs, param_page = 4)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="sum-over-loci" class="level4">
@@ -2380,46 +2486,45 @@ dbl (30): Steps, Locus, Replicate, lnPost, lnDataL, lnPrbGParam, lnPrior, tr...
 <h5 class="anchored" data-anchor-id="bayesfile">Bayesfile</h5>
 <p>These functions are for reconstructing distributions from the <code>bayesfile</code> which consists of distributions for each locus calculated as histograms</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb177"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a>bayesfilenames <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Locus"</span>,<span class="st">"pnumber"</span>,<span class="st">"HPC50"</span>,<span class="st">"HPC95"</span>,<span class="st">"value"</span>,<span class="st">"count"</span>,</span>
-<span id="cb177-2"><a href="#cb177-2" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"freq"</span>,<span class="st">"cumFreq"</span>,<span class="st">"priorFreq"</span>)</span>
-<span id="cb177-3"><a href="#cb177-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-4"><a href="#cb177-4" aria-hidden="true" tabindex="-1"></a>bf <span class="ot">&lt;-</span> <span class="fu">read_table</span>(<span class="at">file =</span> <span class="fu">file.path</span>(winningModelDir,<span class="st">"bayesfile"</span>), </span>
-<span id="cb177-5"><a href="#cb177-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">col_types =</span> <span class="st">"ifiiddddd"</span>, <span class="at">col_names =</span> bayesfilenames,</span>
-<span id="cb177-6"><a href="#cb177-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">comment =</span> <span class="st">"#"</span>, <span class="at">skip_empty_rows =</span> T)</span>
-<span id="cb177-7"><a href="#cb177-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-8"><a href="#cb177-8" aria-hidden="true" tabindex="-1"></a>parameter_number_table <span class="ot">&lt;-</span> <span class="fu">read_table</span>(<span class="at">file =</span> <span class="fu">file.path</span>(winningModelDir,<span class="st">"bayesfile"</span>), </span>
-<span id="cb177-9"><a href="#cb177-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">col_types =</span> <span class="st">"cic"</span>, </span>
-<span id="cb177-10"><a href="#cb177-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"drop"</span>,<span class="st">"pnumber"</span>,<span class="st">"parameter"</span>),</span>
-<span id="cb177-11"><a href="#cb177-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">skip=</span><span class="dv">9</span>, <span class="at">n_max =</span> <span class="dv">16</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb177-12"><a href="#cb177-12" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">select</span>(<span class="sc">-</span>drop) <span class="sc">%&gt;%</span></span>
-<span id="cb177-13"><a href="#cb177-13" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">parameter =</span> <span class="fu">str_replace_all</span>(parameter, <span class="st">","</span>,<span class="st">"_"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb177-14"><a href="#cb177-14" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">parameter =</span> <span class="fu">str_remove_all</span>(parameter,<span class="st">"</span><span class="sc">\\</span><span class="st">("</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb177-15"><a href="#cb177-15" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">parameter =</span> <span class="fu">str_remove_all</span>(parameter,<span class="st">"</span><span class="sc">\\</span><span class="st">)"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb177-16"><a href="#cb177-16" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">left_join</span>(<span class="fu">tibble</span>(<span class="at">parameter_name =</span></span>
-<span id="cb177-17"><a href="#cb177-17" aria-hidden="true" tabindex="-1"></a>                                        parameter_key,</span>
-<span id="cb177-18"><a href="#cb177-18" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">parameter=</span><span class="fu">names</span>(parameter_key)),</span>
-<span id="cb177-19"><a href="#cb177-19" aria-hidden="true" tabindex="-1"></a>                                <span class="at">by =</span> <span class="st">"parameter"</span>)</span>
-<span id="cb177-20"><a href="#cb177-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-21"><a href="#cb177-21" aria-hidden="true" tabindex="-1"></a>parameter_number_key <span class="ot">&lt;-</span> parameter_number_table<span class="sc">$</span>parameter_name </span>
-<span id="cb177-22"><a href="#cb177-22" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(parameter_number_key) <span class="ot">&lt;-</span> parameter_number_table<span class="sc">$</span>pnumber</span>
-<span id="cb177-23"><a href="#cb177-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-24"><a href="#cb177-24" aria-hidden="true" tabindex="-1"></a><span class="co">#bf %&gt;% ggplot(aes(x=value, y = freq, color = Locus)) + </span></span>
-<span id="cb177-25"><a href="#cb177-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  geom_line() + scale_color_continuous() + </span></span>
-<span id="cb177-26"><a href="#cb177-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  facet_wrap(vars(Parameter), scales = "free")</span></span>
-<span id="cb177-27"><a href="#cb177-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-28"><a href="#cb177-28" aria-hidden="true" tabindex="-1"></a><span class="co"># bf %&gt;% filter(pnumber %in% 1:9) %&gt;% filter(Locus %in% 1:109) %&gt;% </span></span>
-<span id="cb177-29"><a href="#cb177-29" aria-hidden="true" tabindex="-1"></a><span class="co">#       ggplot(aes(x=value, y = freq, color = Locus)) + geom_line() +</span></span>
-<span id="cb177-30"><a href="#cb177-30" aria-hidden="true" tabindex="-1"></a><span class="co">#       facet_wrap(vars(pnumber), scales = "free")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb185"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a>bayesfilenames <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Locus"</span>,<span class="st">"pnumber"</span>,<span class="st">"HPC50"</span>,<span class="st">"HPC95"</span>,<span class="st">"value"</span>,<span class="st">"count"</span>,</span>
+<span id="cb185-2"><a href="#cb185-2" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"freq"</span>,<span class="st">"cumFreq"</span>,<span class="st">"priorFreq"</span>)</span>
+<span id="cb185-3"><a href="#cb185-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb185-4"><a href="#cb185-4" aria-hidden="true" tabindex="-1"></a>bf <span class="ot">&lt;-</span> <span class="fu">read_table</span>(<span class="at">file =</span> <span class="fu">file.path</span>(winningModelDir,<span class="st">"bayesfile"</span>), </span>
+<span id="cb185-5"><a href="#cb185-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">col_types =</span> <span class="st">"ifiiddddd"</span>, <span class="at">col_names =</span> bayesfilenames,</span>
+<span id="cb185-6"><a href="#cb185-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">comment =</span> <span class="st">"#"</span>, <span class="at">skip_empty_rows =</span> T)</span>
+<span id="cb185-7"><a href="#cb185-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb185-8"><a href="#cb185-8" aria-hidden="true" tabindex="-1"></a>parameter_number_table <span class="ot">&lt;-</span> <span class="fu">read_table</span>(<span class="at">file =</span> <span class="fu">file.path</span>(winningModelDir,<span class="st">"bayesfile"</span>), </span>
+<span id="cb185-9"><a href="#cb185-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">col_types =</span> <span class="st">"cic"</span>, </span>
+<span id="cb185-10"><a href="#cb185-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"drop"</span>,<span class="st">"pnumber"</span>,<span class="st">"parameter"</span>),</span>
+<span id="cb185-11"><a href="#cb185-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">skip=</span><span class="dv">9</span>, <span class="at">n_max =</span> <span class="dv">16</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb185-12"><a href="#cb185-12" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">select</span>(<span class="sc">-</span>drop) <span class="sc">%&gt;%</span></span>
+<span id="cb185-13"><a href="#cb185-13" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">parameter =</span> <span class="fu">str_replace_all</span>(parameter, <span class="st">","</span>,<span class="st">"_"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb185-14"><a href="#cb185-14" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">parameter =</span> <span class="fu">str_remove_all</span>(parameter,<span class="st">"</span><span class="sc">\\</span><span class="st">("</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb185-15"><a href="#cb185-15" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">parameter =</span> <span class="fu">str_remove_all</span>(parameter,<span class="st">"</span><span class="sc">\\</span><span class="st">)"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb185-16"><a href="#cb185-16" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">left_join</span>(<span class="fu">tibble</span>(<span class="at">parameter_name =</span></span>
+<span id="cb185-17"><a href="#cb185-17" aria-hidden="true" tabindex="-1"></a>                                        parameter_key,</span>
+<span id="cb185-18"><a href="#cb185-18" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">parameter=</span><span class="fu">names</span>(parameter_key)),</span>
+<span id="cb185-19"><a href="#cb185-19" aria-hidden="true" tabindex="-1"></a>                                <span class="at">by =</span> <span class="st">"parameter"</span>)</span>
+<span id="cb185-20"><a href="#cb185-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb185-21"><a href="#cb185-21" aria-hidden="true" tabindex="-1"></a>parameter_number_key <span class="ot">&lt;-</span> parameter_number_table<span class="sc">$</span>parameter_name </span>
+<span id="cb185-22"><a href="#cb185-22" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(parameter_number_key) <span class="ot">&lt;-</span> parameter_number_table<span class="sc">$</span>pnumber</span>
+<span id="cb185-23"><a href="#cb185-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb185-24"><a href="#cb185-24" aria-hidden="true" tabindex="-1"></a><span class="co">#bf %&gt;% ggplot(aes(x=value, y = freq, color = Locus)) + </span></span>
+<span id="cb185-25"><a href="#cb185-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  geom_line() + scale_color_continuous() + </span></span>
+<span id="cb185-26"><a href="#cb185-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  facet_wrap(vars(Parameter), scales = "free")</span></span>
+<span id="cb185-27"><a href="#cb185-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb185-28"><a href="#cb185-28" aria-hidden="true" tabindex="-1"></a><span class="co"># bf %&gt;% filter(pnumber %in% 1:9) %&gt;% filter(Locus %in% 1:109) %&gt;% </span></span>
+<span id="cb185-29"><a href="#cb185-29" aria-hidden="true" tabindex="-1"></a><span class="co">#       ggplot(aes(x=value, y = freq, color = Locus)) + geom_line() +</span></span>
+<span id="cb185-30"><a href="#cb185-30" aria-hidden="true" tabindex="-1"></a><span class="co">#       facet_wrap(vars(pnumber), scales = "free")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="bayesfile---theta" class="level5">
-<h5 class="anchored" data-anchor-id="bayesfile---theta">Bayesfile - Theta</h5>
+<section id="theta" class="level6">
+<h6 class="anchored" data-anchor-id="theta">Theta</h6>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb178"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a>bf <span class="sc">%&gt;%</span> <span class="fu">filter</span>(pnumber <span class="sc">%in%</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Locus <span class="sc">==</span> <span class="dv">440</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb178-2"><a href="#cb178-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> freq, <span class="at">color =</span> pnumber)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb178-3"><a href="#cb178-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"YlGnBu"</span>, <span class="at">labels =</span> parameter_number_key) <span class="sc">+</span></span>
-<span id="cb178-4"><a href="#cb178-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">0.02</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="fl">0.015</span>) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> priorFreq),</span>
-<span id="cb178-5"><a href="#cb178-5" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">linetype=</span><span class="st">"dotted"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb186"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a>bf <span class="sc">%&gt;%</span> <span class="fu">filter</span>(pnumber <span class="sc">%in%</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Locus <span class="sc">==</span> <span class="dv">440</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> freq, <span class="at">color =</span> pnumber)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb186-3"><a href="#cb186-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"YlGnBu"</span>, <span class="at">labels =</span> parameter_number_key) <span class="sc">+</span></span>
+<span id="cb186-4"><a href="#cb186-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">0.02</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="fl">0.015</span>) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> priorFreq),</span>
+<span id="cb186-5"><a href="#cb186-5" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">linetype=</span><span class="st">"dotted"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Removed 6800 rows containing missing values (`geom_line()`).</code></pre>
 </div>
@@ -2427,283 +2532,354 @@ dbl (30): Steps, Locus, Replicate, lnPost, lnDataL, lnPrbGParam, lnPrior, tr...
 <pre><code>Warning: Removed 6872 rows containing missing values (`geom_line()`).</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-68-1.png" class="img-fluid" width="672"></p>
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-70-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
-<section id="bayesfile---mmu" class="level5">
-<h5 class="anchored" data-anchor-id="bayesfile---mmu">Bayesfile - M/mu</h5>
+<section id="mmu" class="level6">
+<h6 class="anchored" data-anchor-id="mmu">M/mu</h6>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb181"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb181-1"><a href="#cb181-1" aria-hidden="true" tabindex="-1"></a>bf <span class="sc">%&gt;%</span> <span class="fu">filter</span>(pnumber <span class="sc">%in%</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">16</span>) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Locus <span class="sc">==</span> <span class="dv">440</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb181-2"><a href="#cb181-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> freq, <span class="at">color =</span> pnumber)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb181-3"><a href="#cb181-3" aria-hidden="true" tabindex="-1"></a>      <span class="co">#scale_color_brewer(palette = "YlGnBu", labels = parameter_number_key) +</span></span>
-<span id="cb181-4"><a href="#cb181-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> priorFreq),</span>
-<span id="cb181-5"><a href="#cb181-5" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">linetype=</span><span class="st">"dotted"</span>) <span class="sc">+</span></span>
-<span id="cb181-6"><a href="#cb181-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="fl">1e4</span>,<span class="fl">1e6</span>)) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">0.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb189"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb189-1"><a href="#cb189-1" aria-hidden="true" tabindex="-1"></a>bf <span class="sc">%&gt;%</span> <span class="fu">filter</span>(pnumber <span class="sc">%in%</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">16</span>) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Locus <span class="sc">==</span> <span class="dv">440</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb189-2"><a href="#cb189-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> freq, <span class="at">color =</span> pnumber)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb189-3"><a href="#cb189-3" aria-hidden="true" tabindex="-1"></a>      <span class="co">#scale_color_brewer(palette = "YlGnBu", labels = parameter_number_key) +</span></span>
+<span id="cb189-4"><a href="#cb189-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> priorFreq),</span>
+<span id="cb189-5"><a href="#cb189-5" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">linetype=</span><span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb189-6"><a href="#cb189-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="fl">1e4</span>,<span class="fl">1e6</span>)) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">0.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="bayesfile---nm" class="level5">
-<h5 class="anchored" data-anchor-id="bayesfile---nm">Bayesfile - Nm</h5>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb182"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb182-1"><a href="#cb182-1" aria-hidden="true" tabindex="-1"></a>bf <span class="sc">%&gt;%</span> <span class="fu">filter</span>(pnumber <span class="sc">%in%</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Locus <span class="sc">==</span> <span class="dv">440</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb182-2"><a href="#cb182-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> freq, <span class="at">color =</span> pnumber)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb182-3"><a href="#cb182-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"YlGnBu"</span>, <span class="at">labels =</span> parameter_number_key) <span class="sc">+</span></span>
-<span id="cb182-4"><a href="#cb182-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">0.02</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="fl">0.015</span>) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> priorFreq),</span>
-<span id="cb182-5"><a href="#cb182-5" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">linetype=</span><span class="st">"dotted"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
 <section id="bayesallfile" class="level5">
 <h5 class="anchored" data-anchor-id="bayesallfile">Bayesallfile</h5>
 <p>These functions are for reconstructing distributions from the “raw” posterior output, which Peter calls a <code>bayesallfile</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb183"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a>remove_prior <span class="ot">&lt;-</span> <span class="cf">function</span>(densityd,prior,<span class="at">threshold =</span> <span class="fl">1e-10</span>){</span>
-<span id="cb183-2"><a href="#cb183-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this function changes values less than a threshold </span></span>
-<span id="cb183-3"><a href="#cb183-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to zero removes a prior from the </span></span>
-<span id="cb183-4"><a href="#cb183-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># y values of a density distributions (density).</span></span>
-<span id="cb183-5"><a href="#cb183-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># first it zeros values less than a threshold, then </span></span>
-<span id="cb183-6"><a href="#cb183-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># removes the prior, then renormalizes so the density</span></span>
-<span id="cb183-7"><a href="#cb183-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sums to 1</span></span>
-<span id="cb183-8"><a href="#cb183-8" aria-hidden="true" tabindex="-1"></a>  densityd[<span class="fu">which</span>(densityd <span class="sc">&lt;</span> threshold)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb183-9"><a href="#cb183-9" aria-hidden="true" tabindex="-1"></a>  new <span class="ot">&lt;-</span> (densityd<span class="sc">/</span>prior)<span class="sc">/</span><span class="fu">sum</span>(densityd<span class="sc">/</span>prior)</span>
-<span id="cb183-10"><a href="#cb183-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb183-11"><a href="#cb183-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(new)</span>
-<span id="cb183-12"><a href="#cb183-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb183-13"><a href="#cb183-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb183-14"><a href="#cb183-14" aria-hidden="true" tabindex="-1"></a>sum_over_loci <span class="ot">&lt;-</span> <span class="cf">function</span>(df,parameter){</span>
-<span id="cb183-15"><a href="#cb183-15" aria-hidden="true" tabindex="-1"></a>      <span class="co">#this function takes a data frame of probability densities for many loci</span></span>
-<span id="cb183-16"><a href="#cb183-16" aria-hidden="true" tabindex="-1"></a>      <span class="co"># that have had the prior removed,</span></span>
-<span id="cb183-17"><a href="#cb183-17" aria-hidden="true" tabindex="-1"></a>      <span class="co"># together with with a logged prior named "logPrior",</span></span>
-<span id="cb183-18"><a href="#cb183-18" aria-hidden="true" tabindex="-1"></a>      <span class="co">#  as well as the name of a parameter (e.g. "Theta_1")</span></span>
-<span id="cb183-19"><a href="#cb183-19" aria-hidden="true" tabindex="-1"></a>      <span class="co"># and sums the densities over loci.</span></span>
-<span id="cb183-20"><a href="#cb183-20" aria-hidden="true" tabindex="-1"></a>       <span class="co"># Rmpfr package allows quadruple precision for calcs on very small numbers.</span></span>
-<span id="cb183-21"><a href="#cb183-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">require</span>(Rmpfr)</span>
-<span id="cb183-22"><a href="#cb183-22" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb183-23"><a href="#cb183-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#add a teeny-tiny amount to all values to avoid zeros</span></span>
-<span id="cb183-24"><a href="#cb183-24" aria-hidden="true" tabindex="-1"></a>    df2 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(parameter), </span>
-<span id="cb183-25"><a href="#cb183-25" aria-hidden="true" tabindex="-1"></a>                        <span class="at">.fns=</span> <span class="cf">function</span>(x) x <span class="sc">+</span> <span class="fl">1e-11</span>))  <span class="sc">%&gt;%</span> </span>
-<span id="cb183-26"><a href="#cb183-26" aria-hidden="true" tabindex="-1"></a>      <span class="co">#log all values</span></span>
-<span id="cb183-27"><a href="#cb183-27" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="fu">c</span>(parameter)),</span>
-<span id="cb183-28"><a href="#cb183-28" aria-hidden="true" tabindex="-1"></a>                  <span class="at">.fns=</span>log)) <span class="sc">%&gt;%</span> </span>
-<span id="cb183-29"><a href="#cb183-29" aria-hidden="true" tabindex="-1"></a>      <span class="co"># convert the df to rowwise so that rows can be summed</span></span>
-<span id="cb183-30"><a href="#cb183-30" aria-hidden="true" tabindex="-1"></a>      <span class="co"># and then sum across the row, including the prior</span></span>
-<span id="cb183-31"><a href="#cb183-31" aria-hidden="true" tabindex="-1"></a>          <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb183-32"><a href="#cb183-32" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">sum_param_prior =</span> </span>
-<span id="cb183-33"><a href="#cb183-33" aria-hidden="true" tabindex="-1"></a>          <span class="fu">sum</span>(<span class="fu">c_across</span>(<span class="fu">starts_with</span>(<span class="fu">c</span>(parameter,<span class="st">"logPrior"</span>))))) <span class="sc">%&gt;%</span> </span>
-<span id="cb183-34"><a href="#cb183-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">#convert back to a regular df</span></span>
-<span id="cb183-35"><a href="#cb183-35" aria-hidden="true" tabindex="-1"></a>          <span class="fu">ungroup</span>()</span>
-<span id="cb183-36"><a href="#cb183-36" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb183-37"><a href="#cb183-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">#need to convert to quadruple precision because </span></span>
-<span id="cb183-38"><a href="#cb183-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">#these will exponentiate to very small numbers.</span></span>
-<span id="cb183-39"><a href="#cb183-39" aria-hidden="true" tabindex="-1"></a>    sum_param_prior_exp <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">mpfr</span>(df2<span class="sc">$</span>sum_param_prior, <span class="at">precBits =</span> <span class="dv">128</span>))</span>
-<span id="cb183-40"><a href="#cb183-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># standardize by dividing by the sum of the column</span></span>
-<span id="cb183-41"><a href="#cb183-41" aria-hidden="true" tabindex="-1"></a>    sum_param_prior_standardized <span class="ot">&lt;-</span></span>
-<span id="cb183-42"><a href="#cb183-42" aria-hidden="true" tabindex="-1"></a>             sum_param_prior_exp<span class="sc">/</span><span class="fu">sum</span>(sum_param_prior_exp)</span>
-<span id="cb183-43"><a href="#cb183-43" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb183-44"><a href="#cb183-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb183-45"><a href="#cb183-45" aria-hidden="true" tabindex="-1"></a>    <span class="co">#drop the intermediate columns (no longer needed), change the standardized</span></span>
-<span id="cb183-46"><a href="#cb183-46" aria-hidden="true" tabindex="-1"></a>    <span class="co"># output back to double precision so that it can be incorporated into the df</span></span>
-<span id="cb183-47"><a href="#cb183-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># rename the summed column after the parameter</span></span>
-<span id="cb183-48"><a href="#cb183-48" aria-hidden="true" tabindex="-1"></a>      df3 <span class="ot">&lt;-</span> df2 <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(sum_param_prior)) <span class="sc">%&gt;%</span></span>
-<span id="cb183-49"><a href="#cb183-49" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">summed_over_loci =</span></span>
-<span id="cb183-50"><a href="#cb183-50" aria-hidden="true" tabindex="-1"></a>          <span class="fu">as.numeric</span>(sum_param_prior_standardized)) <span class="sc">%&gt;%</span> </span>
-<span id="cb183-51"><a href="#cb183-51" aria-hidden="true" tabindex="-1"></a>          <span class="fu">rename_with</span>(<span class="at">.fn =</span> <span class="sc">~</span> <span class="fu">paste</span>(parameter), </span>
-<span id="cb183-52"><a href="#cb183-52" aria-hidden="true" tabindex="-1"></a>                      <span class="at">.cols =</span> summed_over_loci)</span>
-<span id="cb183-53"><a href="#cb183-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(df3)</span>
-<span id="cb183-54"><a href="#cb183-54" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb183-55"><a href="#cb183-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb183-56"><a href="#cb183-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb183-57"><a href="#cb183-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb183-58"><a href="#cb183-58" aria-hidden="true" tabindex="-1"></a>summarize_posterior <span class="ot">&lt;-</span> <span class="cf">function</span>(posterior, </span>
-<span id="cb183-59"><a href="#cb183-59" aria-hidden="true" tabindex="-1"></a>                  <span class="at">parameter_type =</span> <span class="fu">c</span>(<span class="st">"Theta"</span>,<span class="st">"M"</span>,<span class="st">"Nm"</span>,<span class="st">"D"</span>),</span>
-<span id="cb183-60"><a href="#cb183-60" aria-hidden="true" tabindex="-1"></a>                  <span class="at">prior_params =</span> <span class="fu">c</span>(min,mean,max),</span>
-<span id="cb183-61"><a href="#cb183-61" aria-hidden="true" tabindex="-1"></a>                  <span class="at">n=</span><span class="dv">16384</span>){</span>
-<span id="cb183-62"><a href="#cb183-62" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this function takes a Migrate-n posterior "bayesallfile" as a dataframe</span></span>
-<span id="cb183-63"><a href="#cb183-63" aria-hidden="true" tabindex="-1"></a>  <span class="co"># as well as one of the parameter types, and the prior on that parameter</span></span>
-<span id="cb183-64"><a href="#cb183-64" aria-hidden="true" tabindex="-1"></a>  <span class="co"># as a vector c(min,mean,max). Currently only exponential priors supported</span></span>
-<span id="cb183-65"><a href="#cb183-65" aria-hidden="true" tabindex="-1"></a>  <span class="co"># it will create densities for each parameter of the given type,</span></span>
-<span id="cb183-66"><a href="#cb183-66" aria-hidden="true" tabindex="-1"></a>  <span class="co"># remove the prior from each, sum across loci, and re-add the prior (once)</span></span>
-<span id="cb183-67"><a href="#cb183-67" aria-hidden="true" tabindex="-1"></a>  parameters <span class="ot">&lt;-</span> <span class="fu">names</span>(posterior) <span class="sc">%&gt;%</span></span>
-<span id="cb183-68"><a href="#cb183-68" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">str_subset</span>(parameter_type)</span>
-<span id="cb183-69"><a href="#cb183-69" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create a tibble with the x values for all density plots </span></span>
-<span id="cb183-70"><a href="#cb183-70" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  for a particular parameter type</span></span>
-<span id="cb183-71"><a href="#cb183-71" aria-hidden="true" tabindex="-1"></a>  getx <span class="ot">&lt;-</span> posterior <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Locus <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb183-72"><a href="#cb183-72" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span>(parameters[<span class="dv">1</span>])</span>
-<span id="cb183-73"><a href="#cb183-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb183-74"><a href="#cb183-74" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create a tibble with x values for a density plot</span></span>
-<span id="cb183-75"><a href="#cb183-75" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  of the chosen number of points</span></span>
-<span id="cb183-76"><a href="#cb183-76" aria-hidden="true" tabindex="-1"></a>  dens <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">.rows =</span> n, <span class="at">x =</span> <span class="fu">density</span>(getx[<span class="dv">1</span>][[<span class="dv">1</span>]],  <span class="at">n=</span>n, </span>
-<span id="cb183-77"><a href="#cb183-77" aria-hidden="true" tabindex="-1"></a>                           <span class="at">from =</span> prior_params[<span class="dv">1</span>], </span>
-<span id="cb183-78"><a href="#cb183-78" aria-hidden="true" tabindex="-1"></a>                           <span class="at">to =</span> prior_params[<span class="dv">3</span>],</span>
-<span id="cb183-79"><a href="#cb183-79" aria-hidden="true" tabindex="-1"></a>                           <span class="at">bw =</span> <span class="st">"nrd0"</span>)<span class="sc">$</span>x)</span>
-<span id="cb183-80"><a href="#cb183-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"calculating densities"</span>)</span>
-<span id="cb183-81"><a href="#cb183-81" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate densities for each parameter of a given type at each locus</span></span>
-<span id="cb183-82"><a href="#cb183-82" aria-hidden="true" tabindex="-1"></a>  dens <span class="ot">&lt;-</span> posterior <span class="sc">%&gt;%</span> </span>
-<span id="cb183-83"><a href="#cb183-83" aria-hidden="true" tabindex="-1"></a>          <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="st">"Steps"</span>,<span class="st">"Locus"</span>,<span class="st">"Replicate"</span>,</span>
-<span id="cb183-84"><a href="#cb183-84" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste0</span>(parameter_type,<span class="st">"_"</span>)))) <span class="sc">%&gt;%</span> </span>
-<span id="cb183-85"><a href="#cb183-85" aria-hidden="true" tabindex="-1"></a>          <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"Locus"</span>, <span class="at">values_from =</span> </span>
-<span id="cb183-86"><a href="#cb183-86" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">starts_with</span>(<span class="fu">paste0</span>(parameter_type,<span class="st">"_"</span>)),</span>
-<span id="cb183-87"><a href="#cb183-87" aria-hidden="true" tabindex="-1"></a>                          <span class="at">names_sep =</span> <span class="st">"-"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb183-88"><a href="#cb183-88" aria-hidden="true" tabindex="-1"></a>          <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="fu">paste0</span>(parameter_type,<span class="st">"_"</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb183-89"><a href="#cb183-89" aria-hidden="true" tabindex="-1"></a>          <span class="fu">map_dfc</span>(<span class="cf">function</span>(x) <span class="fu">density</span>(x, <span class="at">n =</span> n, <span class="at">from =</span> </span>
-<span id="cb183-90"><a href="#cb183-90" aria-hidden="true" tabindex="-1"></a>                                    prior_params[<span class="dv">1</span>], </span>
-<span id="cb183-91"><a href="#cb183-91" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">to =</span> prior_params[<span class="dv">3</span>], </span>
-<span id="cb183-92"><a href="#cb183-92" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">bw =</span> <span class="st">"nrd0"</span>)<span class="sc">$</span>y) <span class="sc">%&gt;%</span></span>
-<span id="cb183-93"><a href="#cb183-93" aria-hidden="true" tabindex="-1"></a>          <span class="fu">bind_cols</span>(dens)</span>
-<span id="cb183-94"><a href="#cb183-94" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb183-95"><a href="#cb183-95" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create, standardize, log and remove prior</span></span>
-<span id="cb183-96"><a href="#cb183-96" aria-hidden="true" tabindex="-1"></a>  dens<span class="sc">$</span>prior <span class="ot">&lt;-</span> <span class="fu">dexp</span>(dens<span class="sc">$</span>x, <span class="at">rate =</span> <span class="dv">1</span><span class="sc">/</span>prior_params[<span class="dv">2</span>], </span>
-<span id="cb183-97"><a href="#cb183-97" aria-hidden="true" tabindex="-1"></a>                     <span class="at">log =</span> F)</span>
-<span id="cb183-98"><a href="#cb183-98" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb183-99"><a href="#cb183-99" aria-hidden="true" tabindex="-1"></a>  dens<span class="sc">$</span>prior <span class="ot">&lt;-</span> dens<span class="sc">$</span>prior<span class="sc">/</span><span class="fu">sum</span>(dens<span class="sc">$</span>prior)</span>
-<span id="cb183-100"><a href="#cb183-100" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb183-101"><a href="#cb183-101" aria-hidden="true" tabindex="-1"></a>  dens<span class="sc">$</span>logPrior <span class="ot">&lt;-</span> <span class="fu">log</span>(dens<span class="sc">$</span>prior)</span>
-<span id="cb183-102"><a href="#cb183-102" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb183-103"><a href="#cb183-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"removing prior"</span>)</span>
-<span id="cb183-104"><a href="#cb183-104" aria-hidden="true" tabindex="-1"></a>  dens2 <span class="ot">&lt;-</span> dens <span class="sc">%&gt;%</span> </span>
-<span id="cb183-105"><a href="#cb183-105" aria-hidden="true" tabindex="-1"></a>        <span class="co">#remove the prior, standardize</span></span>
-<span id="cb183-106"><a href="#cb183-106" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(parameter_type), </span>
-<span id="cb183-107"><a href="#cb183-107" aria-hidden="true" tabindex="-1"></a>                  <span class="sc">~</span> <span class="fu">remove_prior</span>(<span class="at">densityd =</span> .x,</span>
-<span id="cb183-108"><a href="#cb183-108" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">prior =</span> dens<span class="sc">$</span>prior,</span>
-<span id="cb183-109"><a href="#cb183-109" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">threshold =</span> <span class="fl">1e-10</span>) ))</span>
-<span id="cb183-110"><a href="#cb183-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb183-111"><a href="#cb183-111" aria-hidden="true" tabindex="-1"></a>  dens3 <span class="ot">&lt;-</span> dens2</span>
-<span id="cb183-112"><a href="#cb183-112" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb183-113"><a href="#cb183-113" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(p <span class="cf">in</span> parameters){</span>
-<span id="cb183-114"><a href="#cb183-114" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(p)  </span>
-<span id="cb183-115"><a href="#cb183-115" aria-hidden="true" tabindex="-1"></a>    dens3 <span class="ot">&lt;-</span> <span class="fu">sum_over_loci</span>(<span class="at">df =</span> dens3, <span class="at">parameter =</span> p)</span>
-<span id="cb183-116"><a href="#cb183-116" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb183-117"><a href="#cb183-117" aria-hidden="true" tabindex="-1"></a>  <span class="co"># trying to do the above loop with purrr:map_dfc</span></span>
-<span id="cb183-118"><a href="#cb183-118" aria-hidden="true" tabindex="-1"></a>  <span class="co">#dens4 &lt;- parameters %&gt;% </span></span>
-<span id="cb183-119"><a href="#cb183-119" aria-hidden="true" tabindex="-1"></a>  <span class="co">#        map_dfc(.f = ~ sum_over_loci(df = dens2, parameter = .x))</span></span>
-<span id="cb183-120"><a href="#cb183-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dens3)</span>
-<span id="cb183-121"><a href="#cb183-121" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb183-122"><a href="#cb183-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb183-123"><a href="#cb183-123" aria-hidden="true" tabindex="-1"></a>posterior_stats <span class="ot">&lt;-</span> <span class="cf">function</span>(df,parameter){</span>
-<span id="cb183-124"><a href="#cb183-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">require</span>(spatstat.core)</span>
-<span id="cb183-125"><a href="#cb183-125" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">select</span>(x,parameter) <span class="sc">%&gt;%</span> <span class="fu">as.list</span>(<span class="at">bw =</span> <span class="fl">6.33e-05</span>)</span>
-<span id="cb183-126"><a href="#cb183-126" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(p) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)</span>
-<span id="cb183-127"><a href="#cb183-127" aria-hidden="true" tabindex="-1"></a>  p<span class="sc">$</span>bw <span class="ot">&lt;-</span> <span class="fl">6.33e-5</span></span>
-<span id="cb183-128"><a href="#cb183-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">attr</span>(p, <span class="st">"class"</span>) <span class="ot">&lt;-</span> <span class="st">"density"</span></span>
-<span id="cb183-129"><a href="#cb183-129" aria-hidden="true" tabindex="-1"></a>  qu <span class="ot">&lt;-</span> <span class="fu">quantile.density</span>(p, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.975</span>))</span>
-<span id="cb183-130"><a href="#cb183-130" aria-hidden="true" tabindex="-1"></a>  wmo <span class="ot">&lt;-</span> p<span class="sc">$</span>x[<span class="fu">which</span>(p<span class="sc">$</span>y<span class="sc">==</span><span class="fu">max</span>(p<span class="sc">$</span>y))]</span>
-<span id="cb183-131"><a href="#cb183-131" aria-hidden="true" tabindex="-1"></a>  wme <span class="ot">&lt;-</span> <span class="fu">weighted.mean</span>(p<span class="sc">$</span>x, p<span class="sc">$</span>y)</span>
-<span id="cb183-132"><a href="#cb183-132" aria-hidden="true" tabindex="-1"></a>  wsd <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">weighted.var</span>(p<span class="sc">$</span>x, p<span class="sc">$</span>y))</span>
-<span id="cb183-133"><a href="#cb183-133" aria-hidden="true" tabindex="-1"></a>  stats <span class="ot">&lt;-</span> <span class="fu">c</span>(qu,<span class="at">mode =</span> wmo, <span class="at">mean =</span> wme, <span class="at">sd =</span> wsd)</span>
-<span id="cb183-134"><a href="#cb183-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(stats)</span>
-<span id="cb183-135"><a href="#cb183-135" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb190"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a>remove_prior <span class="ot">&lt;-</span> <span class="cf">function</span>(densityd,prior,<span class="at">threshold =</span> <span class="fl">1e-10</span>, <span class="at">quad_prec =</span> F){</span>
+<span id="cb190-2"><a href="#cb190-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this function removes a prior from the </span></span>
+<span id="cb190-3"><a href="#cb190-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># y values of a density distributions (density).</span></span>
+<span id="cb190-4"><a href="#cb190-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># first it zeros values less than a threshold, then </span></span>
+<span id="cb190-5"><a href="#cb190-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># removes the prior, then renormalizes so the density</span></span>
+<span id="cb190-6"><a href="#cb190-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sums to 1.</span></span>
+<span id="cb190-7"><a href="#cb190-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># can optionally use the mpfr package for very small density values.</span></span>
+<span id="cb190-8"><a href="#cb190-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">require</span>(Rmpfr)</span>
+<span id="cb190-9"><a href="#cb190-9" aria-hidden="true" tabindex="-1"></a>  densityd[<span class="fu">which</span>(densityd <span class="sc">&lt;</span> threshold)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb190-10"><a href="#cb190-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(quad_prec){</span>
+<span id="cb190-11"><a href="#cb190-11" aria-hidden="true" tabindex="-1"></a>    densityd <span class="ot">&lt;-</span> <span class="fu">mpfr</span>(densityd,<span class="at">precBits =</span> <span class="dv">128</span>)</span>
+<span id="cb190-12"><a href="#cb190-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb190-13"><a href="#cb190-13" aria-hidden="true" tabindex="-1"></a>  new <span class="ot">&lt;-</span> (densityd<span class="sc">/</span>prior)<span class="sc">/</span><span class="fu">sum</span>(densityd<span class="sc">/</span>prior)</span>
+<span id="cb190-14"><a href="#cb190-14" aria-hidden="true" tabindex="-1"></a>  new <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(new)</span>
+<span id="cb190-15"><a href="#cb190-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(new)</span>
+<span id="cb190-16"><a href="#cb190-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb190-17"><a href="#cb190-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-18"><a href="#cb190-18" aria-hidden="true" tabindex="-1"></a>sum_over_loci <span class="ot">&lt;-</span> <span class="cf">function</span>(df,parameter){</span>
+<span id="cb190-19"><a href="#cb190-19" aria-hidden="true" tabindex="-1"></a>      <span class="co">#this function takes a data frame of probability densities for many loci</span></span>
+<span id="cb190-20"><a href="#cb190-20" aria-hidden="true" tabindex="-1"></a>      <span class="co"># that have had the prior removed,</span></span>
+<span id="cb190-21"><a href="#cb190-21" aria-hidden="true" tabindex="-1"></a>      <span class="co"># together with with a logged prior named "logPrior",</span></span>
+<span id="cb190-22"><a href="#cb190-22" aria-hidden="true" tabindex="-1"></a>      <span class="co">#  as well as the name of a parameter (e.g. "Theta_1")</span></span>
+<span id="cb190-23"><a href="#cb190-23" aria-hidden="true" tabindex="-1"></a>      <span class="co"># and sums the densities over loci.</span></span>
+<span id="cb190-24"><a href="#cb190-24" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Rmpfr package allows quadruple precision for </span></span>
+<span id="cb190-25"><a href="#cb190-25" aria-hidden="true" tabindex="-1"></a>      <span class="co">#calcs on very small numbers.</span></span>
+<span id="cb190-26"><a href="#cb190-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">require</span>(Rmpfr)</span>
+<span id="cb190-27"><a href="#cb190-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb190-28"><a href="#cb190-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">#add a teeny-tiny amount to all values to avoid zeros</span></span>
+<span id="cb190-29"><a href="#cb190-29" aria-hidden="true" tabindex="-1"></a>    df2 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(parameter), </span>
+<span id="cb190-30"><a href="#cb190-30" aria-hidden="true" tabindex="-1"></a>                        <span class="at">.fns=</span> <span class="cf">function</span>(x) x <span class="sc">+</span> <span class="fl">1e-11</span>))  <span class="sc">%&gt;%</span> </span>
+<span id="cb190-31"><a href="#cb190-31" aria-hidden="true" tabindex="-1"></a>      <span class="co">#log all values</span></span>
+<span id="cb190-32"><a href="#cb190-32" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="fu">c</span>(parameter)),</span>
+<span id="cb190-33"><a href="#cb190-33" aria-hidden="true" tabindex="-1"></a>                  <span class="at">.fns=</span>log)) <span class="sc">%&gt;%</span> </span>
+<span id="cb190-34"><a href="#cb190-34" aria-hidden="true" tabindex="-1"></a>      <span class="co"># convert the df to rowwise so that rows can be summed</span></span>
+<span id="cb190-35"><a href="#cb190-35" aria-hidden="true" tabindex="-1"></a>      <span class="co"># and then sum across the row, including the prior</span></span>
+<span id="cb190-36"><a href="#cb190-36" aria-hidden="true" tabindex="-1"></a>          <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb190-37"><a href="#cb190-37" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">sum_param_prior =</span> </span>
+<span id="cb190-38"><a href="#cb190-38" aria-hidden="true" tabindex="-1"></a>          <span class="fu">sum</span>(<span class="fu">c_across</span>(<span class="fu">starts_with</span>(<span class="fu">c</span>(parameter,<span class="st">"logPrior"</span>))))) <span class="sc">%&gt;%</span> </span>
+<span id="cb190-39"><a href="#cb190-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">#convert back to a regular df</span></span>
+<span id="cb190-40"><a href="#cb190-40" aria-hidden="true" tabindex="-1"></a>          <span class="fu">ungroup</span>()</span>
+<span id="cb190-41"><a href="#cb190-41" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb190-42"><a href="#cb190-42" aria-hidden="true" tabindex="-1"></a>    <span class="co">#need to convert to quadruple precision because </span></span>
+<span id="cb190-43"><a href="#cb190-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">#these will exponentiate to very small numbers.</span></span>
+<span id="cb190-44"><a href="#cb190-44" aria-hidden="true" tabindex="-1"></a>    sum_param_prior_exp <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">mpfr</span>(df2<span class="sc">$</span>sum_param_prior, <span class="at">precBits =</span> <span class="dv">128</span>))</span>
+<span id="cb190-45"><a href="#cb190-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># standardize by dividing by the sum of the column</span></span>
+<span id="cb190-46"><a href="#cb190-46" aria-hidden="true" tabindex="-1"></a>    sum_param_prior_standardized <span class="ot">&lt;-</span></span>
+<span id="cb190-47"><a href="#cb190-47" aria-hidden="true" tabindex="-1"></a>             sum_param_prior_exp<span class="sc">/</span><span class="fu">sum</span>(sum_param_prior_exp)</span>
+<span id="cb190-48"><a href="#cb190-48" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb190-49"><a href="#cb190-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-50"><a href="#cb190-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">#drop the intermediate columns (no longer needed), change the standardized</span></span>
+<span id="cb190-51"><a href="#cb190-51" aria-hidden="true" tabindex="-1"></a>    <span class="co"># output back to double precision so that it can be incorporated into the df</span></span>
+<span id="cb190-52"><a href="#cb190-52" aria-hidden="true" tabindex="-1"></a>    <span class="co"># rename the summed column after the parameter</span></span>
+<span id="cb190-53"><a href="#cb190-53" aria-hidden="true" tabindex="-1"></a>      df3 <span class="ot">&lt;-</span> df2 <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(sum_param_prior)) <span class="sc">%&gt;%</span></span>
+<span id="cb190-54"><a href="#cb190-54" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">summed_over_loci =</span></span>
+<span id="cb190-55"><a href="#cb190-55" aria-hidden="true" tabindex="-1"></a>          <span class="fu">as.numeric</span>(sum_param_prior_standardized)) <span class="sc">%&gt;%</span> </span>
+<span id="cb190-56"><a href="#cb190-56" aria-hidden="true" tabindex="-1"></a>          <span class="fu">rename_with</span>(<span class="at">.fn =</span> <span class="sc">~</span> <span class="fu">paste</span>(parameter), </span>
+<span id="cb190-57"><a href="#cb190-57" aria-hidden="true" tabindex="-1"></a>                      <span class="at">.cols =</span> summed_over_loci)</span>
+<span id="cb190-58"><a href="#cb190-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(df3)</span>
+<span id="cb190-59"><a href="#cb190-59" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb190-60"><a href="#cb190-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-61"><a href="#cb190-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-62"><a href="#cb190-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-63"><a href="#cb190-63" aria-hidden="true" tabindex="-1"></a>summarize_posterior <span class="ot">&lt;-</span> <span class="cf">function</span>(posterior, </span>
+<span id="cb190-64"><a href="#cb190-64" aria-hidden="true" tabindex="-1"></a>                  <span class="at">parameter_type =</span> <span class="fu">c</span>(<span class="st">"Theta"</span>,<span class="st">"M"</span>,<span class="st">"Nm"</span>,<span class="st">"D"</span>),</span>
+<span id="cb190-65"><a href="#cb190-65" aria-hidden="true" tabindex="-1"></a>                  prior,</span>
+<span id="cb190-66"><a href="#cb190-66" aria-hidden="true" tabindex="-1"></a>                  <span class="at">n=</span><span class="dv">16384</span>,</span>
+<span id="cb190-67"><a href="#cb190-67" aria-hidden="true" tabindex="-1"></a>                  ...){</span>
+<span id="cb190-68"><a href="#cb190-68" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this function takes a Migrate-n posterior "bayesallfile" as a dataframe</span></span>
+<span id="cb190-69"><a href="#cb190-69" aria-hidden="true" tabindex="-1"></a>  <span class="co"># as well as one of the parameter types, and the prior on that parameter</span></span>
+<span id="cb190-70"><a href="#cb190-70" aria-hidden="true" tabindex="-1"></a>  <span class="co"># as a tibble of x and y values. </span></span>
+<span id="cb190-71"><a href="#cb190-71" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Currently only exponential priors supported</span></span>
+<span id="cb190-72"><a href="#cb190-72" aria-hidden="true" tabindex="-1"></a>  <span class="co"># it will create densities for each parameter of the given type,</span></span>
+<span id="cb190-73"><a href="#cb190-73" aria-hidden="true" tabindex="-1"></a>  <span class="co"># remove the prior from each, sum across loci, and re-add the prior (once)</span></span>
+<span id="cb190-74"><a href="#cb190-74" aria-hidden="true" tabindex="-1"></a>  parameters <span class="ot">&lt;-</span> <span class="fu">names</span>(posterior) <span class="sc">%&gt;%</span></span>
+<span id="cb190-75"><a href="#cb190-75" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">str_subset</span>(parameter_type)</span>
+<span id="cb190-76"><a href="#cb190-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-77"><a href="#cb190-77" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create a tibble with x values for a density plot</span></span>
+<span id="cb190-78"><a href="#cb190-78" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  of the chosen number of points</span></span>
+<span id="cb190-79"><a href="#cb190-79" aria-hidden="true" tabindex="-1"></a>  dens <span class="ot">&lt;-</span> prior</span>
+<span id="cb190-80"><a href="#cb190-80" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb190-81"><a href="#cb190-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"calculating densities"</span>)</span>
+<span id="cb190-82"><a href="#cb190-82" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate densities for each parameter of a given type at each locus</span></span>
+<span id="cb190-83"><a href="#cb190-83" aria-hidden="true" tabindex="-1"></a>  dens <span class="ot">&lt;-</span> posterior <span class="sc">%&gt;%</span> </span>
+<span id="cb190-84"><a href="#cb190-84" aria-hidden="true" tabindex="-1"></a>          <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="st">"StepsR"</span>,<span class="st">"Locus"</span>,</span>
+<span id="cb190-85"><a href="#cb190-85" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste0</span>(parameter_type,<span class="st">"_"</span>)))) <span class="sc">%&gt;%</span> </span>
+<span id="cb190-86"><a href="#cb190-86" aria-hidden="true" tabindex="-1"></a>          <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"Locus"</span>, <span class="at">values_from =</span> </span>
+<span id="cb190-87"><a href="#cb190-87" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">starts_with</span>(<span class="fu">paste0</span>(parameter_type,<span class="st">"_"</span>)),</span>
+<span id="cb190-88"><a href="#cb190-88" aria-hidden="true" tabindex="-1"></a>                          <span class="at">names_sep =</span> <span class="st">"-"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb190-89"><a href="#cb190-89" aria-hidden="true" tabindex="-1"></a>          <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="fu">paste0</span>(parameter_type,<span class="st">"_"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb190-90"><a href="#cb190-90" aria-hidden="true" tabindex="-1"></a>          <span class="fu">map_dfc</span>(<span class="cf">function</span>(x) <span class="fu">density</span>(x, <span class="at">n =</span> n, <span class="at">from =</span> <span class="dv">0</span>,</span>
+<span id="cb190-91"><a href="#cb190-91" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">bw =</span> <span class="st">"nrd0"</span>)<span class="sc">$</span>y) <span class="sc">%&gt;%</span></span>
+<span id="cb190-92"><a href="#cb190-92" aria-hidden="true" tabindex="-1"></a>          <span class="fu">bind_cols</span>(dens)</span>
+<span id="cb190-93"><a href="#cb190-93" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb190-94"><a href="#cb190-94" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create, standardize, log and remove prior</span></span>
+<span id="cb190-95"><a href="#cb190-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-96"><a href="#cb190-96" aria-hidden="true" tabindex="-1"></a>  <span class="co">#check for NA values</span></span>
+<span id="cb190-97"><a href="#cb190-97" aria-hidden="true" tabindex="-1"></a>  <span class="co">#df %&gt;% </span></span>
+<span id="cb190-98"><a href="#cb190-98" aria-hidden="true" tabindex="-1"></a>  <span class="co">#select_if(function(x) any(is.na(x))) %&gt;% </span></span>
+<span id="cb190-99"><a href="#cb190-99" aria-hidden="true" tabindex="-1"></a>  <span class="co">#summarise_each(funs(sum(is.na(.)))) -&gt; extra_NA</span></span>
+<span id="cb190-100"><a href="#cb190-100" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb190-101"><a href="#cb190-101" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb190-102"><a href="#cb190-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"removing prior"</span>)</span>
+<span id="cb190-103"><a href="#cb190-103" aria-hidden="true" tabindex="-1"></a>  dens2 <span class="ot">&lt;-</span> dens <span class="sc">%&gt;%</span> </span>
+<span id="cb190-104"><a href="#cb190-104" aria-hidden="true" tabindex="-1"></a>        <span class="co">#remove the prior, standardize</span></span>
+<span id="cb190-105"><a href="#cb190-105" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(parameter_type), </span>
+<span id="cb190-106"><a href="#cb190-106" aria-hidden="true" tabindex="-1"></a>                  <span class="sc">~</span> <span class="fu">remove_prior</span>(<span class="at">densityd =</span> .x,</span>
+<span id="cb190-107"><a href="#cb190-107" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">prior =</span> dens<span class="sc">$</span>prior,</span>
+<span id="cb190-108"><a href="#cb190-108" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">threshold =</span> <span class="fl">1e-10</span>,</span>
+<span id="cb190-109"><a href="#cb190-109" aria-hidden="true" tabindex="-1"></a>                                  ...) ))</span>
+<span id="cb190-110"><a href="#cb190-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-111"><a href="#cb190-111" aria-hidden="true" tabindex="-1"></a>  dens3 <span class="ot">&lt;-</span> dens2</span>
+<span id="cb190-112"><a href="#cb190-112" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb190-113"><a href="#cb190-113" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(p <span class="cf">in</span> parameters){</span>
+<span id="cb190-114"><a href="#cb190-114" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(p)  </span>
+<span id="cb190-115"><a href="#cb190-115" aria-hidden="true" tabindex="-1"></a>    dens3 <span class="ot">&lt;-</span> <span class="fu">sum_over_loci</span>(<span class="at">df =</span> dens3, <span class="at">parameter =</span> p)</span>
+<span id="cb190-116"><a href="#cb190-116" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb190-117"><a href="#cb190-117" aria-hidden="true" tabindex="-1"></a>  <span class="co"># trying to do the above loop with purrr:map_dfc</span></span>
+<span id="cb190-118"><a href="#cb190-118" aria-hidden="true" tabindex="-1"></a>  <span class="co">#dens4 &lt;- parameters %&gt;% </span></span>
+<span id="cb190-119"><a href="#cb190-119" aria-hidden="true" tabindex="-1"></a>  <span class="co">#        map_dfc(.f = ~ sum_over_loci(df = dens2, parameter = .x))</span></span>
+<span id="cb190-120"><a href="#cb190-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dens3)</span>
+<span id="cb190-121"><a href="#cb190-121" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb190-122"><a href="#cb190-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-123"><a href="#cb190-123" aria-hidden="true" tabindex="-1"></a>posterior_stats <span class="ot">&lt;-</span> <span class="cf">function</span>(df,parameter){</span>
+<span id="cb190-124"><a href="#cb190-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">require</span>(spatstat.core)</span>
+<span id="cb190-125"><a href="#cb190-125" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">"x"</span>,parameter))) <span class="sc">%&gt;%</span> <span class="fu">as.list</span>(<span class="at">bw =</span> <span class="dv">1</span>)</span>
+<span id="cb190-126"><a href="#cb190-126" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(p) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)</span>
+<span id="cb190-127"><a href="#cb190-127" aria-hidden="true" tabindex="-1"></a>  p<span class="sc">$</span>bw <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb190-128"><a href="#cb190-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">attr</span>(p, <span class="st">"class"</span>) <span class="ot">&lt;-</span> <span class="st">"density"</span></span>
+<span id="cb190-129"><a href="#cb190-129" aria-hidden="true" tabindex="-1"></a>  qu <span class="ot">&lt;-</span> <span class="fu">quantile.density</span>(p, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.975</span>))</span>
+<span id="cb190-130"><a href="#cb190-130" aria-hidden="true" tabindex="-1"></a>  wmo <span class="ot">&lt;-</span> p<span class="sc">$</span>x[<span class="fu">which</span>(p<span class="sc">$</span>y<span class="sc">==</span><span class="fu">max</span>(p<span class="sc">$</span>y))]</span>
+<span id="cb190-131"><a href="#cb190-131" aria-hidden="true" tabindex="-1"></a>  wme <span class="ot">&lt;-</span> <span class="fu">weighted.mean</span>(p<span class="sc">$</span>x, p<span class="sc">$</span>y)</span>
+<span id="cb190-132"><a href="#cb190-132" aria-hidden="true" tabindex="-1"></a>  wsd <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">weighted.var</span>(p<span class="sc">$</span>x, p<span class="sc">$</span>y))</span>
+<span id="cb190-133"><a href="#cb190-133" aria-hidden="true" tabindex="-1"></a>  stats <span class="ot">&lt;-</span> <span class="fu">c</span>(qu,<span class="at">mode =</span> wmo, <span class="at">mean =</span> wme, <span class="at">sd =</span> wsd)</span>
+<span id="cb190-134"><a href="#cb190-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(stats)</span>
+<span id="cb190-135"><a href="#cb190-135" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="theta" class="level5">
-<h5 class="anchored" data-anchor-id="theta">Theta</h5>
+<section id="theta-1" class="level6">
+<h6 class="anchored" data-anchor-id="theta-1">Theta</h6>
 <p>And here I run the code for the <span class="math inline">\(\theta\)</span> estimates</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb184"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb184-1"><a href="#cb184-1" aria-hidden="true" tabindex="-1"></a>parameter_type <span class="ot">&lt;-</span> <span class="st">"Theta"</span></span>
-<span id="cb184-2"><a href="#cb184-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb184-3"><a href="#cb184-3" aria-hidden="true" tabindex="-1"></a>parameters <span class="ot">&lt;-</span> <span class="fu">names</span>(posterior) <span class="sc">%&gt;%</span></span>
-<span id="cb184-4"><a href="#cb184-4" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">str_subset</span>(parameter_type)</span>
-<span id="cb184-5"><a href="#cb184-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb184-6"><a href="#cb184-6" aria-hidden="true" tabindex="-1"></a>parameter_key2 <span class="ot">&lt;-</span> parameters</span>
-<span id="cb184-7"><a href="#cb184-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(parameter_key2) <span class="ot">&lt;-</span> parameter_key[<span class="fu">names</span>(parameter_key) <span class="sc">%in%</span> parameter_key2]</span>
-<span id="cb184-8"><a href="#cb184-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb184-9"><a href="#cb184-9" aria-hidden="true" tabindex="-1"></a><span class="co">#summarize the posterior for theta</span></span>
-<span id="cb184-10"><a href="#cb184-10" aria-hidden="true" tabindex="-1"></a>thetas <span class="ot">&lt;-</span> <span class="fu">summarize_posterior</span>(posterior, <span class="at">parameter_type =</span> <span class="st">"Theta"</span>, </span>
-<span id="cb184-11"><a href="#cb184-11" aria-hidden="true" tabindex="-1"></a>                              <span class="at">prior_params =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.001</span>,<span class="fl">0.1</span>))</span>
-<span id="cb184-12"><a href="#cb184-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb184-13"><a href="#cb184-13" aria-hidden="true" tabindex="-1"></a><span class="co">#convert to long format</span></span>
-<span id="cb184-14"><a href="#cb184-14" aria-hidden="true" tabindex="-1"></a>thetas_long <span class="ot">&lt;-</span> thetas <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"prior"</span>,parameters))) <span class="sc">%&gt;%</span> </span>
-<span id="cb184-15"><a href="#cb184-15" aria-hidden="true" tabindex="-1"></a>                <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="fu">paste0</span>(parameter_type,<span class="st">"_"</span>))), </span>
-<span id="cb184-16"><a href="#cb184-16" aria-hidden="true" tabindex="-1"></a>                            <span class="at">names_to =</span> <span class="st">"Parameter"</span>,</span>
-<span id="cb184-17"><a href="#cb184-17" aria-hidden="true" tabindex="-1"></a>                            <span class="at">values_to =</span> <span class="st">"Density"</span>)</span>
-<span id="cb184-18"><a href="#cb184-18" aria-hidden="true" tabindex="-1"></a>               </span>
-<span id="cb184-19"><a href="#cb184-19" aria-hidden="true" tabindex="-1"></a><span class="co">#plot</span></span>
-<span id="cb184-20"><a href="#cb184-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(thetas_long, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> Density, </span>
-<span id="cb184-21"><a href="#cb184-21" aria-hidden="true" tabindex="-1"></a>                    <span class="at">color =</span> Parameter)) <span class="sc">+</span></span>
-<span id="cb184-22"><a href="#cb184-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb184-23"><a href="#cb184-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_x_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="fl">5e-6</span>,<span class="fl">1e-2</span>)) <span class="sc">+</span> </span>
-<span id="cb184-24"><a href="#cb184-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"YlGnBu"</span>, <span class="at">labels =</span> parameter_key) <span class="sc">+</span></span>
-<span id="cb184-25"><a href="#cb184-25" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y=</span>prior), <span class="at">color =</span> <span class="st">"grey"</span>,</span>
-<span id="cb184-26"><a href="#cb184-26" aria-hidden="true" tabindex="-1"></a>                  <span class="at">linetype=</span><span class="st">"dotted"</span>) <span class="sc">+</span></span>
-<span id="cb184-27"><a href="#cb184-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">0.075</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="fl">0.015</span>)</span>
-<span id="cb184-28"><a href="#cb184-28" aria-hidden="true" tabindex="-1"></a><span class="co"># get stats for each summed-over-loci posterior</span></span>
-<span id="cb184-29"><a href="#cb184-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb184-30"><a href="#cb184-30" aria-hidden="true" tabindex="-1"></a>theta_stats <span class="ot">&lt;-</span> parameter_key2 <span class="sc">%&gt;%</span> <span class="fu">map_dfr</span>(<span class="at">.f =</span> <span class="sc">~</span> <span class="fu">posterior_stats</span>(<span class="at">df =</span> thetas, </span>
-<span id="cb184-31"><a href="#cb184-31" aria-hidden="true" tabindex="-1"></a>                                                             <span class="at">parameter =</span> .x),</span>
-<span id="cb184-32"><a href="#cb184-32" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">.id =</span> <span class="st">"parameter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb191"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior_thetaf %&gt;% filter(Locus == 1) %&gt;% </span></span>
+<span id="cb191-2"><a href="#cb191-2" aria-hidden="true" tabindex="-1"></a><span class="co">#          ggplot(aes(x = Steps, y = Theta_2)) +</span></span>
+<span id="cb191-3"><a href="#cb191-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                  geom_path() + scale_y_log10()</span></span>
+<span id="cb191-4"><a href="#cb191-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb191-5"><a href="#cb191-5" aria-hidden="true" tabindex="-1"></a>parameter_type <span class="ot">&lt;-</span> <span class="st">"Theta"</span></span>
+<span id="cb191-6"><a href="#cb191-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb191-7"><a href="#cb191-7" aria-hidden="true" tabindex="-1"></a>parameters <span class="ot">&lt;-</span> <span class="fu">names</span>(posterior) <span class="sc">%&gt;%</span></span>
+<span id="cb191-8"><a href="#cb191-8" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">str_subset</span>(parameter_type)</span>
+<span id="cb191-9"><a href="#cb191-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb191-10"><a href="#cb191-10" aria-hidden="true" tabindex="-1"></a>parameter_key2 <span class="ot">&lt;-</span> parameters</span>
+<span id="cb191-11"><a href="#cb191-11" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(parameter_key2) <span class="ot">&lt;-</span> parameter_key[<span class="fu">names</span>(parameter_key) <span class="sc">%in%</span> parameter_key2]</span>
+<span id="cb191-12"><a href="#cb191-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb191-13"><a href="#cb191-13" aria-hidden="true" tabindex="-1"></a><span class="co">#summarize the posterior for theta</span></span>
+<span id="cb191-14"><a href="#cb191-14" aria-hidden="true" tabindex="-1"></a>thetas <span class="ot">&lt;-</span> <span class="fu">summarize_posterior</span>(posterior_thetaf, <span class="at">parameter_type =</span> <span class="st">"Theta"</span>, </span>
+<span id="cb191-15"><a href="#cb191-15" aria-hidden="true" tabindex="-1"></a>                              <span class="at">prior=</span>theta_prior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "calculating densities"
+[1] "removing prior"
+[1] "Theta_1"
+[1] "Theta_2"
+[1] "Theta_3"
+[1] "Theta_4"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb193"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb193-1"><a href="#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="co">#convert to long format</span></span>
+<span id="cb193-2"><a href="#cb193-2" aria-hidden="true" tabindex="-1"></a>thetas_long <span class="ot">&lt;-</span> thetas <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"prior"</span>,parameters))) <span class="sc">%&gt;%</span> </span>
+<span id="cb193-3"><a href="#cb193-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="fu">paste0</span>(parameter_type,<span class="st">"_"</span>))), </span>
+<span id="cb193-4"><a href="#cb193-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">names_to =</span> <span class="st">"Parameter"</span>,</span>
+<span id="cb193-5"><a href="#cb193-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">values_to =</span> <span class="st">"Density"</span>)</span>
+<span id="cb193-6"><a href="#cb193-6" aria-hidden="true" tabindex="-1"></a>               </span>
+<span id="cb193-7"><a href="#cb193-7" aria-hidden="true" tabindex="-1"></a><span class="co">#plot</span></span>
+<span id="cb193-8"><a href="#cb193-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(thetas_long, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> Density, </span>
+<span id="cb193-9"><a href="#cb193-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">color =</span> Parameter)) <span class="sc">+</span></span>
+<span id="cb193-10"><a href="#cb193-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb193-11"><a href="#cb193-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">#scale_x_log10() + </span></span>
+<span id="cb193-12"><a href="#cb193-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Spectral"</span>, <span class="at">labels =</span> parameter_key) <span class="sc">+</span></span>
+<span id="cb193-13"><a href="#cb193-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y=</span>prior), <span class="at">color =</span> <span class="st">"grey"</span>,</span>
+<span id="cb193-14"><a href="#cb193-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">linetype=</span><span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb193-15"><a href="#cb193-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlim</span>(<span class="fl">0.095</span>,<span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 62256 rows containing missing values (`geom_line()`).
+Removed 62256 rows containing missing values (`geom_line()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-73-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb195"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb195-1"><a href="#cb195-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get stats for each summed-over-loci posterior</span></span>
+<span id="cb195-2"><a href="#cb195-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb195-3"><a href="#cb195-3" aria-hidden="true" tabindex="-1"></a>theta_stats <span class="ot">&lt;-</span> parameter_key2 <span class="sc">%&gt;%</span> <span class="fu">map_dfr</span>(<span class="at">.f =</span> <span class="sc">~</span> <span class="fu">posterior_stats</span>(<span class="at">df =</span> thetas, </span>
+<span id="cb195-4"><a href="#cb195-4" aria-hidden="true" tabindex="-1"></a>                                                             <span class="at">parameter =</span> .x),</span>
+<span id="cb195-5"><a href="#cb195-5" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">.id =</span> <span class="st">"parameter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Need to check convergence for these things, and that there was sufficient burnin.</p>
 </section>
-<section id="mmu" class="level5">
-<h5 class="anchored" data-anchor-id="mmu">M/mu</h5>
+<section id="mmu-1" class="level6">
+<h6 class="anchored" data-anchor-id="mmu-1">M/mu</h6>
 <p>And here I run the code for the <span class="math inline">\(m/\mu\)</span> estimates</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb185"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a>parameter_type <span class="ot">&lt;-</span> <span class="st">"M"</span></span>
-<span id="cb185-2"><a href="#cb185-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-3"><a href="#cb185-3" aria-hidden="true" tabindex="-1"></a>parameters <span class="ot">&lt;-</span> <span class="fu">names</span>(posterior) <span class="sc">%&gt;%</span></span>
-<span id="cb185-4"><a href="#cb185-4" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">str_subset</span>(parameter_type)</span>
-<span id="cb185-5"><a href="#cb185-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-6"><a href="#cb185-6" aria-hidden="true" tabindex="-1"></a>parameter_key2 <span class="ot">&lt;-</span> parameters</span>
-<span id="cb185-7"><a href="#cb185-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(parameter_key2) <span class="ot">&lt;-</span> parameter_key[<span class="fu">names</span>(parameter_key) <span class="sc">%in%</span> parameter_key2]</span>
-<span id="cb185-8"><a href="#cb185-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-9"><a href="#cb185-9" aria-hidden="true" tabindex="-1"></a><span class="co">#summarize the posterior for theta</span></span>
-<span id="cb185-10"><a href="#cb185-10" aria-hidden="true" tabindex="-1"></a>mmu <span class="ot">&lt;-</span> <span class="fu">summarize_posterior</span>(posterior, <span class="at">parameter_type =</span> <span class="st">"M"</span>, </span>
-<span id="cb185-11"><a href="#cb185-11" aria-hidden="true" tabindex="-1"></a>                              <span class="at">prior_params =</span><span class="fu">c</span>(<span class="fl">0.01</span>,<span class="dv">10000</span>,<span class="dv">100000000</span>))</span>
-<span id="cb185-12"><a href="#cb185-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-13"><a href="#cb185-13" aria-hidden="true" tabindex="-1"></a><span class="co">#convert to long format</span></span>
-<span id="cb185-14"><a href="#cb185-14" aria-hidden="true" tabindex="-1"></a>mmu_long <span class="ot">&lt;-</span> mmu <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"prior"</span>,parameters))) <span class="sc">%&gt;%</span> </span>
-<span id="cb185-15"><a href="#cb185-15" aria-hidden="true" tabindex="-1"></a>                <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="fu">paste0</span>(parameter_type,<span class="st">"_"</span>))), </span>
-<span id="cb185-16"><a href="#cb185-16" aria-hidden="true" tabindex="-1"></a>                            <span class="at">names_to =</span> <span class="st">"Parameter"</span>,</span>
-<span id="cb185-17"><a href="#cb185-17" aria-hidden="true" tabindex="-1"></a>                            <span class="at">values_to =</span> <span class="st">"Density"</span>)</span>
-<span id="cb185-18"><a href="#cb185-18" aria-hidden="true" tabindex="-1"></a>               </span>
-<span id="cb185-19"><a href="#cb185-19" aria-hidden="true" tabindex="-1"></a><span class="co">#plot</span></span>
-<span id="cb185-20"><a href="#cb185-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(mmu_long, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> Density, </span>
-<span id="cb185-21"><a href="#cb185-21" aria-hidden="true" tabindex="-1"></a>                    <span class="at">color =</span> Parameter)) <span class="sc">+</span></span>
-<span id="cb185-22"><a href="#cb185-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb185-23"><a href="#cb185-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_x_log10</span>() <span class="sc">+</span> </span>
-<span id="cb185-24"><a href="#cb185-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"YlGnBu"</span>, <span class="at">labels =</span> parameter_key) <span class="sc">+</span></span>
-<span id="cb185-25"><a href="#cb185-25" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y=</span>prior), <span class="at">color =</span> <span class="st">"grey"</span>,</span>
-<span id="cb185-26"><a href="#cb185-26" aria-hidden="true" tabindex="-1"></a>                  <span class="at">linetype=</span><span class="st">"dotted"</span>) <span class="sc">+</span></span>
-<span id="cb185-27"><a href="#cb185-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">0.075</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="fl">0.015</span>)</span>
-<span id="cb185-28"><a href="#cb185-28" aria-hidden="true" tabindex="-1"></a><span class="co"># get stats for each summed-over-loci posterior</span></span>
-<span id="cb185-29"><a href="#cb185-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-30"><a href="#cb185-30" aria-hidden="true" tabindex="-1"></a>theta_stats <span class="ot">&lt;-</span> parameter_key2 <span class="sc">%&gt;%</span> <span class="fu">map_dfr</span>(<span class="at">.f =</span> <span class="sc">~</span> <span class="fu">posterior_stats</span>(<span class="at">df =</span> thetas, </span>
-<span id="cb185-31"><a href="#cb185-31" aria-hidden="true" tabindex="-1"></a>                                                             <span class="at">parameter =</span> .x),</span>
-<span id="cb185-32"><a href="#cb185-32" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">.id =</span> <span class="st">"parameter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb196"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb196-1"><a href="#cb196-1" aria-hidden="true" tabindex="-1"></a>parameter_type <span class="ot">&lt;-</span> <span class="st">"M"</span></span>
+<span id="cb196-2"><a href="#cb196-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-3"><a href="#cb196-3" aria-hidden="true" tabindex="-1"></a>parameters <span class="ot">&lt;-</span> <span class="fu">names</span>(posterior) <span class="sc">%&gt;%</span></span>
+<span id="cb196-4"><a href="#cb196-4" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">str_subset</span>(parameter_type)</span>
+<span id="cb196-5"><a href="#cb196-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-6"><a href="#cb196-6" aria-hidden="true" tabindex="-1"></a>parameter_key2 <span class="ot">&lt;-</span> parameters</span>
+<span id="cb196-7"><a href="#cb196-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(parameter_key2) <span class="ot">&lt;-</span> parameter_key[<span class="fu">names</span>(parameter_key) <span class="sc">%in%</span> </span>
+<span id="cb196-8"><a href="#cb196-8" aria-hidden="true" tabindex="-1"></a>                                         parameter_key2]</span>
+<span id="cb196-9"><a href="#cb196-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-10"><a href="#cb196-10" aria-hidden="true" tabindex="-1"></a><span class="co">#summarize the posterior for theta</span></span>
+<span id="cb196-11"><a href="#cb196-11" aria-hidden="true" tabindex="-1"></a>mmu <span class="ot">&lt;-</span> <span class="fu">summarize_posterior</span>(posterior_thetaf, <span class="at">parameter_type =</span> <span class="st">"M"</span>, </span>
+<span id="cb196-12"><a href="#cb196-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">prior =</span> mmu_prior, <span class="at">quad_prec =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "calculating densities"
+[1] "removing prior"
+[1] "M_2_1"
+[1] "M_3_1"
+[1] "M_4_1"
+[1] "M_1_2"
+[1] "M_3_2"
+[1] "M_4_2"
+[1] "M_1_3"
+[1] "M_2_3"
+[1] "M_4_3"
+[1] "M_1_4"
+[1] "M_2_4"
+[1] "M_3_4"</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb198"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb198-1"><a href="#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="co">#convert to long format</span></span>
+<span id="cb198-2"><a href="#cb198-2" aria-hidden="true" tabindex="-1"></a>mmu_long <span class="ot">&lt;-</span> mmu <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"prior"</span>,parameters))) <span class="sc">%&gt;%</span> </span>
+<span id="cb198-3"><a href="#cb198-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="fu">paste0</span>(parameter_type,<span class="st">"_"</span>))), </span>
+<span id="cb198-4"><a href="#cb198-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">names_to =</span> <span class="st">"Parameter"</span>,</span>
+<span id="cb198-5"><a href="#cb198-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">values_to =</span> <span class="st">"Density"</span>)</span>
+<span id="cb198-6"><a href="#cb198-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-7"><a href="#cb198-7" aria-hidden="true" tabindex="-1"></a>nm.palette <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">"Spectral"</span>))                </span>
+<span id="cb198-8"><a href="#cb198-8" aria-hidden="true" tabindex="-1"></a><span class="co">#plot</span></span>
+<span id="cb198-9"><a href="#cb198-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mmu_long, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> Density, </span>
+<span id="cb198-10"><a href="#cb198-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">color =</span> Parameter)) <span class="sc">+</span></span>
+<span id="cb198-11"><a href="#cb198-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb198-12"><a href="#cb198-12" aria-hidden="true" tabindex="-1"></a>        <span class="co">#scale_x_log10(limits=c(1e6,1e7))</span></span>
+<span id="cb198-13"><a href="#cb198-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_discrete</span>(<span class="at">type=</span><span class="fu">nm.palette</span>(<span class="dv">12</span>), <span class="at">labels =</span> parameter_key)<span class="sc">+</span></span>
+<span id="cb198-14"><a href="#cb198-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlim</span>(<span class="fl">7e6</span>,<span class="fl">7.5e6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 195624 rows containing missing values (`geom_line()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-74-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb200"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb200-1"><a href="#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get stats for each summed-over-loci posterior</span></span>
+<span id="cb200-2"><a href="#cb200-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb200-3"><a href="#cb200-3" aria-hidden="true" tabindex="-1"></a>mmu_stats <span class="ot">&lt;-</span> parameter_key2 <span class="sc">%&gt;%</span> <span class="fu">map_dfr</span>(<span class="at">.f =</span> <span class="sc">~</span> <span class="fu">posterior_stats</span>(<span class="at">df =</span> mmu, </span>
+<span id="cb200-4"><a href="#cb200-4" aria-hidden="true" tabindex="-1"></a>                                                      <span class="at">parameter =</span> .x),</span>
+<span id="cb200-5"><a href="#cb200-5" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">.id =</span> <span class="st">"parameter"</span>)</span>
+<span id="cb200-6"><a href="#cb200-6" aria-hidden="true" tabindex="-1"></a>mmu_stats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["parameter"],"name":[1],"type":["chr"],"align":["left"]},{"label":["2.5%"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["25%"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["50%"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["75%"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["97.5%"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mode"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["mean"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[9],"type":["dbl"],"align":["right"]}],"data":[{"1":"m/mu Johnston Atoll to Japan","2":"7349081","3":"7349081","4":"7349081","5":"7355185","6":"7355185","7":"7349081","8":"7352046","9":"4316.101"},{"1":"m/mu MHI to Japan","2":"7349081","3":"7349081","4":"7349081","5":"7355185","6":"7355185","7":"7349081","8":"7352047","9":"4316.101"},{"1":"m/mu NWHI to Japan","2":"7349081","3":"7349081","4":"7349081","5":"7355185","6":"7355185","7":"7349081","8":"7352052","9":"4316.101"},{"1":"m/mu Japan to Johnston Atoll","2":"7349081","3":"7349081","4":"7349081","5":"7355185","6":"7355185","7":"7349081","8":"7352003","9":"4316.101"},{"1":"m/mu MHI to Johnston Atoll","2":"7349081","3":"7349081","4":"7349081","5":"7355185","6":"7355185","7":"7349081","8":"7352006","9":"4316.101"},{"1":"m/mu NWHI to Johnston Atoll","2":"7349081","3":"7349081","4":"7349081","5":"7355185","6":"7355185","7":"7349081","8":"7352011","9":"4316.101"},{"1":"m/mu Japan to MHI","2":"7349081","3":"7349081","4":"7349081","5":"7355185","6":"7355185","7":"7349081","8":"7352051","9":"4316.101"},{"1":"m/mu Johnston Atoll to MHI","2":"7349081","3":"7349081","4":"7349081","5":"7355185","6":"7355185","7":"7349081","8":"7352046","9":"4316.101"},{"1":"m/mu NWHI to MHI","2":"7349081","3":"7349081","4":"7349081","5":"7355185","6":"7355185","7":"7349081","8":"7352052","9":"4316.101"},{"1":"m/mu Japan to NWHI","2":"7349081","3":"7349081","4":"7349081","5":"7355185","6":"7355185","7":"7349081","8":"7352055","9":"4316.101"},{"1":"m/mu Johnston Atoll to NWHI","2":"7349081","3":"7349081","4":"7349081","5":"7355185","6":"7355185","7":"7349081","8":"7352051","9":"4316.101"},{"1":"m/mu MHI to NWHI","2":"7349081","3":"7349081","4":"7349081","5":"7355185","6":"7355185","7":"7349081","8":"7352053","9":"4316.101"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="nm" class="level6">
+<h6 class="anchored" data-anchor-id="nm">4Nm</h6>
 <p>And here I run the code for the <code>4Nm</code> estimates</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb186"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a>parameter_type <span class="ot">&lt;-</span> <span class="st">"Nm"</span></span>
-<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb186-3"><a href="#cb186-3" aria-hidden="true" tabindex="-1"></a>parameters <span class="ot">&lt;-</span> <span class="fu">names</span>(posterior) <span class="sc">%&gt;%</span></span>
-<span id="cb186-4"><a href="#cb186-4" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">str_subset</span>(parameter_type)</span>
-<span id="cb186-5"><a href="#cb186-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb186-6"><a href="#cb186-6" aria-hidden="true" tabindex="-1"></a>parameter_key2 <span class="ot">&lt;-</span> parameters</span>
-<span id="cb186-7"><a href="#cb186-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(parameter_key2) <span class="ot">&lt;-</span> parameter_key[<span class="fu">names</span>(parameter_key) <span class="sc">%in%</span> parameter_key2]</span>
-<span id="cb186-8"><a href="#cb186-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb186-9"><a href="#cb186-9" aria-hidden="true" tabindex="-1"></a><span class="co">#summarize the posterior for theta</span></span>
-<span id="cb186-10"><a href="#cb186-10" aria-hidden="true" tabindex="-1"></a>Nm <span class="ot">&lt;-</span> <span class="fu">summarize_posterior</span>(posterior, <span class="at">parameter_type =</span> <span class="st">"M"</span>, </span>
-<span id="cb186-11"><a href="#cb186-11" aria-hidden="true" tabindex="-1"></a>                              <span class="at">prior_params =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">10000</span>))</span>
-<span id="cb186-12"><a href="#cb186-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb186-13"><a href="#cb186-13" aria-hidden="true" tabindex="-1"></a><span class="co">#convert to long format</span></span>
-<span id="cb186-14"><a href="#cb186-14" aria-hidden="true" tabindex="-1"></a>Nm_long <span class="ot">&lt;-</span> Nm <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"prior"</span>,parameters))) <span class="sc">%&gt;%</span> </span>
-<span id="cb186-15"><a href="#cb186-15" aria-hidden="true" tabindex="-1"></a>                <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="fu">paste0</span>(parameter_type,<span class="st">"_"</span>))), </span>
-<span id="cb186-16"><a href="#cb186-16" aria-hidden="true" tabindex="-1"></a>                            <span class="at">names_to =</span> <span class="st">"Parameter"</span>,</span>
-<span id="cb186-17"><a href="#cb186-17" aria-hidden="true" tabindex="-1"></a>                            <span class="at">values_to =</span> <span class="st">"Density"</span>)</span>
-<span id="cb186-18"><a href="#cb186-18" aria-hidden="true" tabindex="-1"></a>               </span>
-<span id="cb186-19"><a href="#cb186-19" aria-hidden="true" tabindex="-1"></a><span class="co">#plot</span></span>
-<span id="cb186-20"><a href="#cb186-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(mmu_long, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> Density, </span>
-<span id="cb186-21"><a href="#cb186-21" aria-hidden="true" tabindex="-1"></a>                    <span class="at">color =</span> Parameter)) <span class="sc">+</span></span>
-<span id="cb186-22"><a href="#cb186-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb186-23"><a href="#cb186-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_x_log10</span>() <span class="sc">+</span> </span>
-<span id="cb186-24"><a href="#cb186-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"YlGnBu"</span>, <span class="at">labels =</span> parameter_key) <span class="sc">+</span></span>
-<span id="cb186-25"><a href="#cb186-25" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y=</span>prior), <span class="at">color =</span> <span class="st">"grey"</span>,</span>
-<span id="cb186-26"><a href="#cb186-26" aria-hidden="true" tabindex="-1"></a>                  <span class="at">linetype=</span><span class="st">"dotted"</span>) <span class="sc">+</span></span>
-<span id="cb186-27"><a href="#cb186-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">0.075</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="fl">0.015</span>)</span>
-<span id="cb186-28"><a href="#cb186-28" aria-hidden="true" tabindex="-1"></a><span class="co"># get stats for each summed-over-loci posterior</span></span>
-<span id="cb186-29"><a href="#cb186-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb186-30"><a href="#cb186-30" aria-hidden="true" tabindex="-1"></a>theta_stats <span class="ot">&lt;-</span> parameter_key2 <span class="sc">%&gt;%</span> <span class="fu">map_dfr</span>(<span class="at">.f =</span> <span class="sc">~</span> <span class="fu">posterior_stats</span>(<span class="at">df =</span> thetas, </span>
-<span id="cb186-31"><a href="#cb186-31" aria-hidden="true" tabindex="-1"></a>                                                             <span class="at">parameter =</span> .x),</span>
-<span id="cb186-32"><a href="#cb186-32" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">.id =</span> <span class="st">"parameter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb201"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb201-1"><a href="#cb201-1" aria-hidden="true" tabindex="-1"></a>parameter_type <span class="ot">&lt;-</span> <span class="st">"Nm"</span></span>
+<span id="cb201-2"><a href="#cb201-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb201-3"><a href="#cb201-3" aria-hidden="true" tabindex="-1"></a>parameters <span class="ot">&lt;-</span> <span class="fu">names</span>(posterior) <span class="sc">%&gt;%</span></span>
+<span id="cb201-4"><a href="#cb201-4" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">str_subset</span>(parameter_type)</span>
+<span id="cb201-5"><a href="#cb201-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb201-6"><a href="#cb201-6" aria-hidden="true" tabindex="-1"></a>parameter_key2 <span class="ot">&lt;-</span> parameters</span>
+<span id="cb201-7"><a href="#cb201-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(parameter_key2) <span class="ot">&lt;-</span> parameter_key[<span class="fu">names</span>(parameter_key) <span class="sc">%in%</span> parameter_key2]</span>
+<span id="cb201-8"><a href="#cb201-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb201-9"><a href="#cb201-9" aria-hidden="true" tabindex="-1"></a><span class="co">#summarize the posterior for theta</span></span>
+<span id="cb201-10"><a href="#cb201-10" aria-hidden="true" tabindex="-1"></a>Nm <span class="ot">&lt;-</span> <span class="fu">summarize_posterior</span>(posterior_thetaf, <span class="at">parameter_type =</span> <span class="st">"Nm"</span>, </span>
+<span id="cb201-11"><a href="#cb201-11" aria-hidden="true" tabindex="-1"></a>                              <span class="at">prior =</span> nm_prior_interpolated)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "calculating densities"
+[1] "removing prior"
+[1] "Nm_2_1"
+[1] "Nm_3_1"
+[1] "Nm_4_1"
+[1] "Nm_1_2"
+[1] "Nm_3_2"
+[1] "Nm_4_2"
+[1] "Nm_1_3"
+[1] "Nm_2_3"
+[1] "Nm_4_3"
+[1] "Nm_1_4"
+[1] "Nm_2_4"
+[1] "Nm_3_4"</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb203"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb203-1"><a href="#cb203-1" aria-hidden="true" tabindex="-1"></a><span class="co">#convert to long format</span></span>
+<span id="cb203-2"><a href="#cb203-2" aria-hidden="true" tabindex="-1"></a>Nm_long <span class="ot">&lt;-</span> Nm <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"prior"</span>,parameters))) <span class="sc">%&gt;%</span> </span>
+<span id="cb203-3"><a href="#cb203-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="fu">paste0</span>(parameter_type,<span class="st">"_"</span>))), </span>
+<span id="cb203-4"><a href="#cb203-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">names_to =</span> <span class="st">"Parameter"</span>,</span>
+<span id="cb203-5"><a href="#cb203-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">values_to =</span> <span class="st">"Density"</span>)</span>
+<span id="cb203-6"><a href="#cb203-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb203-7"><a href="#cb203-7" aria-hidden="true" tabindex="-1"></a>nm.palette <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">"Spectral"</span>))   </span>
+<span id="cb203-8"><a href="#cb203-8" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb203-9"><a href="#cb203-9" aria-hidden="true" tabindex="-1"></a><span class="co">#plot</span></span>
+<span id="cb203-10"><a href="#cb203-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(Nm_long, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> Density, </span>
+<span id="cb203-11"><a href="#cb203-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">color =</span> Parameter)) <span class="sc">+</span></span>
+<span id="cb203-12"><a href="#cb203-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb203-13"><a href="#cb203-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_discrete</span>(<span class="at">type=</span><span class="fu">nm.palette</span>(<span class="dv">12</span>), <span class="at">labels =</span> parameter_key) <span class="sc">+</span></span>
+<span id="cb203-14"><a href="#cb203-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 190704 rows containing missing values (`geom_line()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-75-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb205"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb205-1"><a href="#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get stats for each summed-over-loci posterior</span></span>
+<span id="cb205-2"><a href="#cb205-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb205-3"><a href="#cb205-3" aria-hidden="true" tabindex="-1"></a>nm_stats <span class="ot">&lt;-</span> parameter_key2 <span class="sc">%&gt;%</span> <span class="fu">map_dfr</span>(<span class="at">.f =</span> <span class="sc">~</span> <span class="fu">posterior_stats</span>(<span class="at">df =</span> Nm, </span>
+<span id="cb205-4"><a href="#cb205-4" aria-hidden="true" tabindex="-1"></a>                                                             <span class="at">parameter =</span> .x),</span>
+<span id="cb205-5"><a href="#cb205-5" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">.id =</span> <span class="st">"parameter"</span>)</span>
+<span id="cb205-6"><a href="#cb205-6" aria-hidden="true" tabindex="-1"></a>nm_stats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["parameter"],"name":[1],"type":["chr"],"align":["left"]},{"label":["2.5%"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["25%"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["50%"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["75%"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["97.5%"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mode"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["mean"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[9],"type":["dbl"],"align":["right"]}],"data":[{"1":"4Nem Johnston Atoll to Japan","2":"9.4610267","3":"11.597388","4":"12.818165","5":"14.161021","6":"17.151926","7":"12.574010","8":"12.934098","9":"1.9678091"},{"1":"4Nem MHI to Japan","2":"10.2545321","3":"12.574010","4":"13.916865","5":"15.442837","6":"18.738937","7":"13.672710","8":"14.075355","9":"2.1736144"},{"1":"4Nem NWHI to Japan","2":"10.4376488","3":"12.818165","4":"14.222059","5":"15.809070","6":"19.288287","7":"13.977904","8":"14.403706","9":"2.2633128"},{"1":"4Nem Japan to Johnston Atoll","2":"0.7935055","3":"1.098700","4":"1.342855","5":"1.525972","6":"1.892205","7":"1.342855","8":"1.325358","9":"0.2981184"},{"1":"4Nem MHI to Johnston Atoll","2":"0.9766221","3":"1.281817","4":"1.464933","5":"1.709089","6":"2.136361","7":"1.464933","8":"1.509971","9":"0.3006513"},{"1":"4Nem NWHI to Johnston Atoll","2":"0.8545443","3":"1.220778","4":"1.403894","5":"1.587011","6":"2.014283","7":"1.403894","8":"1.389057","9":"0.3010590"},{"1":"4Nem Japan to MHI","2":"10.1934933","3":"12.512971","4":"13.855826","5":"15.320759","6":"18.555820","7":"13.550632","8":"13.987024","9":"2.1476129"},{"1":"4Nem Johnston Atoll to MHI","2":"9.7051822","3":"11.963621","4":"13.245437","5":"14.649332","6":"17.762315","7":"13.001282","8":"13.370135","9":"2.0492114"},{"1":"4Nem NWHI to MHI","2":"9.9493377","3":"12.207776","4":"13.550632","5":"15.015565","6":"18.311665","7":"13.245437","8":"13.714079","9":"2.1418080"},{"1":"4Nem Japan to NWHI","2":"11.9636208","3":"14.710371","4":"16.297381","5":"18.006470","6":"21.973997","7":"15.931148","8":"16.458761","9":"2.5539754"},{"1":"4Nem Johnston Atoll to NWHI","2":"10.9259598","3":"13.367515","4":"14.832448","5":"16.358420","6":"19.837637","7":"14.527254","8":"14.967092","9":"2.2779737"},{"1":"4Nem MHI to NWHI","2":"11.2921931","3":"13.855826","4":"15.381798","5":"17.029848","6":"20.692181","7":"15.015565","8":"15.517175","9":"2.4016146"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 </section>
@@ -2712,28 +2888,28 @@ dbl (30): Steps, Locus, Replicate, lnPost, lnDataL, lnPrbGParam, lnPrior, tr...
 <section id="model-marginal-likelihoods-1" class="level4">
 <h4 class="anchored" data-anchor-id="model-marginal-likelihoods-1">Model Marginal Likelihoods</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb187"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb187-1"><a href="#cb187-1" aria-hidden="true" tabindex="-1"></a>runDir_car <span class="ot">&lt;-</span> <span class="st">"carbunculus/migrate/output"</span></span>
-<span id="cb187-2"><a href="#cb187-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-3"><a href="#cb187-3" aria-hidden="true" tabindex="-1"></a>likelist_car <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb187-4"><a href="#cb187-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
-<span id="cb187-5"><a href="#cb187-5" aria-hidden="true" tabindex="-1"></a>  rep <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"rep"</span>,r)</span>
-<span id="cb187-6"><a href="#cb187-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(rep)</span>
-<span id="cb187-7"><a href="#cb187-7" aria-hidden="true" tabindex="-1"></a>  likelist_car[[rep]] <span class="ot">&lt;-</span> <span class="fu">harvest.model.likelihoods</span>(<span class="at">workingDir=</span><span class="fu">file.path</span>(runDir_car,rep))</span>
-<span id="cb187-8"><a href="#cb187-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb187-9"><a href="#cb187-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-10"><a href="#cb187-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Model selection for each replicate...</span></span>
-<span id="cb187-11"><a href="#cb187-11" aria-hidden="true" tabindex="-1"></a>likelist_car <span class="sc">%&gt;%</span> <span class="fu">map</span>(bfcalcs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb206"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb206-1"><a href="#cb206-1" aria-hidden="true" tabindex="-1"></a>runDir_car <span class="ot">&lt;-</span> <span class="st">"carbunculus/migrate/output"</span></span>
+<span id="cb206-2"><a href="#cb206-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-3"><a href="#cb206-3" aria-hidden="true" tabindex="-1"></a>likelist_car <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb206-4"><a href="#cb206-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
+<span id="cb206-5"><a href="#cb206-5" aria-hidden="true" tabindex="-1"></a>  rep <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"rep"</span>,r)</span>
+<span id="cb206-6"><a href="#cb206-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(rep)</span>
+<span id="cb206-7"><a href="#cb206-7" aria-hidden="true" tabindex="-1"></a>  likelist_car[[rep]] <span class="ot">&lt;-</span> <span class="fu">harvest.model.likelihoods</span>(<span class="at">workingDir=</span><span class="fu">file.path</span>(runDir_car,rep))</span>
+<span id="cb206-8"><a href="#cb206-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb206-9"><a href="#cb206-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-10"><a href="#cb206-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Model selection for each replicate...</span></span>
+<span id="cb206-11"><a href="#cb206-11" aria-hidden="true" tabindex="-1"></a>likelist_car <span class="sc">%&gt;%</span> <span class="fu">map</span>(bfcalcs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The final model marginal likelihood estimates based on the mean of 10 replicates:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb188"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb188-1"><a href="#cb188-1" aria-hidden="true" tabindex="-1"></a>like.df_car <span class="ot">&lt;-</span>  likelist_car <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>() <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(model)</span>
-<span id="cb188-2"><a href="#cb188-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb188-3"><a href="#cb188-3" aria-hidden="true" tabindex="-1"></a>means_car <span class="ot">&lt;-</span> like.df_car <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">bezier.corrected =</span> <span class="fu">mean</span>(bezier.corrected))</span>
-<span id="cb188-4"><a href="#cb188-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb188-5"><a href="#cb188-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb188-6"><a href="#cb188-6" aria-hidden="true" tabindex="-1"></a>final_model_car <span class="ot">&lt;-</span> <span class="fu">bfcalcs</span>(means_car)</span>
-<span id="cb188-7"><a href="#cb188-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb188-8"><a href="#cb188-8" aria-hidden="true" tabindex="-1"></a>final_model_car</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb207"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb207-1"><a href="#cb207-1" aria-hidden="true" tabindex="-1"></a>like.df_car <span class="ot">&lt;-</span>  likelist_car <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>() <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(model)</span>
+<span id="cb207-2"><a href="#cb207-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb207-3"><a href="#cb207-3" aria-hidden="true" tabindex="-1"></a>means_car <span class="ot">&lt;-</span> like.df_car <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">bezier.corrected =</span> <span class="fu">mean</span>(bezier.corrected))</span>
+<span id="cb207-4"><a href="#cb207-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb207-5"><a href="#cb207-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb207-6"><a href="#cb207-6" aria-hidden="true" tabindex="-1"></a>final_model_car <span class="ot">&lt;-</span> <span class="fu">bfcalcs</span>(means_car)</span>
+<span id="cb207-7"><a href="#cb207-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb207-8"><a href="#cb207-8" aria-hidden="true" tabindex="-1"></a>final_model_car</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
@@ -2748,12 +2924,12 @@ dbl (30): Steps, Locus, Replicate, lnPost, lnDataL, lnPrbGParam, lnPrior, tr...
 <h4 class="anchored" data-anchor-id="t-test-1">T-Test</h4>
 <p>Difference between panmixia and the second-place full model is very significant.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb189"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb189-1"><a href="#cb189-1" aria-hidden="true" tabindex="-1"></a>top.choice <span class="ot">&lt;-</span> final_model_car<span class="sc">$</span>model[<span class="fu">which</span>(final_model_car<span class="sc">$</span>choice <span class="sc">==</span><span class="dv">1</span>)]</span>
-<span id="cb189-2"><a href="#cb189-2" aria-hidden="true" tabindex="-1"></a>second.choice <span class="ot">&lt;-</span> final_model_car<span class="sc">$</span>model[<span class="fu">which</span>(final_model_car<span class="sc">$</span>choice <span class="sc">==</span><span class="dv">2</span>)]</span>
-<span id="cb189-3"><a href="#cb189-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb189-4"><a href="#cb189-4" aria-hidden="true" tabindex="-1"></a><span class="fu">permTS</span>(like.df_car<span class="sc">$</span>bezier.corrected[<span class="fu">which</span>(like.df_car<span class="sc">$</span>model <span class="sc">==</span> top.choice)],</span>
-<span id="cb189-5"><a href="#cb189-5" aria-hidden="true" tabindex="-1"></a>       like.df_car<span class="sc">$</span>bezier.corrected[<span class="fu">which</span>(like.df_car<span class="sc">$</span>model <span class="sc">==</span> second.choice)],</span>
-<span id="cb189-6"><a href="#cb189-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">alternative =</span> <span class="st">"greater"</span>, <span class="at">method =</span> <span class="st">"exact.ce"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb208"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb208-1"><a href="#cb208-1" aria-hidden="true" tabindex="-1"></a>top.choice <span class="ot">&lt;-</span> final_model_car<span class="sc">$</span>model[<span class="fu">which</span>(final_model_car<span class="sc">$</span>choice <span class="sc">==</span><span class="dv">1</span>)]</span>
+<span id="cb208-2"><a href="#cb208-2" aria-hidden="true" tabindex="-1"></a>second.choice <span class="ot">&lt;-</span> final_model_car<span class="sc">$</span>model[<span class="fu">which</span>(final_model_car<span class="sc">$</span>choice <span class="sc">==</span><span class="dv">2</span>)]</span>
+<span id="cb208-3"><a href="#cb208-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb208-4"><a href="#cb208-4" aria-hidden="true" tabindex="-1"></a><span class="fu">permTS</span>(like.df_car<span class="sc">$</span>bezier.corrected[<span class="fu">which</span>(like.df_car<span class="sc">$</span>model <span class="sc">==</span> top.choice)],</span>
+<span id="cb208-5"><a href="#cb208-5" aria-hidden="true" tabindex="-1"></a>       like.df_car<span class="sc">$</span>bezier.corrected[<span class="fu">which</span>(like.df_car<span class="sc">$</span>model <span class="sc">==</span> second.choice)],</span>
+<span id="cb208-6"><a href="#cb208-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">alternative =</span> <span class="st">"greater"</span>, <span class="at">method =</span> <span class="st">"exact.ce"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Exact Permutation Test (complete enumeration)
@@ -2771,29 +2947,29 @@ mean GROUP 1 - mean GROUP 2
 <h4 class="anchored" data-anchor-id="figures-1">Figures</h4>
 <p>And a figure summarizing all this</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb191"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Divergence With Gene Flow 1"</span>,<span class="st">"Divergence With Gene Flow 2"</span>,</span>
-<span id="cb191-2"><a href="#cb191-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Divergence Only 1"</span>, <span class="st">"Divergence Only 2"</span>,</span>
-<span id="cb191-3"><a href="#cb191-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Gene Flow Only 1"</span>, <span class="st">"Gene Flow Only 2"</span>, <span class="st">"Gene Flow Only Full"</span>,</span>
-<span id="cb191-4"><a href="#cb191-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"n-island"</span>, <span class="st">"panmixia"</span>)</span>
-<span id="cb191-5"><a href="#cb191-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb191-6"><a href="#cb191-6" aria-hidden="true" tabindex="-1"></a>likesPlot_car <span class="ot">&lt;-</span> likelist_car <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>() <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(model) <span class="sc">%&gt;%</span> </span>
-<span id="cb191-7"><a href="#cb191-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>model, <span class="at">y =</span> bezier.corrected)) <span class="sc">+</span></span>
-<span id="cb191-8"><a href="#cb191-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">geom_violin</span>(<span class="at">draw_quantiles =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb191-9"><a href="#cb191-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb191-10"><a href="#cb191-10" aria-hidden="true" tabindex="-1"></a>              <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> models) <span class="sc">+</span></span>
-<span id="cb191-11"><a href="#cb191-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Metapopulation Model"</span>, <span class="at">y =</span> <span class="st">"Bezier Corrected Marginal Likelihood"</span>)</span>
-<span id="cb191-12"><a href="#cb191-12" aria-hidden="true" tabindex="-1"></a>likesPlot_car</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb210"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb210-1"><a href="#cb210-1" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Divergence With Gene Flow 1"</span>,<span class="st">"Divergence With Gene Flow 2"</span>,</span>
+<span id="cb210-2"><a href="#cb210-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Divergence Only 1"</span>, <span class="st">"Divergence Only 2"</span>,</span>
+<span id="cb210-3"><a href="#cb210-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Gene Flow Only 1"</span>, <span class="st">"Gene Flow Only 2"</span>, <span class="st">"Gene Flow Only Full"</span>,</span>
+<span id="cb210-4"><a href="#cb210-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"n-island"</span>, <span class="st">"panmixia"</span>)</span>
+<span id="cb210-5"><a href="#cb210-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb210-6"><a href="#cb210-6" aria-hidden="true" tabindex="-1"></a>likesPlot_car <span class="ot">&lt;-</span> likelist_car <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>() <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb210-7"><a href="#cb210-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>model, <span class="at">y =</span> bezier.corrected)) <span class="sc">+</span></span>
+<span id="cb210-8"><a href="#cb210-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">geom_violin</span>(<span class="at">draw_quantiles =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb210-9"><a href="#cb210-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb210-10"><a href="#cb210-10" aria-hidden="true" tabindex="-1"></a>              <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> models) <span class="sc">+</span></span>
+<span id="cb210-11"><a href="#cb210-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Metapopulation Model"</span>, <span class="at">y =</span> <span class="st">"Bezier Corrected Marginal Likelihood"</span>)</span>
+<span id="cb210-12"><a href="#cb210-12" aria-hidden="true" tabindex="-1"></a>likesPlot_car</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-78-1.png" class="img-fluid" width="672"></p>
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-79-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Zoom in on the top three models</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb192"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a>likesPlot_zoom_car <span class="ot">&lt;-</span> likesPlot_car <span class="sc">+</span> <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">525000</span>, <span class="sc">-</span><span class="dv">520000</span>) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
-<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a>likesPlot_zoom_car</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb211"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb211-1"><a href="#cb211-1" aria-hidden="true" tabindex="-1"></a>likesPlot_zoom_car <span class="ot">&lt;-</span> likesPlot_car <span class="sc">+</span> <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">525000</span>, <span class="sc">-</span><span class="dv">520000</span>) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb211-2"><a href="#cb211-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb211-3"><a href="#cb211-3" aria-hidden="true" tabindex="-1"></a>likesPlot_zoom_car</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-79-1.png" class="img-fluid" width="672"></p>
+<p><img src="Etelis_migrate_files/figure-html/unnamed-chunk-80-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Hmmm…. so despite there being significant <span class="math inline">\(F_{st}\)</span> between Japan and Hawaii, Migrate finds a model of panmixia 🤔</p>

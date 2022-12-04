@@ -39,7 +39,6 @@ library(spatstat.core)
 library(Rmpfr)
 library(emoji)
 library(RColorBrewer)
-library(jags)
 ```
 
 ## Function library
@@ -1787,6 +1786,23 @@ likesPlot_zoom_cor
 
 ```
 
+### Checking the effects of a bad Ti/Tv ratio
+
+So, I was using a Ti/Tv ratio in my K80/HKY mutation models that was way out of bounds. I've exported the locus-by-locus marginal likelihoods out of the panmixia, full and divergence-with-gene-flow3 models to see what happens when I remove the bad loci.
+
+```{r}
+#| eval: false
+mlikes <- read_csv("coruscans/model_marglike_comp.csv") %>% 
+            filter(!Locus_Index %in% badloci$Locus) %>%
+              filter(!Locus_Index==440) %>%  #locus 440 is the migrate sum
+              summarize(across(.fns = sum))
+
+mlikes
+```
+
+With this new back-of-the-envelope analysis, the full model comes 3rd, after divergence-with-gene-flow3. The scaling factor might have a big effect here.
+
+
 ## Best Model Parameter Estimates
 
 ### Priors
@@ -1970,7 +1986,7 @@ names(parameter_number_key) <- parameter_number_table$pnumber
   
 ```
 
-##### Bayesfile - Theta
+###### Theta
 
 ```{r}
 bf %>% filter(pnumber %in% 1:4) %>% filter(Locus == 440) %>% 
@@ -1981,7 +1997,7 @@ bf %>% filter(pnumber %in% 1:4) %>% filter(Locus == 440) %>%
 
 ```
 
-##### Bayesfile - M/mu
+###### M/mu
 
 ```{r}
 #| eval: false
@@ -1993,21 +2009,6 @@ bf %>% filter(pnumber %in% 6:16) %>% filter(Locus == 440) %>%
       scale_x_log10(limits = c(1e4,1e6)) + ylim(0,0.05)
 
 ```
-
-
-##### Bayesfile - Nm
-
-```{r}
-#| eval: false
-bf %>% filter(pnumber %in% 1:4) %>% filter(Locus == 440) %>% 
-      ggplot(aes(x = value, y = freq, color = pnumber)) + geom_line() +
-      scale_color_brewer(palette = "YlGnBu", labels = parameter_number_key) +
-      ylim(0,0.02) + xlim(0,0.015) + geom_line(aes(x = value, y = priorFreq),
-                                             color = "grey", linetype="dotted")
-
-```
-
-
 
 ##### Bayesallfile
 
@@ -2152,12 +2153,12 @@ posterior_stats <- function(df,parameter){
 
 ```
 
-##### Theta
+###### Theta
 
 And here I run the code for the $\theta$ estimates
 
 ```{r}
-#| eval: false
+
 #posterior_thetaf %>% filter(Locus == 1) %>% 
 #          ggplot(aes(x = Steps, y = Theta_2)) +
 #                  geom_path() + scale_y_log10()
@@ -2198,12 +2199,12 @@ theta_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = thetas,
 
 Need to check convergence for these things, and that there was sufficient burnin.
 
-##### M/mu
+###### M/mu
 
 And here I run the code for the $m/\mu$ estimates
 
 ```{r}
-#| eval: false
+
 
 parameter_type <- "M"
 
@@ -2229,22 +2230,23 @@ nm.palette <- colorRampPalette(brewer.pal(9,"Spectral"))
 ggplot(mmu_long, aes(x = x, y = Density, 
                     color = Parameter)) +
         geom_line(linewidth = 0.5) + 
-        scale_x_log10()
-        scale_color_discrete(type=nm.palette(12), labels = parameter_key)
+        #scale_x_log10(limits=c(1e6,1e7))
+        scale_color_discrete(type=nm.palette(12), labels = parameter_key)+
+        xlim(7e6,7.5e6)
 # get stats for each summed-over-loci posterior
 
-mmu_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = Nm, 
+mmu_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = mmu, 
                                                       parameter = .x),
                                       .id = "parameter")
 mmu_stats
 ```
 
-##### 4Nm
+###### 4Nm
 
 And here I run the code for the `4Nm` estimates
 
 ```{r}
-#| eval: false
+
 parameter_type <- "Nm"
 
 parameters <- names(posterior) %>%
