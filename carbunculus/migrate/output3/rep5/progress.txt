@@ -1,0 +1,10 @@
+Mon Jan  2 01:15:42 PM HST 2023
+starting divergence_geneflow_1/ at Mon Jan 2 01:15:42 PM HST 2023
+starting divergence_geneflow_2/ at Mon Jan 2 04:32:59 PM HST 2023
+starting divergence_only_1/ at Mon Jan 2 07:43:28 PM HST 2023
+starting divergence_only_2/ at Mon Jan 2 10:19:39 PM HST 2023
+starting geneflow_only_1/ at Tue Jan 3 12:56:14 AM HST 2023
+starting geneflow_only_2/ at Tue Jan 3 03:36:36 AM HST 2023
+starting geneflow_only_full/ at Tue Jan 3 06:13:07 AM HST 2023
+starting n-island/ at Tue Jan 3 09:49:54 AM HST 2023
+starting panmixia/ at Tue Jan 3 12:32:02 PM HST 2023
