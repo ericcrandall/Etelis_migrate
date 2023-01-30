@@ -43,3 +43,5 @@ vignettes/*.pdf
 /coruscans/populations_r100
 /carbunculus/populations_r100
 /.quarto/
+
+*.pdf
