@@ -195,7 +195,7 @@ summarize_posterior <- function(posterior,
 
   # create a tibble with x values for a density plot
   #  of the chosen number of points
-  dens <- tibble(.rows = n, x = density(getx[,1],  n=n, 
+  dens <- tibble(.rows = n, x = density(getx[[1]],  n=n, 
                            from = prior_params[1], 
                            to = prior_params[3],
                            bw = "nrd0")$x)
@@ -2029,7 +2029,7 @@ effectiveSize(posteriors2[[1]])
 #ggmcmc(posterior.ggs, param_page = 4)
 
 ```
- Took 51 minutes to generatr the ggmcmc output, but everything looks really really good, other than the Geweke diagnostics... need to look that up.
+ Took 51 minutes to generate the ggmcmc output, but everything looks really really good, other than the Geweke diagnostics... need to look that up.
 
 ##### Effective Sizes
 Effective sizes are good for one replicate 
@@ -2436,11 +2436,14 @@ for(r in 2:4){
                                       "bayesallfile"), comment = "#") 
 }
 
-#combine into one, and then keep only the first 1 rep (based on diagnostics below)
-posterior <- posteriors %>% bind_rows(.id = "rep") %>% select(-ml_harmonic) %>% 
-                                filter(rep <= 1) %>% migrants.per.gen()
 # This creates an empty element number one, set that to null
 posteriors[[1]] <- NULL
+
+
+#combine into one, and then keep only the first 1 rep (based on diagnostics below)
+#also need to do this to keep "rep" as a column for summarizing over loci function.
+posterior <- posteriors %>% bind_rows(.id = "rep") %>%  
+                                filter(rep <= 1) %>% migrants.per.gen()
 
 # posterior_long <- posterior %>% 
 #                   pivot_longer(starts_with(c("Theta_", "M_", "Nm_","D_", "d_")),
@@ -2553,7 +2556,7 @@ thetas_long <- thetas %>% select(all_of(c("x","prior",parameters))) %>%
                             names_to = "Parameter",
                             values_to = "Density")
 
-theta.colors <- brewer.pal(4,"Spectral")
+theta.colors <- brewer.pal(3,"Spectral")
 theta.colors.light <- lighten(theta.colors)
 theta.colors.dark <- darken(theta.colors)
 
@@ -2566,14 +2569,14 @@ thetas_density <-  ggplot(thetas_long, aes(x = x, y = Density,
                              labels = parameter_key) +
         geom_line(aes(x = x, y=prior), color = "grey",
                   linetype="dotted") +
-        ylim(0,0.125) + xlim(0,0.0025)
+        ylim(0,0.06) + xlim(0,0.0125)
 
 thetas_ridges <- ggplot(thetas_long, aes(x = x, y = Parameter, height = Density, 
                     fill = Parameter)) +
         geom_density_ridges(stat = "identity") + 
         scale_fill_discrete(type = theta.colors, labels = parameter_key) +
         scale_y_discrete(limits = rev, labels = NULL, breaks = NULL) +
-        labs(x = TeX("$\\Theta$")) + xlim(0,0.0025)
+        labs(x = TeX("$\\Theta$")) + xlim(0,0.0125)
 
 thetas_violins <- ggplot(thetas_long, aes(x = Parameter, y = x, 
                                           violinwidth = Density*10, 
@@ -2581,11 +2584,11 @@ thetas_violins <- ggplot(thetas_long, aes(x = Parameter, y = x,
         geom_violin(stat = "identity") + 
         scale_fill_discrete(type = theta.colors, labels = parameter_key) +
         scale_x_discrete(limits = rev, labels = NULL, breaks = NULL) +
-        labs(y = TeX("$\\Theta$")) + ylim(0,0.0025)
+        labs(y = TeX("$\\Theta$")) + ylim(0,0.0125)
 
-ggsave("./carbunculus/migrate/theta_density_full.jpg", plot = thetas_density)
-ggsave("./carbunculus/migrate/theta_ridges_full.jpg", plot = thetas_ridges)
-ggsave("./carbunculus/migrate/theta_violins_full.jpg", plot = thetas_violins)
+#ggsave("./carbunculus/migrate/theta_density_full.jpg", plot = thetas_density)
+#ggsave("./carbunculus/migrate/theta_ridges_full.jpg", plot = thetas_ridges)
+#ggsave("./carbunculus/migrate/theta_violins_full.jpg", plot = thetas_violins)
 
 # get stats for each summed-over-loci posterior
 
@@ -2637,14 +2640,14 @@ Ms_long <- Ms %>% select(all_of(c("x","prior",parameters))) %>%
 
 migration.colors <- c(theta.colors[1],theta.colors.dark[1],theta.colors.light[1],
                       theta.colors[2],theta.colors.dark[2],theta.colors.light[2],
-                      theta.colors[3],theta.colors.dark[3],theta.colors.light[3],
-                      theta.colors[4],theta.colors.dark[4],theta.colors.light[4])           
+                      theta.colors[3],theta.colors.dark[3],theta.colors.light[3])
+                                 
 #plot
 Ms_density <-  ggplot(Ms_long, aes(x = x, y = Density, 
                     color = Parameter)) +
-        geom_line(size = 1) + 
-        scale_x_log10(limits = c(1,3000)) + 
-        scale_color_discrete(type = migration.colors, labels = parameter_key) +
+        geom_line(linewidth = 1) + 
+        scale_x_log10(limits = c(100,3000)) + 
+        scale_color_discrete(type = theta.colors, labels = parameter_key) +
         geom_line(aes(x = x, y=prior), color = "grey",
                   linetype="dotted")
   
@@ -2654,16 +2657,16 @@ M_ridges <- ggplot(Ms_long, aes(x = x, y = Parameter, height = Density,
                     fill = Parameter)) +
         geom_density_ridges(stat = "identity") + 
         #scale_x_log10(limits = c(1,2000)) +
-        scale_fill_discrete(type = migration.colors, labels = parameter_key) +
+        scale_fill_discrete(type = theta.colors, labels = parameter_key) +
         scale_y_discrete(limits = rev, labels = NULL, breaks = NULL) +
-        labs(x = TeX("$\\frac{m}{\\mu}$")) + xlim(0,1200)
+        labs(x = TeX("$\\frac{m}{\\mu}$")) + xlim(0,3000)
 
   
 M_violins <- ggplot(Ms_long, aes(x = Parameter, y = x, violinwidth = Density*20, 
                     fill = Parameter)) +
         geom_violin(stat = "identity") +
-        scale_y_log10(limits = c(1,1200)) +
-        scale_fill_discrete(type = migration.colors, labels = parameter_key) 
+        scale_y_log10(limits = c(1,3000)) +
+        scale_fill_discrete(type = theta.colors, labels = parameter_key) 
 
 # ggsave("./carbunculus/migrate/Mmu_density_full.pdf", plot = Ms_density)
 # ggsave("./carbunculus/migrate/Mmu_ridges_full.pdf", plot = M_ridges)
@@ -2720,26 +2723,26 @@ Nms_density <-  ggplot(nms_long, aes(x = x, y = Density,
                     color = Parameter)) +
         geom_line(size = 1) + 
         #scale_x_log10(limits = c(5e-4,1e-2)) + 
-        scale_color_discrete(type = migration.colors, labels = parameter_key) +
+        scale_color_discrete(type = theta.colors, labels = parameter_key) +
         geom_line(aes(x = x, y=prior), color = "grey",
                   linetype="dotted") +
-         xlim(0,1.5)
+         xlim(0,10)
   
            
 #plot
 nm_ridges <- ggplot(nms_long, aes(x = x, y = Parameter, height = Density, 
                     fill = Parameter)) +
         geom_density_ridges(stat = "identity") + 
-        scale_fill_discrete(type = migration.colors, labels = parameter_key) +
+        scale_fill_discrete(type = theta.colors, labels = parameter_key) +
         scale_y_discrete(limits = rev, labels = NULL, breaks = NULL) +
         labs(x = TeX("$4N_em$")) +
-        xlim(0,1.5)
+        xlim(0,10)
   
 nm_violins <- ggplot(nms_long, aes(x = Parameter, y = x, violinwidth = Density*20, 
                     fill = Parameter)) +
         geom_violin(stat = "identity") + 
-        scale_fill_discrete(type = migration.colors, labels = parameter_key) +
-        ylim(0,1.5)
+        scale_fill_discrete(type = theta.colors, labels = parameter_key) +
+        ylim(0,10)
 # get stats for each summed-over-loci posterior
 
 nms_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = nms, 
