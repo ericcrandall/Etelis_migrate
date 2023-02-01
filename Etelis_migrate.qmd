@@ -2029,7 +2029,7 @@ effectiveSize(posteriors2[[1]])
 #ggmcmc(posterior.ggs, param_page = 4)
 
 ```
- Took 51 minutes to generation the ggmcmc output, but everything looks really really good, other than the Geweke diagnostics... need to look that up.
+ Took 51 minutes to generatr the ggmcmc output, but everything looks really really good, other than the Geweke diagnostics... need to look that up.
 
 ##### Effective Sizes
 Effective sizes are good for one replicate 
@@ -2082,7 +2082,7 @@ gelman.diag(posteriors.mcmc, transform = T)
 
 
 
-#### Theta Estimates
+##### Theta Estimates
 
 And here I run the code for the $\theta$ estimates
 
@@ -2366,7 +2366,7 @@ permTS(like.df_car$bezier.corrected[which(like.df_car$model == top.choice)],
        alternative = "greater", method = "exact.ce")
 ```
 
-#### Figures
+#### Model-Selection Figures
 
 And a figure summarizing all this
 
@@ -2399,6 +2399,371 @@ likesPlot_zoom_car
 
 Hmmm.... so despite there being significant $F_{st}$ between Japan and Hawaii, Migrate finds a model of panmixia `r emoji("thinking")`
 
+#### Final Parameter Estimates
+
+These are the final estimates, summed over loci.
+
+Here are the priors I'm using for the equilibrium models, as a reminder.
+```
+bayes-priors= THETA WEXPPRIOR: 0.0 0.001 0.1000000 0.01000 
+bayes-priors= MIG WEXPPRIOR: 0.0100 10000.000000 100000000 10000
+
+```
+
+
+##### Read in the posterior and make a labeling key
+
+```{r}
+#| eval: false
+
+repsDir <- "~/Library/CloudStorage/OneDrive-ThePennsylvaniaStateUniversity/Research/Etelis/migrate_output/carbunculus/output3"
+
+# for some reason the bayesallfile has 39 columns, but only 31 are labelled.
+
+# read in a population key to translate numbers into names in figures
+popkey <- read_csv("carbunculus/popkey.csv")
+names(popkey$Pop) <- popkey$Index
+
+
+winningModel <- "divergence_geneflow_2"
+
+posteriors <- list()
+
+#read in the posterior for one replicate this may take 5 minutes
+for(r in 2:4){
+  print(paste("Loading Rep",r))
+  posteriors[[r]] <- read_tsv_chunked(file.path(repsDir,paste0("rep",r),winningModel,
+                                      "bayesallfile"), comment = "#") 
+}
+
+#combine into one, and then keep only the first 1 rep (based on diagnostics below)
+posterior <- posteriors %>% bind_rows(.id = "rep") %>% select(-ml_harmonic) %>% 
+                                filter(rep <= 1) %>% migrants.per.gen()
+# This creates an empty element number one, set that to null
+posteriors[[1]] <- NULL
+
+# posterior_long <- posterior %>% 
+#                   pivot_longer(starts_with(c("Theta_", "M_", "Nm_","D_", "d_")),
+#                                names_to = "parameter", 
+#                                values_to = "value")
+#make a new labeling key
+posterior_parameters <- names(posterior)[str_which(names(posterior),
+                                                   paste(c("Theta_", "M_", 
+                                                           "Nm_","D_", "d_"), 
+                                                         collapse = "|"))]
+
+parameter_key <- posterior_parameters %>% 
+                                  str_replace("(\\d)_(\\d)", "\\1 to \\2") %>%
+                                  str_replace("M_", "m/mu " ) %>% 
+                                  str_replace("Theta_", "theta ") %>% 
+                                  str_replace_all(popkey$Pop) %>% 
+                                  str_replace("Nm_", "4Nem ") 
+                                  
+
+names(parameter_key) <- posterior_parameters
+
+
+
+
+```
+
+##### Check Convergence
+
+
+```{r}
+#| eval: false
+
+#thin by taking every 5 steps
+posteriors2 <- map(posteriors,filter,Steps%%500==0)
+#posteriors2 <- map(posteriors2, select, -mL_harmonic) #remove mL_harmonic, which took in extra unlabeled columns
+# select parameters only
+posteriors2 <- lapply(posteriors2, select, starts_with(c("Theta_", "M_", 
+                                                          "Nm_","D_","d_")))
+
+                        
+posteriors.mcmc <- mcmc.list(lapply(posteriors2,mcmc,thin=500))
+posterior.ggs <- ggs(posteriors.mcmc, burnin = F)
+effectiveSize(posteriors.mcmc[[2]])
+#ggmcmc(posterior.ggs, param_page = 4)
+
+```
+ Took 51 minutes to generate the ggmcmc output, but everything looks really really good, other than the Geweke diagnostics... need to look that up.
+
+##### Effective Sizes
+Effective sizes are good for one replicate 
+
+```{}
+effectiveSize(posteriors2[[2]]) #same results achieved for effectiveSize(posteriors.mcmc[[2]])
+Theta_1 Theta_2 Theta_3   M_3_2   M_1_3   D_3_2   D_1_3 
+4655257 5216879 4800514 4769200 4744785 5452765 5111168 
+
+```
+
+
+##### Gelman-Rubin Diagnostic
+
+Gelman-Rubin diagnostic perfect, both transformed and untransformed!
+
+```{}
+
+gelman.diag(posteriors.mcmc)
+
+Potential scale reduction factors:
+
+        Point est. Upper C.I.
+Theta_1          1          1
+Theta_2          1          1
+Theta_3          1          1
+M_3_2            1          1
+M_1_3            1          1
+D_3_2            1          1
+D_1_3            1          1
+
+Multivariate psrf
+
+1
+
+gelman.diag(posteriors.mcmc, transform = T)
+```
+
+
+
+##### Theta Estimates
+
+And here I run the code for the $\theta$ estimates
+
+```{r}
+#| eval: false
+
+parameter_type <- "Theta"
+
+parameters <- names(posterior) %>%
+                        str_subset(parameter_type)
+
+parameter_key2 <- parameters
+names(parameter_key2) <- parameter_key[names(parameter_key) %in% parameter_key2]
+
+#summarize the posterior for theta
+thetas <- summarize_posterior(posterior, parameter_type = parameter_type, 
+                              prior_params = c(0,0.001,0.1))
+
+#convert to long format
+thetas_long <- thetas %>% select(all_of(c("x","prior",parameters))) %>% 
+                pivot_longer(starts_with(c(paste0(parameter_type,"_"))), 
+                            names_to = "Parameter",
+                            values_to = "Density")
+
+theta.colors <- brewer.pal(4,"Spectral")
+theta.colors.light <- lighten(theta.colors)
+theta.colors.dark <- darken(theta.colors)
+
+#plot
+thetas_density <-  ggplot(thetas_long, aes(x = x, y = Density, 
+                    color = Parameter)) +
+        geom_line(linewidth = 1) + 
+        #scale_x_log10(limits = c(5e-4,1e-2)) + 
+        scale_color_discrete(type = theta.colors, 
+                             labels = parameter_key) +
+        geom_line(aes(x = x, y=prior), color = "grey",
+                  linetype="dotted") +
+        ylim(0,0.125) + xlim(0,0.0025)
+
+thetas_ridges <- ggplot(thetas_long, aes(x = x, y = Parameter, height = Density, 
+                    fill = Parameter)) +
+        geom_density_ridges(stat = "identity") + 
+        scale_fill_discrete(type = theta.colors, labels = parameter_key) +
+        scale_y_discrete(limits = rev, labels = NULL, breaks = NULL) +
+        labs(x = TeX("$\\Theta$")) + xlim(0,0.0025)
+
+thetas_violins <- ggplot(thetas_long, aes(x = Parameter, y = x, 
+                                          violinwidth = Density*10, 
+                                          fill = Parameter)) +
+        geom_violin(stat = "identity") + 
+        scale_fill_discrete(type = theta.colors, labels = parameter_key) +
+        scale_x_discrete(limits = rev, labels = NULL, breaks = NULL) +
+        labs(y = TeX("$\\Theta$")) + ylim(0,0.0025)
+
+ggsave("./carbunculus/migrate/theta_density_full.jpg", plot = thetas_density)
+ggsave("./carbunculus/migrate/theta_ridges_full.jpg", plot = thetas_ridges)
+ggsave("./carbunculus/migrate/theta_violins_full.jpg", plot = thetas_violins)
+
+# get stats for each summed-over-loci posterior
+
+theta_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = thetas, 
+                                                             parameter = .x),
+                                      .id = "parameter")
+#write.csv(theta_stats,"./carbunculus/migrate/theta_stats_full.csv")
+```
+
+Theta estimates:
+
+```{r}
+thetastats <- read_csv("./carbunculus/migrate/theta_stats.csv")
+thetastats
+```
+
+![Theta Density](./carbunculus/migrate/theta_density_full.pdf)
+![Theta Ridges](./carbunculus/migrate/theta_ridges_full.pdf)
+
+![Theta Violins](./carbunculus/migrate/theta_violins_full.pdf)
+
+
+##### m/mu estimates
+
+```{r}
+#| eval: false
+
+parameter_type <- "M"
+
+# use this to figure out the granularity of the prior needed for summarize_prior
+#seq(0,100000, length.out = 2^17)
+
+parameters <- names(posterior) %>%
+                        str_subset(parameter_type)
+
+parameter_key2 <- parameters
+names(parameter_key2) <- parameter_key[names(parameter_key) %in% parameter_key2]
+
+#summarize the posterior for theta
+Ms <- summarize_posterior(posterior, parameter_type = parameter_type, 
+                              prior_params = c(0,10000,100000), n = 2^17)
+
+#convert to long format
+Ms_long <- Ms %>% select(all_of(c("x","prior",parameters))) %>% 
+                pivot_longer(starts_with(c(paste0(parameter_type,"_"))), 
+                            names_to = "Parameter",
+                            values_to = "Density")
+
+
+migration.colors <- c(theta.colors[1],theta.colors.dark[1],theta.colors.light[1],
+                      theta.colors[2],theta.colors.dark[2],theta.colors.light[2],
+                      theta.colors[3],theta.colors.dark[3],theta.colors.light[3],
+                      theta.colors[4],theta.colors.dark[4],theta.colors.light[4])           
+#plot
+Ms_density <-  ggplot(Ms_long, aes(x = x, y = Density, 
+                    color = Parameter)) +
+        geom_line(size = 1) + 
+        scale_x_log10(limits = c(1,3000)) + 
+        scale_color_discrete(type = migration.colors, labels = parameter_key) +
+        geom_line(aes(x = x, y=prior), color = "grey",
+                  linetype="dotted")
+  
+           
+#plot
+M_ridges <- ggplot(Ms_long, aes(x = x, y = Parameter, height = Density, 
+                    fill = Parameter)) +
+        geom_density_ridges(stat = "identity") + 
+        #scale_x_log10(limits = c(1,2000)) +
+        scale_fill_discrete(type = migration.colors, labels = parameter_key) +
+        scale_y_discrete(limits = rev, labels = NULL, breaks = NULL) +
+        labs(x = TeX("$\\frac{m}{\\mu}$")) + xlim(0,1200)
+
+  
+M_violins <- ggplot(Ms_long, aes(x = Parameter, y = x, violinwidth = Density*20, 
+                    fill = Parameter)) +
+        geom_violin(stat = "identity") +
+        scale_y_log10(limits = c(1,1200)) +
+        scale_fill_discrete(type = migration.colors, labels = parameter_key) 
+
+# ggsave("./carbunculus/migrate/Mmu_density_full.pdf", plot = Ms_density)
+# ggsave("./carbunculus/migrate/Mmu_ridges_full.pdf", plot = M_ridges)
+# ggsave("./carbunculus/migrate/Mmu_violins_full.pdf", plot = M_violins)
+
+# get stats for each summed-over-loci posterior
+
+Ms_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = Ms, 
+                                                             parameter = .x),
+                                      .id = "parameter")
+
+#write.csv(Ms_stats,"./carbunculus/migrate/Mmu_stats_full.csv")
+```
+
+M/mu estimates:
+
+```{r}
+ms_stats <- read_csv("./carbunculus/migrate/Mmu_stats_full.csv")
+ms_stats
+```
+
+![M/mu Density](./carbunculus/migrate/Mmu_density_full.pdf)
+
+![M/mu Ridges](./carbunculus/migrate/Mmu_ridges_full.pdf)
+
+![M/mu Violins](./carbunculus/migrate/Mmu_violins_full.pdf)
+
+##### 4Nem estimates
+
+```{r}
+#| eval: false
+
+parameter_type <- "Nm"
+
+parameters <- names(posterior) %>%
+                        str_subset(parameter_type)
+
+parameter_key2 <- parameters
+names(parameter_key2) <- parameter_key[names(parameter_key) %in% parameter_key2]
+
+#summarize the posterior for theta
+nms <- summarize_posterior(posterior, parameter_type = parameter_type, 
+                              prior_params = c(0,10,100), n = 2^14)
+
+#convert to long format
+nms_long <- nms %>% select(all_of(c("x","prior",parameters))) %>% 
+                pivot_longer(starts_with(c(paste0(parameter_type,"_"))), 
+                            names_to = "Parameter",
+                            values_to = "Density")
+
+          
+#plot
+Nms_density <-  ggplot(nms_long, aes(x = x, y = Density, 
+                    color = Parameter)) +
+        geom_line(size = 1) + 
+        #scale_x_log10(limits = c(5e-4,1e-2)) + 
+        scale_color_discrete(type = migration.colors, labels = parameter_key) +
+        geom_line(aes(x = x, y=prior), color = "grey",
+                  linetype="dotted") +
+         xlim(0,1.5)
+  
+           
+#plot
+nm_ridges <- ggplot(nms_long, aes(x = x, y = Parameter, height = Density, 
+                    fill = Parameter)) +
+        geom_density_ridges(stat = "identity") + 
+        scale_fill_discrete(type = migration.colors, labels = parameter_key) +
+        scale_y_discrete(limits = rev, labels = NULL, breaks = NULL) +
+        labs(x = TeX("$4N_em$")) +
+        xlim(0,1.5)
+  
+nm_violins <- ggplot(nms_long, aes(x = Parameter, y = x, violinwidth = Density*20, 
+                    fill = Parameter)) +
+        geom_violin(stat = "identity") + 
+        scale_fill_discrete(type = migration.colors, labels = parameter_key) +
+        ylim(0,1.5)
+# get stats for each summed-over-loci posterior
+
+nms_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = nms, 
+                                                             parameter = .x),
+                                      .id = "parameter")
+
+ggsave("./carbunculus/migrate/Nm_density_full.pdf", plot = Nms_density)
+ggsave("./carbunculus/migrate/Nm_ridges_full.pdf", plot = nm_ridges)
+ggsave("./carbunculus/migrate/Nm_violins_full.pdf", plot = nm_violins)
+write.csv(nms_stats,"./carbunculus/migrate/Nm_stats_full.csv")
+```
+
+$4N_em$ estimates:
+
+```{r}
+nms_stats <- read_csv("./carbunculus/migrate/Nm_stats_full.csv")
+nms_stats
+```
+
+![4Nm Density](./carbunculus/migrate/Nm_density_full.pdf)
+
+![4Nm Ridges](./carbunculus/migrate/Nm_ridges_full.pdf)
+
+![4Nm Violins](./carbunculus/migrate/Nm_violins_full.pdf)
 
 
 # Sum over loci - Bayesfile
@@ -2466,3 +2831,4 @@ bf %>% filter(pnumber %in% 6:16) %>% filter(Locus == 440) %>%
       scale_x_log10(limits = c(1e4,1e6)) + ylim(0,0.05)
 
 ```
+
