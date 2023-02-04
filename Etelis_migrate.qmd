@@ -2373,13 +2373,14 @@ nms_stats
 ```{r}
 #| message: false
 #| results: hide
-runDir_car <- "carbunculus/migrate/output3"
+runDir_car <- "carbunculus/migrate/output4"
 
 likelist_car <- list()
 for(r in 1:5){
   rep = paste0("rep",r)
   print(rep)
-  likelist_car[[rep]] <- harvest.model.likelihoods(workingDir=file.path(runDir_car,rep))
+  likelist_car[[rep]] <- harvest.model.likelihoods(workingDir=file.path(runDir_car,rep),
+                                                   outfileName = "outfile_rerun.txt")
 }
 
 # Model selection for each replicate...
@@ -2664,7 +2665,7 @@ thetastats
 parameter_type <- "M"
 
 # use this to figure out the granularity of the prior needed for summarize_prior
-#seq(0,100000, length.out = 2^17)
+#seq(0,100000000, length.out = 2^17)
 
 parameters <- names(posterior) %>%
                         str_subset(parameter_type)
