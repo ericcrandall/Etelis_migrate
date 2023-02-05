@@ -1,0 +1,13 @@
+starting rep2/ at Sat Feb 4 01:51:39 PM HST 2023
+starting divergence_geneflow_1/ at Sat Feb 4 01:51:39 PM HST 2023
+starting divergence_geneflow_2/ at Sat Feb 4 01:57:32 PM HST 2023
+starting divergence_geneflow_3/ at Sat Feb 4 02:03:25 PM HST 2023
+starting divergence_only_1/ at Sat Feb 4 02:10:12 PM HST 2023
+starting divergence_only_2/ at Sat Feb 4 02:14:29 PM HST 2023
+starting divergence_only_3/ at Sat Feb 4 02:18:44 PM HST 2023
+starting full/ at Sat Feb 4 02:22:56 PM HST 2023
+starting geneflow_only_1/ at Sat Feb 4 02:38:31 PM HST 2023
+starting geneflow_only_2/ at Sat Feb 4 02:46:01 PM HST 2023
+starting geneflow_only_3/ at Sat Feb 4 02:53:43 PM HST 2023
+starting n-island/ at Sat Feb 4 03:00:07 PM HST 2023
+starting panmixia/ at Sat Feb 4 03:02:44 PM HST 2023

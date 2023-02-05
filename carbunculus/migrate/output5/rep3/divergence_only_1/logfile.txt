@@ -1,0 +1,92 @@
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ +                                                                +
+ +   POPULATION SIZE, MIGRATION, DIVERGENCE, ASSIGNMENT, HISTORY  +
+ +   Bayesian inference using the structured coalescent           +
+ +                                                                +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  Compiled for a PARALLEL COMPUTER ARCHITECTURE
+  One master and 89 compute nodes are available.
+  PDF output enabled [Letter-size]
+  Version 5.0.4(git:Distribution-version)   [May-09-2022]
+  Program started at   Sat Feb  4 04:54:16 2023
+
+
+
+
+Reading (1) Pop_Japan ...
+Reading (2) Pop_MHI ...
+Reading (3) Pop_NWHI ...
+Options in use:
+---------------
+
+Analysis strategy is BAYESIAN INFERENCE
+    - Population size estimation: Theta [Exponential Distribution]
+    - Geneflow estimation: Migration [Exponential Distribution]
+    - Divergence estimation: Divergence time [Exponential Distribution with mean]
+
+Proposal distribution:
+Parameter group          Proposal type
+-----------------------  -------------------
+Population size (Theta)  Metropolis sampling
+Migration rate      (M)       Slice sampling
+Divergence Time (D)  Metropolis sampling
+Divergence time spread (STD) Metropolis sampling
+Genealogy                Metropolis-Hastings
+
+
+Prior distribution (Proposal-delta will be tuned to acceptance frequency 0.440000):
+Parameter group            Prior type   Minimum    Mean(*)    Maximum    Delta      Bins   Updatefreq
+-------------------------  ------------ ---------- ---------- ---------- ---------- ------ -------
+Population size (Theta_1)   Exp window  0.000000   0.001000   0.100000   0.010000   16384  0.10000
+Population size (Theta_2)   Exp window  0.000000   0.001000   0.100000   0.010000   16384  0.10000
+Population size (Theta_3)   Exp window  0.000000   0.001000   0.100000   0.010000   16384  0.10000
+Ancestor 1 to 2 (D_time)   Exp window  0.000000   0.001000   0.100000   0.010000    1500  0.10000
+Ancestor 1 to 2 (S_time)   Exp window  0.000000   0.001000   0.100000   0.010000    1500  0.10000
+Ancestor 2 to 3 (D_time)   Exp window  0.000000   0.001000   0.100000   0.010000    1500  0.10000
+Ancestor 2 to 3 (S_time)   Exp window  0.000000   0.001000   0.100000   0.010000    1500  0.10000
+
+Inheritance multipliers in use for Thetas (specified # 1)
+All inheritance multipliers are the same [1.000000]
+
+Pseudo-random number generator: Mersenne-Twister                                
+Random number seed (with internal timer)           2835940200
+
+Start parameters:
+   First genealogy was started using a random tree
+   Start parameter values were generated
+Connection matrix:
+m = average (average over a group of Thetas or M,
+s = symmetric migration M, S = symmetric 4Nm,
+0 = zero, and not estimated,
+* = migration free to vary, Thetas are on diagonal
+d = row population split off column population
+D = split and then migration
+   1 Pop_Japan      * 0 0 
+   2 Pop_MHI        d * 0 
+   3 Pop_NWHI       0 d * 
+
+
+
+Mutation rate is constant for all loci
+
+Markov chain settings:
+   Long chains (long-chains):                              1
+      Steps sampled (long-inc*samples):              3000000
+      Steps recorded (long-sample):                    30000
+   Static heating scheme
+      4 chains with  temperatures
+       1.00, 1.50, 3.00,1000000.00
+      Swapping interval is 1
+   Burn-in per replicate (samples*inc):              1000000
+
+Print options:
+   Data file:                         ../../Ecarbunculus.mig
+   Parameter file:                            parmfile_rerun
+   Haplotyping is turned on:                              NO
+   Output file (ASCII text):              outfile_rerun3.txt
+   Output file (PDF):                                     NO
+   Posterior distribution:                         bayesfile
+   All values of Post.Dist:                     bayesallfile
+   Print data:                                            No
+   Print genealogies:                                     No
+05:03:13   Program finished

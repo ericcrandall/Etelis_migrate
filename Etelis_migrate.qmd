@@ -1921,14 +1921,14 @@ With this new back-of-the-envelope analysis, the full model comes 3rd, after div
 ```{r}
 #| message: false
 #| results: hide
-runDir_cor <- "coruscans/migrate/output4"
+runDir_cor <- "coruscans/migrate/output5"
 
 likelist_cor <- list()
 for(r in 1:5){
   rep = paste0("rep",r)
   print(rep)
   likelist_cor[[rep]] <- harvest.model.likelihoods(workingDir=file.path(runDir_cor,rep),
-                                                   outfileName = "outfile_rerun.txt")
+                                                   outfileName = "outfile_rerun3.txt")
 }
 
 # Model selection for each replicate...
@@ -2373,14 +2373,14 @@ nms_stats
 ```{r}
 #| message: false
 #| results: hide
-runDir_car <- "carbunculus/migrate/output4"
+runDir_car <- "carbunculus/migrate/output5"
 
 likelist_car <- list()
 for(r in 1:5){
   rep = paste0("rep",r)
   print(rep)
   likelist_car[[rep]] <- harvest.model.likelihoods(workingDir=file.path(runDir_car,rep),
-                                                   outfileName = "outfile_rerun.txt")
+                                                   outfileName = "outfile_rerun3.txt")
 }
 
 # Model selection for each replicate...

@@ -1,0 +1,12 @@
+starting rep1/ at Thu Feb 2 08:57:23 AM HST 2023
+starting rep2/ at Fri Feb 3 01:10:40 PM HST 2023
+starting rep3/ at Fri Feb 3 01:11:09 PM HST 2023
+starting rep4/ at Fri Feb 3 01:11:38 PM HST 2023
+starting rep5/ at Fri Feb 3 01:12:07 PM HST 2023
+starting rep1/ at Sat Feb 4 12:55:47 AM HST 2023
+starting rep1/ at Sat Feb 4 12:56:10 AM HST 2023
+starting rep1/ at Sat Feb 4 01:27:54 AM HST 2023
+starting rep2/ at Sat Feb 4 03:00:24 AM HST 2023
+starting rep3/ at Sat Feb 4 04:30:40 AM HST 2023
+starting rep4/ at Sat Feb 4 06:00:22 AM HST 2023
+starting rep5/ at Sat Feb 4 07:28:40 AM HST 2023
