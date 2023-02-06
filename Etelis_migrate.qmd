@@ -2462,7 +2462,7 @@ bayes-priors= MIG WEXPPRIOR: 0.0100 10000.000000 100000000 10000
 ```{r}
 #| eval: false
 
-repsDir <- "~/Library/CloudStorage/OneDrive-ThePennsylvaniaStateUniversity/Research/Etelis/migrate_output/carbunculus/output3"
+repsDir <- "~/Library/CloudStorage/OneDrive-ThePennsylvaniaStateUniversity/Research/Etelis/migrate_output/carbunculus/output5"
 
 # for some reason the bayesallfile has 39 columns, but only 31 are labelled.
 
@@ -2471,14 +2471,14 @@ popkey <- read_csv("carbunculus/popkey.csv")
 names(popkey$Pop) <- popkey$Index
 
 
-winningModel <- "divergence_geneflow_2"
+winningModel <- "geneflow_only_full"
 
 posteriors <- list()
 
 #read in the posterior for one replicate this may take 5 minutes
 for(r in 2:4){
   print(paste("Loading Rep",r))
-  posteriors[[r]] <- read_tsv_chunked(file.path(repsDir,paste0("rep",r),winningModel,
+  posteriors[[r]] <- read_tsv(file.path(repsDir,paste0("rep",r),winningModel,
                                       "bayesallfile"), comment = "#") 
 }
 
@@ -2532,19 +2532,19 @@ posteriors2 <- lapply(posteriors2, select, starts_with(c("Theta_", "M_",
                         
 posteriors.mcmc <- mcmc.list(lapply(posteriors2,mcmc,thin=500))
 posterior.ggs <- ggs(posteriors.mcmc, burnin = F)
-effectiveSize(posteriors.mcmc[[2]])
+effectiveSize(posteriors.mcmc[[1]])
 #ggmcmc(posterior.ggs, param_page = 4)
 
 ```
  Took 51 minutes to generate the ggmcmc output, but everything looks really really good, other than the Geweke diagnostics... need to look that up.
 
 ##### Effective Sizes
-Effective sizes are good for one replicate 
+Effective sizes are good for one replicate - although this isn't broken up by locus.
 
 ```{}
 effectiveSize(posteriors2[[2]]) #same results achieved for effectiveSize(posteriors.mcmc[[2]])
-Theta_1 Theta_2 Theta_3   M_3_2   M_1_3   D_3_2   D_1_3 
-4655257 5216879 4800514 4769200 4744785 5452765 5111168 
+Theta_1 Theta_2 Theta_3   M_2_1   M_3_1   M_1_2   M_3_2   M_1_3   M_2_3 
+4725164 4925675 4731644 4285552 4023338 4464066 4439156 4072776 5068390 
 
 ```
 
