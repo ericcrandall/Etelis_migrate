@@ -1360,6 +1360,7 @@ I renamed the FASTA headers in `populations.samples.fa` with BBEdit to create `p
 
 ```{bash}
 #| eval: false
+#| 
 Find: >CLocus_\d+_Sample_\d+_Locus_(\d+)_Allele_([01]) \[Etelis_(.+)\]
 Replace: >\3_L\1_A\2
 
@@ -1846,36 +1847,37 @@ The way that model marginal likelihood is calculated depends on the scaling cons
 
 ### Re-running with more bins
 
-```{bash}
+```{}
+#| eval: false
 
-### Bash Script
-#!
-for r in */
-	do
-	 echo starting $r at $(date ) >> progress_rerun.txt
-         cd $r
-		echo $r
-		date
-		echo starting $r at $(date ) >> progress_rerun.txt
-			for m in */
-			  do
-			  echo starting $m at $(date )>> progress_rerun.txt
-				cd $m
-				  date > date_rerun.txt
-				  echo $m
-				  date
-				  # copy the parmfile to parmfile_rerun, and replace the following 3 lines
-				  cp parmfile parmfile_rerun
-				  sed -i 's/recover=NO/recover=YES/g' parmfile_rerun
-				  sed -i 's/outfile=outfile.txt/outfile=outfile_rerun.txt/g' parmfile_rerun
-				  sed -i 's/bayes-posteriorbins= 3000 3000/bayes-posteriorbins= 16384 16384/g' parmfile_rerun
-				  
-				  mpirun --use-hwthread-cpus -np 60 ~/migrate-5.0.4/src/migrate-n-mpi parmfile_rerun
-				  sleep 1
-				cd ..
-			  done
-		cd ..
-	done
+<!-- ### Bash Script -->
+<!-- #! -->
+<!-- for r in */ -->
+<!-- 	do -->
+<!-- 	 echo starting $r at $(date ) >> progress_rerun.txt -->
+<!--          cd $r -->
+<!-- 		echo $r -->
+<!-- 		date -->
+<!-- 		echo starting $r at $(date ) >> progress_rerun.txt -->
+<!-- 			for m in */ -->
+<!-- 			  do -->
+<!-- 			  echo starting $m at $(date )>> progress_rerun.txt -->
+<!-- 				cd $m -->
+<!-- 				  date > date_rerun.txt -->
+<!-- 				  echo $m -->
+<!-- 				  date -->
+<!-- 				  # copy the parmfile to parmfile_rerun, and replace the following 3 lines -->
+<!-- 				  cp parmfile parmfile_rerun -->
+<!-- 				  sed -i 's/recover=NO/recover=YES/g' parmfile_rerun -->
+<!-- 				  sed -i 's/outfile=outfile.txt/outfile=outfile_rerun.txt/g' parmfile_rerun -->
+<!-- 				  sed -i 's/bayes-posteriorbins= 3000 3000/bayes-posteriorbins= 16384 16384/g' parmfile_rerun -->
+
+<!-- 				  mpirun --use-hwthread-cpus -np 60 ~/migrate-5.0.4/src/migrate-n-mpi parmfile_rerun -->
+<!-- 				  sleep 1 -->
+<!-- 				cd .. -->
+<!-- 			  done -->
+<!-- 		cd .. -->
+<!-- 	done -->
 ```
 
 
@@ -1980,15 +1982,6 @@ likesPlot_cor <- likelist_cor %>% bind_rows() %>% group_by(model) %>%
 likesPlot_cor
 ```
 
-Zoom in on the top two models
-
-```{r}
-
-likesPlot_zoom_cor <- likesPlot_cor + ylim(-270000, -265000) + geom_point()
-
-likesPlot_zoom_cor
-
-```
 
 #### Final Parameter Estimates
 
@@ -2005,6 +1998,8 @@ bayes-priors= MIG WEXPPRIOR: 0.0100 10000.000000 100000000 10000
 ##### Read in the posterior and make a labeling key
 
 ```{r}
+#| eval: false
+
 repsDir <- "~/Library/CloudStorage/OneDrive-ThePennsylvaniaStateUniversity/Research/Etelis/migrate_output/coruscans"
 
 # for some reason the bayesallfile has 39 columns, but only 31 are labelled.
@@ -2197,7 +2192,7 @@ theta_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = thetas,
 Theta estimates:
 
 ```{r}
-thetastats <- read_csv("./coruscans/migrate/theta_stats.csv")
+thetastats <- read_csv("./coruscans/migrate/theta_stats_full.csv")
 thetastats
 ```
 
@@ -2432,18 +2427,7 @@ likesPlot_car <- likelist_car %>% bind_rows() %>% group_by(model) %>%
 likesPlot_car
 ```
 
-Zoom in on the top three models
 
-```{r}
-#| warning: false
-
-likesPlot_zoom_car <- likesPlot_car + ylim(-525000, -520000) + geom_point()
-
-likesPlot_zoom_car
-
-```
-
-Hmmm.... so despite there being significant $F_{st}$ between Japan and Hawaii, Migrate finds a model of panmixia `r emoji("thinking")`
 
 #### Final Parameter Estimates
 
@@ -2647,7 +2631,7 @@ theta_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = thetas,
 Theta estimates:
 
 ```{r}
-thetastats <- read_csv("./carbunculus/migrate/theta_stats.csv")
+thetastats <- read_csv("./carbunculus/migrate/theta_stats_full.csv")
 thetastats
 ```
 
@@ -2824,6 +2808,8 @@ This is code for summing over loci in a Bayesfile. Sticking it down here for now
 These functions are for reconstructing distributions from the `bayesfile` which consists of distributions for each locus calculated as histograms 
 
 ```{r}
+#| eval: false
+
 bayesfilenames <- c("Locus","pnumber","HPC50","HPC95","value","count",
                     "freq","cumFreq","priorFreq")
 
@@ -2860,6 +2846,7 @@ names(parameter_number_key) <- parameter_number_table$pnumber
 ## Theta
 
 ```{r}
+#| eval: false
 bf %>% filter(pnumber %in% 1:4) %>% filter(Locus == 440) %>% 
       ggplot(aes(x = value, y = freq, color = pnumber)) + geom_line() +
       scale_color_brewer(palette = "YlGnBu", labels = parameter_number_key) +

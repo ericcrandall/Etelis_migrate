@@ -1,0 +1,16 @@
+starting carbunculus/ at Sat Feb 25 14:25:45 EST 2023
+starting migrate/ at Sat Feb 25 14:25:45 EST 2023
+starting plink/ at Sat Feb 25 14:25:46 EST 2023
+starting populations_r100/ at Sat Feb 25 14:25:47 EST 2023
+starting carbunculus/ at Sat Feb 25 14:31:23 EST 2023
+starting migrate/ at Sat Feb 25 14:31:23 EST 2023
+starting plink/ at Sat Feb 25 14:31:24 EST 2023
+starting populations_r100/ at Sat Feb 25 14:31:25 EST 2023
+starting carbunculus/ at Sat Feb 25 14:36:07 EST 2023
+starting migrate/ at Sat Feb 25 14:36:07 EST 2023
+starting plink/ at Sat Feb 25 14:36:08 EST 2023
+starting populations_r100/ at Sat Feb 25 14:36:09 EST 2023
+starting carbunculus/ at Sat Feb 25 14:45:04 EST 2023
+starting migrate/ at Sat Feb 25 14:45:04 EST 2023
+starting plink/ at Sat Feb 25 14:45:05 EST 2023
+starting populations_r100/ at Sat Feb 25 14:45:06 EST 2023
