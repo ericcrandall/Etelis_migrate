@@ -2196,10 +2196,10 @@ thetastats <- read_csv("./coruscans/migrate/theta_stats_full.csv")
 thetastats
 ```
 
-![Theta Density](./coruscans/migrate/theta_density_full.pdf)
-![Theta Ridges](./coruscans/migrate/theta_ridges_full.pdf)
+![Theta Density](./coruscans/migrate/theta_density_full.jpg)
+![Theta Ridges](./coruscans/migrate/theta_ridges_full.jpg)
 
-![Theta Violins](./coruscans/migrate/theta_violins_full.pdf)
+![Theta Violins](./coruscans/migrate/theta_violins_full.jpg)
 
 
 ##### m/mu estimates
@@ -2279,11 +2279,11 @@ ms_stats <- read_csv("./coruscans/migrate/Mmu_stats_full.csv")
 ms_stats
 ```
 
-![M/mu Density](./coruscans/migrate/Mmu_density_full.pdf)
+![M/mu Density](./coruscans/migrate/Mmu_density_full.jpg)
 
-![M/mu Ridges](./coruscans/migrate/Mmu_ridges_full.pdf)
+![M/mu Ridges](./coruscans/migrate/Mmu_ridges_full.jpg)
 
-![M/mu Violins](./coruscans/migrate/Mmu_violins_full.pdf)
+![M/mu Violins](./coruscans/migrate/Mmu_violins_full.jpg)
 
 ##### 4Nem estimates
 
@@ -2353,11 +2353,11 @@ nms_stats <- read_csv("./coruscans/migrate/Nm_stats_full.csv")
 nms_stats
 ```
 
-![4Nm Density](./coruscans/migrate/Nm_density_full.pdf)
+![4Nm Density](./coruscans/migrate/Nm_density_full.jpg)
 
-![4Nm Ridges](./coruscans/migrate/Nm_ridges_full.pdf)
+![4Nm Ridges](./coruscans/migrate/Nm_ridges_full.jpg)
 
-![4Nm Violins](./coruscans/migrate/Nm_violins_full.pdf)
+![4Nm Violins](./coruscans/migrate/Nm_violins_full.jpg)
 
 
 
@@ -2635,10 +2635,10 @@ thetastats <- read_csv("./carbunculus/migrate/theta_stats_full.csv")
 thetastats
 ```
 
-![Theta Density](./carbunculus/migrate/theta_density_full.pdf)
-![Theta Ridges](./carbunculus/migrate/theta_ridges_full.pdf)
+![Theta Density](./carbunculus/migrate/theta_density_full.jpg)
+![Theta Ridges](./carbunculus/migrate/theta_ridges_full.jpg)
 
-![Theta Violins](./carbunculus/migrate/theta_violins_full.pdf)
+![Theta Violins](./carbunculus/migrate/theta_violins_full.jpg)
 
 
 ##### m/mu estimates
@@ -2718,11 +2718,11 @@ ms_stats <- read_csv("./carbunculus/migrate/Mmu_stats_full.csv")
 ms_stats
 ```
 
-![M/mu Density](./carbunculus/migrate/Mmu_density_full.pdf)
+![M/mu Density](./carbunculus/migrate/Mmu_density_full.jpg)
 
-![M/mu Ridges](./carbunculus/migrate/Mmu_ridges_full.pdf)
+![M/mu Ridges](./carbunculus/migrate/Mmu_ridges_full.jpg)
 
-![M/mu Violins](./carbunculus/migrate/Mmu_violins_full.pdf)
+![M/mu Violins](./carbunculus/migrate/Mmu_violins_full.jpg)
 
 ##### 4Nem estimates
 
@@ -2792,11 +2792,11 @@ nms_stats <- read_csv("./carbunculus/migrate/Nm_stats_full.csv")
 nms_stats
 ```
 
-![4Nm Density](./carbunculus/migrate/Nm_density_full.pdf)
+![4Nm Density](./carbunculus/migrate/Nm_density_full.jpg)
 
-![4Nm Ridges](./carbunculus/migrate/Nm_ridges_full.pdf)
+![4Nm Ridges](./carbunculus/migrate/Nm_ridges_full.jpg)
 
-![4Nm Violins](./carbunculus/migrate/Nm_violins_full.pdf)
+![4Nm Violins](./carbunculus/migrate/Nm_violins_full.jpg)
 
 
 # Sum over loci - Bayesfile
