@@ -8,17 +8,17 @@ format:
     toc-float: true
     toc-depth: 5
     df-print: paged
-    smooth-scroll: true
-    citations-hover: true
 editor: source
 bibliography: "./etelis.bib"
 ---
+
 
 # Setup
 
 ## R Libraries
 
 Here I'm just loading a bunch of R packages that we'll need.
+
 
 ```{r}
 #| label: setup library
@@ -47,9 +47,11 @@ library(latex2exp)
 library(ggridges)
 ```
 
+
 ## Function library
 
 And here are some homebrewed functions that will be helpful.
+
 
 ```{r}
 #| label: setup function library
@@ -261,6 +263,7 @@ posterior_stats <- function(df,parameter){
 
 ```
 
+
 # Introduction
 
 Brian Bowen's student Anne Lee asked me to do a migrate analysis on two species of deepwater snapper, *Etelis carbunculus* and *Etelis coruscans*. She wrote:
@@ -282,6 +285,7 @@ I'm also going to see how much I can learn about quarto notebooks, which Rstudio
 
 Anne placed all the data on Google Drive, zipped by population.  I will download them with the gdown python package. This involves looking up the google id for each file in the URL of the share link and pasting that into gdown thusly. They were quite large, and `unzip` and `gzip` wouldn't work. I used jar (which I didn't even know could uncompress things) as suggested [here](https://unix.stackexchange.com/questions/438368/unix-unzip-is-failing-but-mac-archive-utility-works)
 
+
 ```{bash}
 #| eval: false
 gdown https://drive.google.com/uc?id=142BTkLDRNa6TXk1l4vhxRMxcejOg3rMt --output ECA_Japan.zip
@@ -298,7 +302,9 @@ jar xvf ECA_Japan.zip
 ```
 
 
+
 Need to rename the files into Illumina format in order for Stacks to recognize the paired reads.
+
 
 ```{bash}
 #| eval: false
@@ -318,12 +324,14 @@ cd ..
 ```
 
 
+
 # Haplotypes from Stacks
 
 ## Clean the data with process_radtags 
 
 
 Same commands for carbunculus and coruscans. Paired end. Look for ecoR1 cutsites on read 1 and mspI cutsites on read 2. Remove low quality reads (based on a sliding window average). Remove reads smaller than 145 bp, and trim others to that length.
+
 
 ```{bash}
 #| eval: false
@@ -334,6 +342,7 @@ process_radtags -p ./raw/ -o ./cleaned/ --rescue --clean --quality --paired --th
                   --adapter-mm 2
 
 ```
+
 
 ### E. carbunculus output
 
@@ -369,6 +378,7 @@ Hmm... gotta rename the cleaned files too. All code is being run on both species
 
 ### More renaming
 
+
 ```{bash}
 #| eval: false
 cd cleaned
@@ -388,6 +398,7 @@ for f in *001.rem.2.fq.gz; do mv $f ${f/_R[12]_001.rem.2.fq.gz/.rem.2.fq.gz}; do
 ```
 
 
+
 # The pipeline
 
 
@@ -399,6 +410,7 @@ Oy - so denovo_map.pl crashed with this message:
 Aborted.
 
 Julian Catchen gives the solution [here](https://groups.google.com/g/stacks-users/c/CT_IunvM3l4/m/SpIorz1nBQAJ). Because these data were already run through `process_radtags` once to demultiplex them, it attached a `\1` to the labels of all primary reads and a `\2` to the labels of all paired reads. When I re-ran them in `process_radtags`, it attached an extra flag to each, which then confused `tsv2bam`. Julian provides the below code to remove the extra flags.
+
 
 
 ```{bash}
@@ -414,15 +426,18 @@ parallel gzip ::: *
 
 ```
 
+
 ## Run denovo_map.pl
 
 I'm going to use the denovo_map.pl pipeline. This command will take data from `./cleaned` and the popmap provided by Anne and -m 5 reads per stack, -M 4  distance between stacks, -n 4 distance between catalog loci. Running on 8 -T threads and only keeping loci that appear in 80% of individuals in all 4 populations
+
 
 ```{bash}
 #| eval: false
 denovo_map.pl --samples ./cleaned/ --popmap popmapECA.tsv --out-path ./pipeline --paired \
 -m 5 -M 4 -n 4  -T 12 -r 80 -p 4 -X "populations: --fasta-samples" -X "populations: --filter-haplotype-wise"
 ```
+
 
 ## Populations
 
@@ -431,9 +446,11 @@ Now I need to re-run `populations` to get more statistics. Original populations 
 ### r80
 
 Settings for keeping loci that occur in 80 percent of indivs per population (so 4/5 of the Johnston invivs for coruscans). I'm being intentionally stringent by setting the p-value cutoff for hwe at 0.05.
+
 ```{bash eval = F}
 populations -P ./ -O ./output2_r80 -M ../popmapECO.tsv -t 12 -p 4 -r 80 -H --hwe --fstats --p-value-cutoff 0.05 --fasta-loci --fasta-samples --vcf --genepop --structure --treemix --fasta-samples-raw 
 ```
+
 
 #### E. carbunculus
 
@@ -647,6 +664,7 @@ scp -r argo:./Etelis/coruscans/pipeline/output6_r100.dropA150.SNP/populations.sn
 
 I am testing differences among 4 *a priori* defined populations. Thus, following recommendations in [@thiaGuidelinesStandardizingApplication2022], I will only use k-1 or 3 PCA axes.
 
+
 ```{r}
 ecor_haps <- read.genepop("coruscans/populations_r100/populations.haps.gen")
 levels(ecor_haps$pop) <- c("JA","MHI","NWHI","JP")
@@ -662,7 +680,9 @@ ecor_hwe <- hw.test(ecor_haps, B = 1000)
 
 ```
 
+
 Let's take a look with the randomly selected SNPs
+
 
 ```{r}
 ecor_snps.genind <- read.genepop("coruscans/populations_r100/populations.randsnp.gen")
@@ -675,9 +695,11 @@ scatter(ecor_dapc_snps)
 
 ```
 
+
 ### SNPr
 
 I will use Will Hemstrom's new package [SNPr](https://github.com/hemstrow/snpR) to further evaluate and filter the SNPs that I randomly selected from each locus. 
+
 
 ```{r}
 popmap_cor <- read_tsv("coruscans/popmapECO.tsv",col_names = c("sampID","pop"))
@@ -685,9 +707,11 @@ ecor_snps <- read_vcf(file = "coruscans/populations_r100/populations.randsnp.vcf
                       sample.meta = popmap_cor)
 ```
 
+
 #### Filtering
 
 I've already implemented stringent filters in Stacks to only include individuals with all loci and loci found in all individuals. Now going to implement a strict HWE filter - if a locus is out of HWE in any population (`hwe_facets = "pop"`) after a Bonferroni correction, then it will be removed. Also going to remove non-variant loci, and loci with only a single minor allele ("singletons").
+
 
 ```{r}
 ecor_snps <- filter_snps(ecor_snps, min_ind = 0.9999, min_loci = 0.9999, re_run = "full", 
@@ -697,9 +721,11 @@ ecor_snps <- filter_snps(ecor_snps, min_ind = 0.9999, min_loci = 0.9999, re_run 
 ```
 
 
+
 #### Individual Stats
 
 snpR uses facets to subset data on either sample metadata (such as sample ID, or population) or SNP metadata. Here we will look at per-individual stats. Also, note that the calculations are just attached to the data object, so we don't lose track of them. Nice.
+
 
 ```{r}
 ecor_snps <- calc_hs(ecor_snps, facets = "sampID")
@@ -713,7 +739,9 @@ p$plots$pca
 ```
 
 
+
 so there's that one weirdo at Johnston, who is A150... we can identify him like this. He has double the mean $H_e$ and $H_o$.
+
 
 ```{r}
 ecor_snps <- calc_genetic_distances(ecor_snps, facets = "sampID",method = "Nei")
@@ -728,6 +756,7 @@ p2$plots$pca
 
 ```
 
+
 ### Re-running after dropping the Bad Apple
 
 I went back to re-run `populations` from the stacks pipeline with the "Bad Apple" (sample A150 from Johnston) removed from the popmap (see above). This removal is as suggested by [@cercaRemovingBadApples2021] Now to re-do everything.
@@ -735,6 +764,7 @@ I went back to re-run `populations` from the stacks pipeline with the "Bad Apple
 ### Adegenet
 
 I am testing differences among 4 *a priori* defined populations. Thus, following recommendations in [@thiaGuidelinesStandardizingApplication], I will only use k-1 or 3 PCA axes.
+
 
 ```{r}
 ecor_haps <- read.genepop("coruscans/populations_r100.dropA150/populations.haps.gen")
@@ -751,7 +781,9 @@ ecor_hwe <- hw.test(ecor_haps, B = 1000)
 
 ```
 
+
 Let's take a look with the randomly selected SNPs
+
 
 ```{r}
 ecor_snps.genind <- read.genepop("coruscans/populations_r100/populations.randsnp.gen")
@@ -764,7 +796,9 @@ scatter(ecor_dapc_snps)
 
 ```
 
+
 ### SNPr
+
 
 ```{r}
 popmap_cor <- read_tsv("coruscans/popmapECO.dropA150.tsv",col_names = c("sampID","pop"))
@@ -772,9 +806,11 @@ ecor_snps <- read_vcf(file = "coruscans/populations_r100.dropA150/populations.ra
                       sample.meta = popmap_cor)
 ```
 
+
 #### Filtering
 
 I've already implemented stringent filters in Stacks to only include individuals with all loci and loci found in all individuals. Now going to implement a strict HWE filter - if a locus is out of HWE in any population (`hwe_facets = "pop"`) after a Bonferroni correction, then it will be removed. Also going to remove non-variant loci, and loci with only a single minor allele ("singletons").
+
 
 ```{r}
 ecor_snps <- filter_snps(ecor_snps, min_ind = 0.9999, min_loci = 0.9999, re_run = "full", 
@@ -784,9 +820,11 @@ ecor_snps <- filter_snps(ecor_snps, min_ind = 0.9999, min_loci = 0.9999, re_run 
 ```
 
 
+
 #### Individual Stats
 
 snpR uses facets to subset data on either sample metadata (such as sample ID, or population) or SNP metadata. Here we will look at per-individual stats. Also, note that the calculations are just attached to the data object, so we don't lose track of them. Nice.
+
 
 ```{r}
 ecor_snps <- calc_hs(ecor_snps, facets = "sampID")
@@ -799,9 +837,11 @@ p$plots$pca
 
 ```
 
+
 #### Population Stats
 
 And here are some summary stats about each population
+
 
 ```{r}
 ecor_snps <- calc_ho(ecor_snps, facets = "pop")
@@ -823,9 +863,11 @@ ecor_fst$fst.matrix
 
 ```
 
+
 #### Linkage Disequilibrium
 
 A little stuck on LD. But there are so few markers (intentionally) that it really shouldn't be an issue.
+
 
 ```{r}
 #| eval: false
@@ -835,11 +877,13 @@ ld <- plot_pairwise_ld_heatmap(ecor_snps, facets=c("CHROM"))
 ```
 
 
+
 ### Remove loci under selection using pcadapt
 
 Following along [here](https://bcm-uga.github.io/pcadapt/articles/pcadapt.html. 
 
 First, write out the data into plink format
+
 
 ```{r}
 #| eval: false
@@ -851,7 +895,9 @@ format_snps(ecor_snps, output = "plink", facets = "pop",
 
 ```
 
+
 #### Scree Plot
+
 
 ```{r}
 
@@ -863,16 +909,17 @@ plot(pca20, option = "screeplot")
 
 ```
 
+
 Based on the scree plot I think we'll use 6 PCs.
 
 #### PCA
+
 
 ```{r}
 pca6 <- pcadapt(ecor_plink, K = 6)
 plot(pca6, option = "scores", pop = popmap_cor$pop)
 
 ```
-
 
 ```{r}
 plot(pca6, option = "manhattan")
@@ -883,10 +930,12 @@ plot(pca6, option = "qqplot")
 hist(pca6$pvalues, xlab = "p-values", main = NULL, breaks = 50, col = "orange")
 ```
 
+
 #### Outliers
 
 
 So the p-values (even uncorrected) are all fairly large here. There aren't really any outliers.
+
 
 ```{r}
  
@@ -898,7 +947,9 @@ pca6_outliers <- which(padj < alpha)
 #ecor_snps2 <- ecor_snps[-pca5_outliers,]
 ```
 
+
 #### Write out filtered SNPs and haplotypes
+
 
 
 ```{r}
@@ -922,11 +973,13 @@ genind_to_genepop(ecor_haps2,output = "coruscans/hwe.pcadapt.filtered.haps.txt")
 
 ```
 
+
 #### Re-check the DAPC
 
 We didn't remove any outlier loci, so no need to re-calculate Fst.
 
 ##### Haplotypes
+
 
 ```{r}
 ecor_haps2 <- read.genepop("coruscans/hwe.pcadapt.filtered.haps.gen")
@@ -939,7 +992,9 @@ scatter(ecor_dapc2)
 ```
 
 
+
 ##### SNPs
+
 
 ```{r}
 ecor_snps2.genind <- read.genepop("coruscans/hwe.pcadapt.filtered.snps.gen")
@@ -952,9 +1007,11 @@ scatter(ecor_dapc2_snps)
 
 ```
 
+
 ## E. carbunculus
 
 ### Adegenet
+
 
 ```{r}
 ecar_haps <- read.genepop("carbunculus/populations_r100/populations.haps.gen")
@@ -967,7 +1024,9 @@ scatter(ecar_dapc)
 
 ```
 
+
 Let's take a look with the randomly selected SNPs
+
 
 ```{r}
 ecar_snps.genind <- read.genepop("carbunculus/populations_r100/populations.randsnp.gen")
@@ -980,9 +1039,11 @@ scatter(ecar_dapc_snps)
 
 ```
 
+
 ### SNPr
 
 I will use Will Hemstrom's new package [SNPr](https://github.com/hemstrow/snpR) to further evaluate and filter the SNPs that I randomly selected from each locus. 
+
 
 ```{r}
 ecar_popmap <- read_tsv("carbunculus/popmapECA.tsv",col_names = c("sampID","pop"))
@@ -990,9 +1051,11 @@ ecar_snps <- read_vcf(file = "carbunculus/populations_r100/populations.randsnp.v
                       sample.meta = ecar_popmap)
 ```
 
+
 #### Filtering
 
 I've already implemented stringent filters in Stacks to only include individuals with all loci and loci found in all individuals. Now going to implement a strict HWE filter - if a locus is out of HWE in any population (`hwe_facets = "pop"`) after a Bonferroni correction, then it will be removed. Also going to remove non-variant loci, and loci with only a single minor allele ("singletons").
+
 
 ```{r}
 ecar_snps <- filter_snps(ecar_snps, min_ind = 0.9999, min_loci = 0.9999, re_run = "full", 
@@ -1002,9 +1065,11 @@ ecar_snps <- filter_snps(ecar_snps, min_ind = 0.9999, min_loci = 0.9999, re_run 
 ```
 
 
+
 #### Individual Stats
 
 snpR uses facets to subset data on either sample metadata (such as sample ID, or population) or SNP metadata. Here we will look at per-individual stats. Also, note that the calculations are just attached to the data object, so we don't lose track of them. Nice.
+
 
 ```{r}
 ecar_snps <- calc_hs(ecar_snps, facets = "sampID")
@@ -1018,7 +1083,9 @@ p$plots$pca
 ```
 
 
+
 The separation between both Hawaiian populations and Japan is pretty evident even in the PCA.
+
 
 ```{r}
 ecar_snps <- calc_genetic_distances(ecar_snps, facets = "sampID",method = "Nei")
@@ -1026,11 +1093,13 @@ stats.ind <- get.snpR.stats(ecar_snps, facets="sampID", stats = c("hs","ho","he"
 ind.dists <- get.snpR.stats(ecar_snps,facets="sampID", stats = "genetic_distance")                  
 heatmap(as.matrix(ind.dists$sampID$.base$Nei))
 ```
+
 And there doesn't seem to be any reason to drop any individuals.
 
 #### Population Stats
 
 And here are some summary stats about each population
+
 
 ```{r}
 ecar_snps <- calc_ho(ecar_snps, facets = "pop")
@@ -1051,9 +1120,11 @@ ecar_fst <- get.snpR.stats(ecar_snps, facets = "pop", stats = c("fst"))
 ecar_fst$fst.matrix
 ```
 
+
 #### Linkage Disequilibrium
 
 A little stuck on LD. But there are so few markers (intentionally) that it really shouldn't be an issue.
+
 
 ```{r}
 #| eval: false
@@ -1063,11 +1134,13 @@ ld <- plot_pairwise_ld_heatmap(ecar_snps, facets=c("CHROM"))
 ```
 
 
+
 ### Remove loci under selection using pcadapt
 
 Following along [here](https://bcm-uga.github.io/pcadapt/articles/pcadapt.html. 
 
 First, write out the data into plink format
+
 
 ```{r}
 #| eval: false
@@ -1079,7 +1152,9 @@ format_snps(ecar_snps, output = "plink", facets = "pop",
 
 ```
 
+
 #### Scree Plot
+
 
 ```{r}
 
@@ -1091,16 +1166,17 @@ plot(pca20, option = "screeplot")
 
 ```
 
+
 Based on the scree plot I think we'll use 2 PCs.
 
 #### PCA
+
 
 ```{r}
 pca2 <- pcadapt(ecar_plink, K = 2)
 plot(pca2, option = "scores", pop = ecar_popmap$pop)
 
 ```
-
 
 ```{r}
 plot(pca2, option = "manhattan")
@@ -1111,10 +1187,12 @@ plot(pca2, option = "qqplot")
 hist(pca2$pvalues, xlab = "p-values", main = NULL, breaks = 50, col = "orange")
 ```
 
+
 #### Outliers
 
 
 In this species, there are some clear outliers. I am going to correct to Benjamini-Yekuteli False Discovery Rate, with a 1 in 1000 FDR.
+
 
 ```{r}
  
@@ -1128,9 +1206,11 @@ ecar_snps2 <- ecar_snps[-pca2_outliers,]
 
 ```
 
+
 #### Write out filtered SNPs and haplotypes
 
 I'm going to write a whitelist with 401 randomly selected SNPs - to be in parity with coruscans. Adding more would take longer.
+
 
 ```{r}
 #| eval: false
@@ -1161,9 +1241,11 @@ format_snps(ecar_snps3, output = "genepop", facets = "pop",
 
 ```
 
+
 #### Re-check the DAPC
 
 ##### Haplotypes
+
 
 ```{r}
 ecar_haps2 <- read.genepop("carbunculus/hwe.pcadapt.filtered.haps.gen")
@@ -1176,7 +1258,9 @@ scatter(ecar_dapc2)
 ```
 
 
+
 ##### SNPs
+
 
 ```{r}
 ecar_snps2.genind <- read.genepop("carbunculus/hwe.pcadapt.filtered.snps1000.gen")
@@ -1189,7 +1273,9 @@ scatter(ecar_dapc2_snps)
 
 ```
 
+
 So the structure as depicted by DAPC still seems intact in this species.
+
 
 
 ```{r}
@@ -1214,11 +1300,14 @@ ecar_fst3 <- get.snpR.stats(ecar_snps3, facets = "pop", stats = c("fst"))
 ecar_fst3$fst.matrix
 ```
 
+
 And compare that to pre-filtering. Some differences, but not as much as when I was overly stringent with selected loci.
+
 
 ```{r}
 ecar_fst$fst.matrix
 ```
+
 
 
 # Fasta2Genotype
@@ -1227,6 +1316,7 @@ Paul Maier created [this script](https://github.com/paulmaier/fasta2genotype) to
 
 ## Install Python2
 I had a doozy of a time trying to get this to work this time around: the script was written in python2. which is nearly deprecated. I first tried to use `2to3` to upgrade the script to python3, but there were a few stray tabs I couldn't figure out. I eventually landed [here](https://stackoverflow.com/questions/60298514/how-to-reinstall-python2-from-homebrew), and used the following commands to install [`pyenv`](https://github.com/pyenv/pyenv), which can handle multiple python installs.
+
 
 ```{bash}
 #| eval: false
@@ -1244,12 +1334,14 @@ pyenv shell 2.7.18 # use python 2 for this shell session
 
 ```
 
+
 ## E. coruscans
 
 ### Run it
 
 
 I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by `fasta2genotype.py`. I wrote out a whitelist above of all the 440 loci that passed through the filters.
+
 
 ```{bash}
 #| eval: false
@@ -1303,6 +1395,7 @@ Outputting migrate-n file...
 
 ```
 
+
 I then re-ran the script, selecting phylip output, with locus name headers, and all other options the same. I need the locus names in the order output by the script in order to run modeltest.
 
 ## E. carbunculus
@@ -1310,6 +1403,7 @@ I then re-ran the script, selecting phylip output, with locus name headers, and 
 ### Run it
 
 I had to remove all the [individualName] tokens from the populations.samples.fa to get it to work. Also, I added a SampleID column and header row to the popmap for use by `fasta2genotype.py`. I wrote out a whitelist above of 1000/1666 randomly selected loci that passed through the filters. Used the same options as E. coruscans.
+
 
 ```{bash}
 #| eval: false
@@ -1348,6 +1442,7 @@ Outputting migrate-n file...
 It removed locus 31718 for being overly heterozygous, so I zapped it from the whitelist.
 ```
 
+
 I then re-ran the script, selecting phylip output, with full sequences, haploid, all loci, not separated by ! locus name headers, and all other options the same. I need the locus names in the order output by the script in order to run modeltest. This is only needed to get the locus names in the next step.
 
 
@@ -1360,6 +1455,7 @@ I installed Migrate 5.0.4 as described [here](https://ericcrandall.github.io/Pal
  I need to figure out an overall mutation model to use with RAD loci. [I received this advice one](https://groups.google.com/g/migrate-support/c/XjV_4jZW4RI/m/HbRWoGY6AwAJ) from Peter about how to construct these. I'll use `modelTest` in the phangorn package to see where that gets me.
 
 I renamed the FASTA headers in `populations.samples.fa` with BBEdit to create `population.samples3.fa`
+
 
 ```{bash}
 #| eval: false
@@ -1375,6 +1471,7 @@ Replace:
 
 ```
 
+
 Lets load in the data and calculate some statistics for each locus. Previously Migrate-n only implemented the F84 (=HKY) model, with two rates (Transitions and Transversions) and gamma distributed rate variability.
 
 Now it will take these possible models: 
@@ -1384,6 +1481,7 @@ Now it will take these possible models:
  4  Felsenstein 1984 (F84) model
  5  Hasegawa-Kishino-Yano model
  6  Tamura-Nei model
+
 
 
 
@@ -1473,9 +1571,11 @@ for(l in migrate_loci$locus_name){
 # write_csv(stats, "coruscans/migrate_locus_statistics439.csv")
 ```
 
+
 #### Write a model block
 
 Write a space delimited textfile that can be added to the migrate data file in the format that Peter suggested.
+
 
 ```{r}
 #| eval: false
@@ -1495,6 +1595,7 @@ migrate_mutation_models <- tibble(prefix = "#$",
 
 #write_delim(migrate_mutation_models,"./coruscans/migrate_modelblock439.txt", na="", delim = " ")
 ```
+
 Read them back in so we don't have to recalculate them every time I knit.
 
 
@@ -1707,6 +1808,7 @@ population-relabel={1 1 1 1}
 
 Here's the parmfile I am using, based on my parmfile for *Palythoa tuberculosa*. This one depicts a model of divergence without gene flow. Migration prior is increased to have a maximum of 1e8 (100,000,000), and mean of 1e4 (10,000). This reflects a prior expectation that $m/\mu$ will not be larger than this value, if m is not larger than 0.1 (10% of population migrates), assuming a nuclear mutation rate of 1e-9. Also on average one out of every 100K individuals will send a migrant (m = 1e-5).
 
+
 ```{bash parmfile, eval = F}
 ################################################################################
 # Parmfile for Migrate 4.4.4(git:v4-series-26-ge85c6ff)-June-1-2019 [do not remove these first TWO lines]
@@ -1792,8 +1894,10 @@ end
 
 ```
 
+
 ### Copy It Up
 Copy it up, and then make a total of 10 replicate copies of the folder.
+
 
 ```{bash}
 #| eval: false
@@ -1810,9 +1914,11 @@ for a in $(seq 2 10); do cp -r rep1 rep$a; done
 
 
 
+
 ## Bash Script
 
 So we will do 10 replicates of 3 replicates.  This will start at r1, and run all models for that before moving on. Pretty sure this will finish one whole model before moving on to the next one (since all threads are being used for different loci). This uses two threads per core as well with the --use-hwthread-cpus flag.
+
 
 ```{bash}
 #| eval: false
@@ -1839,6 +1945,7 @@ for r in */
         done
 
 ```
+
 
 The way that model marginal likelihood is calculated depends on the scaling constant k, which is an indicator of agreement on parameter values between loci. To get this, migrate uses the same histograms that it uses in its output. Thus, setting number of bins becomes important, as does using a version of migrate that doesn't have the visualization issues that Peter reported. I revised my bash submission script to:
 
@@ -1888,6 +1995,7 @@ The way that model marginal likelihood is calculated depends on the scaling cons
 
 And ten replicates finished in about 10 days! Found [this guide](https://www.cyberciti.biz/faq/scp-exclude-files-when-using-command-recursively-on-unix-linux/) to download everything except the massive bayesallfiles and pdfs
 
+
 ```{bash}
 #| eval: false
 
@@ -1899,9 +2007,11 @@ rsync -av -e ssh --exclude='bayes*' --exclude="*.pdf" --exclude="*.mig" eric@thr
 
 ```
 
+
 ### Checking the effects of a bad Ti/Tv ratio
 
 So, I was using a Ti/Tv ratio in my K80/HKY mutation models that was way out of bounds. I've exported the locus-by-locus marginal likelihoods out of the panmixia, full and divergence-with-gene-flow3 models to see what happens when I remove the bad loci.
+
 
 ```{r}
 #| eval: false
@@ -1913,6 +2023,7 @@ mlikes <- read_csv("coruscans/model_marglike_comp.csv") %>%
 mlikes
 ```
 
+
 With this new back-of-the-envelope analysis, the full model comes 3rd, after divergence-with-gene-flow3. The scaling factor might have a big effect here.
 
 ## Results
@@ -1920,6 +2031,7 @@ With this new back-of-the-envelope analysis, the full model comes 3rd, after div
 ### E. coruscans
 
 ##### Model Marginal Likelihoods
+
 
 
 
@@ -1939,7 +2051,9 @@ for(r in 1:5){
 # Model selection for each replicate...
 likelist_cor %>% map(bfcalcs)
 ```
+
 The final model marginal likelihood estimates based on the mean of 10 replicates:
+
 
 ```{r}
 like.df_cor <-  likelist_cor %>% bind_rows() %>% group_by(model)
@@ -1952,9 +2066,11 @@ final_model_cor <- bfcalcs(means_cor)
 final_model_cor
 ```
 
+
 ##### T-Test
 
 Difference between panmixia and the second-place full model is very significant.
+
 
 ```{r}
 top.choice <- final_model_cor$model[which(final_model_cor$choice ==1)]
@@ -1965,9 +2081,11 @@ permTS(like.df_cor$bezier.corrected[which(like.df_cor$model == top.choice)],
        alternative = "greater", method = "exact.ce")
 ```
 
+
 ##### Model Selection Figures
 
 And a figure summarizing all this
+
 
 ```{r}
 #| fig-width: 10
@@ -1986,6 +2104,7 @@ likesPlot_cor
 ```
 
 
+
 #### Final Parameter Estimates
 
 These are the final estimates, summed over loci.
@@ -1999,6 +2118,7 @@ bayes-priors= MIG WEXPPRIOR: 0.0100 10000.000000 100000000 10000
 
 
 ##### Read in the posterior and make a labeling key
+
 
 ```{r}
 #| eval: false
@@ -2053,7 +2173,9 @@ names(parameter_key) <- posterior_parameters
 
 ```
 
+
 ##### Check Convergence
+
 
 
 ```{r}
@@ -2072,6 +2194,7 @@ effectiveSize(posteriors2[[1]])
 #ggmcmc(posterior.ggs, param_page = 4)
 
 ```
+
  Took 51 minutes to generate the ggmcmc output, but everything looks really really good, other than the Geweke diagnostics... need to look that up.
 
 ##### Effective Sizes
@@ -2128,6 +2251,7 @@ gelman.diag(posteriors.mcmc, transform = T)
 ##### Theta Estimates
 
 And here I run the code for the $\theta$ estimates
+
 
 ```{r}
 #| eval: false
@@ -2192,12 +2316,15 @@ theta_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = thetas,
 #write.csv(theta_stats,"./coruscans/migrate/theta_stats_full.csv")
 ```
 
+
 Theta estimates:
+
 
 ```{r}
 thetastats <- read_csv("./coruscans/migrate/theta_stats_full.csv")
 thetastats
 ```
+
 
 ![Theta Density](./coruscans/migrate/theta_density_full.jpg)
 ![Theta Ridges](./coruscans/migrate/theta_ridges_full.jpg)
@@ -2206,6 +2333,7 @@ thetastats
 
 
 ##### m/mu estimates
+
 
 ```{r}
 #| eval: false
@@ -2275,12 +2403,15 @@ Ms_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = Ms,
 #write.csv(Ms_stats,"./coruscans/migrate/Mmu_stats_full.csv")
 ```
 
+
 M/mu estimates:
+
 
 ```{r}
 ms_stats <- read_csv("./coruscans/migrate/Mmu_stats_full.csv")
 ms_stats
 ```
+
 
 ![M/mu Density](./coruscans/migrate/Mmu_density_full.jpg)
 
@@ -2289,6 +2420,7 @@ ms_stats
 ![M/mu Violins](./coruscans/migrate/Mmu_violins_full.jpg)
 
 ##### 4Nem estimates
+
 
 ```{r}
 #| eval: false
@@ -2349,12 +2481,15 @@ ggsave("./coruscans/migrate/Nm_violins_full.pdf", plot = nm_violins)
 write.csv(nms_stats,"./coruscans/migrate/Nm_stats_full.csv")
 ```
 
+
 $4N_em$ estimates:
+
 
 ```{r}
 nms_stats <- read_csv("./coruscans/migrate/Nm_stats_full.csv")
 nms_stats
 ```
+
 
 ![4Nm Density](./coruscans/migrate/Nm_density_full.jpg)
 
@@ -2367,6 +2502,7 @@ nms_stats
 ### E. carbunculus
 
 #### Model Marginal Likelihoods
+
 
 ```{r}
 #| message: false
@@ -2384,7 +2520,9 @@ for(r in 1:5){
 # Model selection for each replicate...
 likelist_car %>% map(bfcalcs)
 ```
+
 The final model marginal likelihood estimates based on the mean of 5 replicates:
+
 
 ```{r}
 like.df_car <-  likelist_car %>% bind_rows() %>% group_by(model)
@@ -2397,9 +2535,11 @@ final_model_car <- bfcalcs(means_car)
 final_model_car
 ```
 
+
 #### T-Test
 
 Difference between panmixia and the second-place full model is very significant.
+
 
 ```{r}
 top.choice <- final_model_car$model[which(final_model_car$choice ==1)]
@@ -2410,9 +2550,11 @@ permTS(like.df_car$bezier.corrected[which(like.df_car$model == top.choice)],
        alternative = "greater", method = "exact.ce")
 ```
 
+
 #### Model-Selection Figures
 
 And a figure summarizing all this
+
 
 ```{r}
 
@@ -2432,6 +2574,7 @@ likesPlot_car
 
 
 
+
 #### Final Parameter Estimates
 
 These are the final estimates, summed over loci.
@@ -2445,6 +2588,7 @@ bayes-priors= MIG WEXPPRIOR: 0.0100 10000.000000 100000000 10000
 
 
 ##### Read in the posterior and make a labeling key
+
 
 ```{r}
 #| eval: false
@@ -2503,7 +2647,9 @@ names(parameter_key) <- posterior_parameters
 
 ```
 
+
 ##### Check Convergence
+
 
 
 ```{r}
@@ -2523,6 +2669,7 @@ effectiveSize(posteriors.mcmc[[1]])
 #ggmcmc(posterior.ggs, param_page = 4)
 
 ```
+
  Took 51 minutes to generate the ggmcmc output, but everything looks really really good, other than the Geweke diagnostics... need to look that up.
 
 ##### Effective Sizes
@@ -2567,6 +2714,7 @@ gelman.diag(posteriors.mcmc, transform = T)
 ##### Theta Estimates
 
 And here I run the code for the $\theta$ estimates
+
 
 ```{r}
 #| eval: false
@@ -2631,12 +2779,15 @@ theta_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = thetas,
 #write.csv(theta_stats,"./carbunculus/migrate/theta_stats_full.csv")
 ```
 
+
 Theta estimates:
+
 
 ```{r}
 thetastats <- read_csv("./carbunculus/migrate/theta_stats_full.csv")
 thetastats
 ```
+
 
 ![Theta Density](./carbunculus/migrate/theta_density_full.jpg)
 ![Theta Ridges](./carbunculus/migrate/theta_ridges_full.jpg)
@@ -2645,6 +2796,7 @@ thetastats
 
 
 ##### m/mu estimates
+
 
 ```{r}
 #| eval: false
@@ -2714,12 +2866,15 @@ Ms_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = Ms,
 #write.csv(Ms_stats,"./carbunculus/migrate/Mmu_stats_full.csv")
 ```
 
+
 M/mu estimates:
+
 
 ```{r}
 ms_stats <- read_csv("./carbunculus/migrate/Mmu_stats_full.csv")
 ms_stats
 ```
+
 
 ![M/mu Density](./carbunculus/migrate/Mmu_density_full.jpg)
 
@@ -2730,6 +2885,7 @@ ms_stats
 
 
 ##### 4Nem estimates
+
 
 ```{r}
 #| eval: false
@@ -2790,12 +2946,15 @@ ggsave("./carbunculus/migrate/Nm_violins_full.jpg", plot = nm_violins)
 write.csv(nms_stats,"./carbunculus/migrate/Nm_stats_full.csv")
 ```
 
+
 $4N_em$ estimates:
+
 
 ```{r}
 nms_stats <- read_csv("./carbunculus/migrate/Nm_stats_full.csv")
 nms_stats
 ```
+
 
 ![4Nm Density](./carbunculus/migrate/Nm_density_full.jpg)
 
@@ -2811,6 +2970,7 @@ This is code for summing over loci in a Bayesfile. Sticking it down here for now
 ## Read Bayesfile
 
 These functions are for reconstructing distributions from the `bayesfile` which consists of distributions for each locus calculated as histograms 
+
 
 ```{r}
 #| eval: false
@@ -2848,7 +3008,9 @@ names(parameter_number_key) <- parameter_number_table$pnumber
   
 ```
 
+
 ## Theta
+
 
 ```{r}
 #| eval: false
@@ -2860,7 +3022,9 @@ bf %>% filter(pnumber %in% 1:4) %>% filter(Locus == 440) %>%
 
 ```
 
+
 ## M/mu
+
 
 ```{r}
 #| eval: false
