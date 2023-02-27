@@ -1224,9 +1224,9 @@ $pop$fst
 
 $pop$p
                p1 Johnston_Atoll       MHI      NWHI
-1:          Japan      0.3926074 0.1568432 0.1818182
-2: Johnston_Atoll             NA 0.6023976 0.8071928
-3:            MHI             NA        NA 0.5134865</code></pre>
+1:          Japan      0.3606394 0.1358641 0.1948052
+2: Johnston_Atoll             NA 0.6013986 0.7982018
+3:            MHI             NA        NA 0.4945055</code></pre>
 </div>
 </div>
 </section>
@@ -1570,8 +1570,8 @@ $pop$fst
 
 $pop$p
       p1         MHI        NWHI
-1: Japan 0.000999001 0.000999001
-2:   MHI          NA 0.338661339</code></pre>
+1: Japan 0.002997003 0.000999001
+2:   MHI          NA 0.328671329</code></pre>
 </div>
 </div>
 </section>
@@ -1771,9 +1771,9 @@ $pop$fst
 2:   MHI         NA 0.0003387499
 
 $pop$p
-      p1         MHI        NWHI
-1: Japan 0.003996004 0.000999001
-2:   MHI          NA 0.382617383</code></pre>
+      p1        MHI        NWHI
+1: Japan 0.01198801 0.000999001
+2:   MHI         NA 0.411588412</code></pre>
 </div>
 </div>
 <p>And compare that to pre-filtering. Some differences, but not as much as when I was overly stringent with selected loci.</p>
@@ -1788,8 +1788,8 @@ $pop$fst
 
 $pop$p
       p1         MHI        NWHI
-1: Japan 0.000999001 0.000999001
-2:   MHI          NA 0.338661339</code></pre>
+1: Japan 0.002997003 0.000999001
+2:   MHI          NA 0.328671329</code></pre>
 </div>
 </div>
 </section>
@@ -3162,7 +3162,7 @@ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":["...1"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["parameter"],"name":[2],"type":["chr"],"align":["left"]},{"label":["2.5%"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["25%"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["50%"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["75%"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["97.5%"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["mode"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["mean"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"theta Japan","3":"0.004333761","4":"0.004407007","5":"0.004443631","6":"0.004474150","7":"0.004522981","8":"0.004455838","9":"0.004440162","10":"4.951581e-05"},{"1":"2","2":"theta MHI","3":"0.004944149","4":"0.005145578","5":"0.005206617","6":"0.005249344","7":"0.005316487","8":"0.005224928","9":"0.005185366","10":"9.312567e-05"},{"1":"3","2":"theta NWHI","3":"0.007861808","4":"0.007953366","5":"0.007983886","6":"0.008014405","7":"0.008069340","8":"0.007996094","9":"0.007980405","10":"5.263222e-05"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["...1"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["parameter"],"name":[2],"type":["chr"],"align":["left"]},{"label":["2.5%"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["25%"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["50%"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["75%"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["97.5%"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["mode"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["mean"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"theta Japan","3":"0.004553501","4":"0.004614539","5":"0.004645059","6":"0.004669474","7":"0.004724409","8":"0.004645059","9":"0.004641755","10":"4.372650e-05"},{"1":"2","2":"theta MHI","3":"0.004449734","4":"0.004547397","5":"0.004590124","6":"0.004632851","7":"0.004693890","8":"0.004602332","9":"0.004585863","10":"6.437120e-05"},{"1":"3","2":"theta NWHI","3":"0.007031679","4":"0.007074406","5":"0.007092718","6":"0.007117134","7":"0.007153757","8":"0.007098822","9":"0.007094449","10":"3.214071e-05"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -3208,7 +3208,7 @@ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 <span id="cb199-28"><a href="#cb199-28" aria-hidden="true" tabindex="-1"></a>Ms_density <span class="ot">&lt;-</span>  <span class="fu">ggplot</span>(Ms_long, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> Density, </span>
 <span id="cb199-29"><a href="#cb199-29" aria-hidden="true" tabindex="-1"></a>                    <span class="at">color =</span> Parameter)) <span class="sc">+</span></span>
 <span id="cb199-30"><a href="#cb199-30" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb199-31"><a href="#cb199-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_x_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">100</span>,<span class="dv">3000</span>)) <span class="sc">+</span> </span>
+<span id="cb199-31"><a href="#cb199-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_x_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">100</span>,<span class="dv">1000</span>)) <span class="sc">+</span> </span>
 <span id="cb199-32"><a href="#cb199-32" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_discrete</span>(<span class="at">type =</span> theta.colors, <span class="at">labels =</span> parameter_key) <span class="sc">+</span></span>
 <span id="cb199-33"><a href="#cb199-33" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y=</span>prior), <span class="at">color =</span> <span class="st">"grey"</span>,</span>
 <span id="cb199-34"><a href="#cb199-34" aria-hidden="true" tabindex="-1"></a>                  <span class="at">linetype=</span><span class="st">"dotted"</span>)</span>
@@ -3221,18 +3221,18 @@ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 <span id="cb199-41"><a href="#cb199-41" aria-hidden="true" tabindex="-1"></a>        <span class="co">#scale_x_log10(limits = c(1,2000)) +</span></span>
 <span id="cb199-42"><a href="#cb199-42" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_discrete</span>(<span class="at">type =</span> theta.colors, <span class="at">labels =</span> parameter_key) <span class="sc">+</span></span>
 <span id="cb199-43"><a href="#cb199-43" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> rev, <span class="at">labels =</span> <span class="cn">NULL</span>, <span class="at">breaks =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb199-44"><a href="#cb199-44" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">TeX</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">frac{m}{</span><span class="sc">\\</span><span class="st">mu}$"</span>)) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="dv">3000</span>)</span>
+<span id="cb199-44"><a href="#cb199-44" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">TeX</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">frac{m}{</span><span class="sc">\\</span><span class="st">mu}$"</span>)) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="dv">1000</span>)</span>
 <span id="cb199-45"><a href="#cb199-45" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb199-46"><a href="#cb199-46" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb199-47"><a href="#cb199-47" aria-hidden="true" tabindex="-1"></a>M_violins <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Ms_long, <span class="fu">aes</span>(<span class="at">x =</span> Parameter, <span class="at">y =</span> x, <span class="at">violinwidth =</span> Density<span class="sc">*</span><span class="dv">20</span>, </span>
 <span id="cb199-48"><a href="#cb199-48" aria-hidden="true" tabindex="-1"></a>                    <span class="at">fill =</span> Parameter)) <span class="sc">+</span></span>
 <span id="cb199-49"><a href="#cb199-49" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_violin</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb199-50"><a href="#cb199-50" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3000</span>)) <span class="sc">+</span></span>
+<span id="cb199-50"><a href="#cb199-50" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_y_log10</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">100</span>,<span class="dv">1000</span>)) <span class="sc">+</span></span>
 <span id="cb199-51"><a href="#cb199-51" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_discrete</span>(<span class="at">type =</span> theta.colors, <span class="at">labels =</span> parameter_key) </span>
 <span id="cb199-52"><a href="#cb199-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb199-53"><a href="#cb199-53" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("./carbunculus/migrate/Mmu_density_full.pdf", plot = Ms_density)</span></span>
-<span id="cb199-54"><a href="#cb199-54" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("./carbunculus/migrate/Mmu_ridges_full.pdf", plot = M_ridges)</span></span>
-<span id="cb199-55"><a href="#cb199-55" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("./carbunculus/migrate/Mmu_violins_full.pdf", plot = M_violins)</span></span>
+<span id="cb199-53"><a href="#cb199-53" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("./carbunculus/migrate/Mmu_density_full.jpg", plot = Ms_density)</span></span>
+<span id="cb199-54"><a href="#cb199-54" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("./carbunculus/migrate/Mmu_ridges_full.jpg", plot = M_ridges)</span></span>
+<span id="cb199-55"><a href="#cb199-55" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("./carbunculus/migrate/Mmu_violins_full.jpg", plot = M_violins)</span></span>
 <span id="cb199-56"><a href="#cb199-56" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb199-57"><a href="#cb199-57" aria-hidden="true" tabindex="-1"></a><span class="co"># get stats for each summed-over-loci posterior</span></span>
 <span id="cb199-58"><a href="#cb199-58" aria-hidden="true" tabindex="-1"></a></span>
@@ -3247,7 +3247,7 @@ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 <div class="sourceCode cell-code" id="cb200"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb200-1"><a href="#cb200-1" aria-hidden="true" tabindex="-1"></a>ms_stats <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./carbunculus/migrate/Mmu_stats_full.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>New names:
-Rows: 2 Columns: 10
+Rows: 6 Columns: 10
 ── Column specification
 ──────────────────────────────────────────────────────── Delimiter: "," chr
 (1): parameter dbl (9): ...1, 2.5%, 25%, 50%, 75%, 97.5%, mode, mean, sd
@@ -3260,7 +3260,7 @@ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":["...1"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["parameter"],"name":[2],"type":["chr"],"align":["left"]},{"label":["2.5%"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["25%"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["50%"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["75%"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["97.5%"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["mode"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["mean"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"m/mu NWHI to MHI","3":"1781.4772","4":"1846.328","5":"1881.423","6":"1916.519","7":"1985.184","8":"1879.897","9":"1881.737","10":"51.96596"},{"1":"2","2":"m/mu Japan to NWHI","3":"978.0958","4":"1010.140","5":"1026.924","6":"1044.472","7":"1078.042","8":"1026.924","9":"1027.479","10":"25.49287"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["...1"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["parameter"],"name":[2],"type":["chr"],"align":["left"]},{"label":["2.5%"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["25%"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["50%"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["75%"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["97.5%"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["mode"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["mean"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"m/mu MHI to Japan","3":"403.5980","4":"426.4864","5":"438.6935","6":"450.9007","7":"476.0779","8":"437.9306","9":"438.9794","10":"18.65489"},{"1":"2","2":"m/mu NWHI to Japan","3":"408.1757","4":"430.3011","5":"442.5083","6":"454.7154","7":"478.3667","8":"441.7453","9":"442.5293","10":"18.10313"},{"1":"3","2":"m/mu Japan to MHI","3":"393.6798","4":"415.8052","5":"428.0123","6":"440.2194","7":"463.8707","8":"427.2494","9":"428.1113","10":"18.03488"},{"1":"4","2":"m/mu NWHI to MHI","3":"381.4726","4":"402.0722","5":"413.5163","6":"424.9605","7":"447.8489","8":"412.7534","9":"413.6475","10":"17.13680"},{"1":"5","2":"m/mu Japan to NWHI","3":"237.2760","4":"250.2460","5":"257.1126","6":"264.7420","7":"278.4750","8":"257.1126","9":"257.5886","10":"10.62879"},{"1":"6","2":"m/mu MHI to NWHI","3":"232.6983","4":"245.6684","5":"252.5349","6":"259.4014","7":"273.8974","8":"252.5349","9":"252.8519","10":"10.46573"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -3314,7 +3314,7 @@ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 <span id="cb203-25"><a href="#cb203-25" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_discrete</span>(<span class="at">type =</span> theta.colors, <span class="at">labels =</span> parameter_key) <span class="sc">+</span></span>
 <span id="cb203-26"><a href="#cb203-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y=</span>prior), <span class="at">color =</span> <span class="st">"grey"</span>,</span>
 <span id="cb203-27"><a href="#cb203-27" aria-hidden="true" tabindex="-1"></a>                  <span class="at">linetype=</span><span class="st">"dotted"</span>) <span class="sc">+</span></span>
-<span id="cb203-28"><a href="#cb203-28" aria-hidden="true" tabindex="-1"></a>         <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb203-28"><a href="#cb203-28" aria-hidden="true" tabindex="-1"></a>         <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="fl">2.5</span>)</span>
 <span id="cb203-29"><a href="#cb203-29" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb203-30"><a href="#cb203-30" aria-hidden="true" tabindex="-1"></a>           </span>
 <span id="cb203-31"><a href="#cb203-31" aria-hidden="true" tabindex="-1"></a><span class="co">#plot</span></span>
@@ -3324,22 +3324,22 @@ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 <span id="cb203-35"><a href="#cb203-35" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_discrete</span>(<span class="at">type =</span> theta.colors, <span class="at">labels =</span> parameter_key) <span class="sc">+</span></span>
 <span id="cb203-36"><a href="#cb203-36" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> rev, <span class="at">labels =</span> <span class="cn">NULL</span>, <span class="at">breaks =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
 <span id="cb203-37"><a href="#cb203-37" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">TeX</span>(<span class="st">"$4N_em$"</span>)) <span class="sc">+</span></span>
-<span id="cb203-38"><a href="#cb203-38" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb203-38"><a href="#cb203-38" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlim</span>(<span class="dv">0</span>,<span class="fl">2.5</span>)</span>
 <span id="cb203-39"><a href="#cb203-39" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb203-40"><a href="#cb203-40" aria-hidden="true" tabindex="-1"></a>nm_violins <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(nms_long, <span class="fu">aes</span>(<span class="at">x =</span> Parameter, <span class="at">y =</span> x, <span class="at">violinwidth =</span> Density<span class="sc">*</span><span class="dv">20</span>, </span>
 <span id="cb203-41"><a href="#cb203-41" aria-hidden="true" tabindex="-1"></a>                    <span class="at">fill =</span> Parameter)) <span class="sc">+</span></span>
 <span id="cb203-42"><a href="#cb203-42" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_violin</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> </span>
 <span id="cb203-43"><a href="#cb203-43" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_fill_discrete</span>(<span class="at">type =</span> theta.colors, <span class="at">labels =</span> parameter_key) <span class="sc">+</span></span>
-<span id="cb203-44"><a href="#cb203-44" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb203-44"><a href="#cb203-44" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">2.5</span>)</span>
 <span id="cb203-45"><a href="#cb203-45" aria-hidden="true" tabindex="-1"></a><span class="co"># get stats for each summed-over-loci posterior</span></span>
 <span id="cb203-46"><a href="#cb203-46" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb203-47"><a href="#cb203-47" aria-hidden="true" tabindex="-1"></a>nms_stats <span class="ot">&lt;-</span> parameter_key2 <span class="sc">%&gt;%</span> <span class="fu">map_dfr</span>(<span class="at">.f =</span> <span class="sc">~</span> <span class="fu">posterior_stats</span>(<span class="at">df =</span> nms, </span>
 <span id="cb203-48"><a href="#cb203-48" aria-hidden="true" tabindex="-1"></a>                                                             <span class="at">parameter =</span> .x),</span>
 <span id="cb203-49"><a href="#cb203-49" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">.id =</span> <span class="st">"parameter"</span>)</span>
 <span id="cb203-50"><a href="#cb203-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb203-51"><a href="#cb203-51" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./carbunculus/migrate/Nm_density_full.pdf"</span>, <span class="at">plot =</span> Nms_density)</span>
-<span id="cb203-52"><a href="#cb203-52" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./carbunculus/migrate/Nm_ridges_full.pdf"</span>, <span class="at">plot =</span> nm_ridges)</span>
-<span id="cb203-53"><a href="#cb203-53" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./carbunculus/migrate/Nm_violins_full.pdf"</span>, <span class="at">plot =</span> nm_violins)</span>
+<span id="cb203-51"><a href="#cb203-51" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./carbunculus/migrate/Nm_density_full.jpg"</span>, <span class="at">plot =</span> Nms_density)</span>
+<span id="cb203-52"><a href="#cb203-52" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./carbunculus/migrate/Nm_ridges_full.jpg"</span>, <span class="at">plot =</span> nm_ridges)</span>
+<span id="cb203-53"><a href="#cb203-53" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./carbunculus/migrate/Nm_violins_full.jpg"</span>, <span class="at">plot =</span> nm_violins)</span>
 <span id="cb203-54"><a href="#cb203-54" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(nms_stats,<span class="st">"./carbunculus/migrate/Nm_stats_full.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><span class="math inline">\(4N_em\)</span> estimates:</p>
@@ -3347,7 +3347,7 @@ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 <div class="sourceCode cell-code" id="cb204"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb204-1"><a href="#cb204-1" aria-hidden="true" tabindex="-1"></a>nms_stats <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./carbunculus/migrate/Nm_stats_full.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>New names:
-Rows: 2 Columns: 10
+Rows: 6 Columns: 10
 ── Column specification
 ──────────────────────────────────────────────────────── Delimiter: "," chr
 (1): parameter dbl (9): ...1, 2.5%, 25%, 50%, 75%, 97.5%, mode, mean, sd
@@ -3360,7 +3360,7 @@ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":["...1"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["parameter"],"name":[2],"type":["chr"],"align":["left"]},{"label":["2.5%"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["25%"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["50%"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["75%"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["97.5%"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["mode"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["mean"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"4Nem NWHI to MHI","3":"6.476225","4":"6.769212","5":"6.927913","6":"7.086614","7":"7.397912","8":"6.921809","9":"6.930091","10":"0.2366961"},{"1":"2","2":"4Nem Japan to NWHI","3":"6.854666","4":"7.092718","5":"7.214796","6":"7.342977","7":"7.587133","8":"7.214796","9":"7.217552","10":"0.1867890"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["...1"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["parameter"],"name":[2],"type":["chr"],"align":["left"]},{"label":["2.5%"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["25%"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["50%"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["75%"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["97.5%"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["mode"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["mean"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"4Nem MHI to Japan","3":"1.409998","4":"1.489349","5":"1.532076","6":"1.574803","7":"1.660258","8":"1.525972","9":"1.532949","10":"0.06528266"},{"1":"2","2":"4Nem NWHI to Japan","3":"1.446621","4":"1.525972","5":"1.568699","6":"1.611426","7":"1.696881","8":"1.562595","9":"1.568072","10":"0.06622006"},{"1":"3","2":"4Nem Japan to MHI","3":"1.367271","4":"1.440518","5":"1.483245","6":"1.525972","7":"1.605323","8":"1.477141","9":"1.483571","10":"0.06291191"},{"1":"4","2":"4Nem NWHI to MHI","3":"1.336752","4":"1.409998","5":"1.446621","6":"1.489349","7":"1.574803","8":"1.446621","9":"1.450550","10":"0.06103872"},{"1":"5","2":"4Nem Japan to NWHI","3":"1.403894","4":"1.477141","5":"1.519868","6":"1.562595","7":"1.641946","8":"1.519868","9":"1.519877","10":"0.06241966"},{"1":"6","2":"4Nem MHI to NWHI","3":"1.373375","4":"1.446621","5":"1.489349","6":"1.532076","7":"1.611426","8":"1.489349","9":"1.490888","10":"0.06217260"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>

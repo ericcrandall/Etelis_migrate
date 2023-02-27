@@ -2676,7 +2676,7 @@ migration.colors <- c(theta.colors[1],theta.colors.dark[1],theta.colors.light[1]
 Ms_density <-  ggplot(Ms_long, aes(x = x, y = Density, 
                     color = Parameter)) +
         geom_line(linewidth = 1) + 
-        scale_x_log10(limits = c(100,3000)) + 
+        scale_x_log10(limits = c(100,1000)) + 
         scale_color_discrete(type = theta.colors, labels = parameter_key) +
         geom_line(aes(x = x, y=prior), color = "grey",
                   linetype="dotted")
@@ -2689,18 +2689,18 @@ M_ridges <- ggplot(Ms_long, aes(x = x, y = Parameter, height = Density,
         #scale_x_log10(limits = c(1,2000)) +
         scale_fill_discrete(type = theta.colors, labels = parameter_key) +
         scale_y_discrete(limits = rev, labels = NULL, breaks = NULL) +
-        labs(x = TeX("$\\frac{m}{\\mu}$")) + xlim(0,3000)
+        labs(x = TeX("$\\frac{m}{\\mu}$")) + xlim(0,1000)
 
   
 M_violins <- ggplot(Ms_long, aes(x = Parameter, y = x, violinwidth = Density*20, 
                     fill = Parameter)) +
         geom_violin(stat = "identity") +
-        scale_y_log10(limits = c(1,3000)) +
+        scale_y_log10(limits = c(100,1000)) +
         scale_fill_discrete(type = theta.colors, labels = parameter_key) 
 
-# ggsave("./carbunculus/migrate/Mmu_density_full.pdf", plot = Ms_density)
-# ggsave("./carbunculus/migrate/Mmu_ridges_full.pdf", plot = M_ridges)
-# ggsave("./carbunculus/migrate/Mmu_violins_full.pdf", plot = M_violins)
+# ggsave("./carbunculus/migrate/Mmu_density_full.jpg", plot = Ms_density)
+# ggsave("./carbunculus/migrate/Mmu_ridges_full.jpg", plot = M_ridges)
+# ggsave("./carbunculus/migrate/Mmu_violins_full.jpg", plot = M_violins)
 
 # get stats for each summed-over-loci posterior
 
@@ -2723,6 +2723,8 @@ ms_stats
 ![M/mu Ridges](./carbunculus/migrate/Mmu_ridges_full.jpg)
 
 ![M/mu Violins](./carbunculus/migrate/Mmu_violins_full.jpg)
+
+
 
 ##### 4Nem estimates
 
@@ -2756,7 +2758,7 @@ Nms_density <-  ggplot(nms_long, aes(x = x, y = Density,
         scale_color_discrete(type = theta.colors, labels = parameter_key) +
         geom_line(aes(x = x, y=prior), color = "grey",
                   linetype="dotted") +
-         xlim(0,10)
+         xlim(0,2.5)
   
            
 #plot
@@ -2766,22 +2768,22 @@ nm_ridges <- ggplot(nms_long, aes(x = x, y = Parameter, height = Density,
         scale_fill_discrete(type = theta.colors, labels = parameter_key) +
         scale_y_discrete(limits = rev, labels = NULL, breaks = NULL) +
         labs(x = TeX("$4N_em$")) +
-        xlim(0,10)
+        xlim(0,2.5)
   
 nm_violins <- ggplot(nms_long, aes(x = Parameter, y = x, violinwidth = Density*20, 
                     fill = Parameter)) +
         geom_violin(stat = "identity") + 
         scale_fill_discrete(type = theta.colors, labels = parameter_key) +
-        ylim(0,10)
+        ylim(0,2.5)
 # get stats for each summed-over-loci posterior
 
 nms_stats <- parameter_key2 %>% map_dfr(.f = ~ posterior_stats(df = nms, 
                                                              parameter = .x),
                                       .id = "parameter")
 
-ggsave("./carbunculus/migrate/Nm_density_full.pdf", plot = Nms_density)
-ggsave("./carbunculus/migrate/Nm_ridges_full.pdf", plot = nm_ridges)
-ggsave("./carbunculus/migrate/Nm_violins_full.pdf", plot = nm_violins)
+ggsave("./carbunculus/migrate/Nm_density_full.jpg", plot = Nms_density)
+ggsave("./carbunculus/migrate/Nm_ridges_full.jpg", plot = nm_ridges)
+ggsave("./carbunculus/migrate/Nm_violins_full.jpg", plot = nm_violins)
 write.csv(nms_stats,"./carbunculus/migrate/Nm_stats_full.csv")
 ```
 
